@@ -34,7 +34,18 @@ def signup():
     if request.method == 'POST':
         username = request.form['username']
         password = generate_password_hash(request.form['password'])
-        new_user = User(username=username, password=password)
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        account_type = request.form['account_type']
+        email = request.form['email']
+        position = request.form['position']
+        new_user = User(username=username,
+                        password=password,
+                        first_name=first_name,
+                        last_name=last_name,
+                        account_type=account_type,
+                        email=email,
+                        position=position)
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
