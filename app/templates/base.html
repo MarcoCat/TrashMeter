@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>My Flask App</title>
+    <!-- Include the global stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Include the navigation stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
+    <!-- Conditionally include the signup stylesheet only for the signup page -->
+    {% if request.endpoint == 'signup' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
+    {% endif %}
 </head>
 <body>
-    <header>
-        <h1>Welcome to My Flask App</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li><a href="{{ url_for('about') }}">About</a></li>
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>  <!-- Link to login page -->
-                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>  <!-- Link to signup page -->
-            </ul>
-        </nav>
-    </header>
-    <main>
+    {% include 'nav.html' %}
+    <main style="padding-top: 60px;"> <!-- Add padding to the top of main content -->
         {% block content %}{% endblock %}
     </main>
 </body>
