@@ -33,6 +33,10 @@ label {
     margin-bottom: 5px; /* Space below each label */
 }
 
+.required {
+    color: red;
+}
+
 input[type="text"], input[type="password"], select {
     width: calc(100% - 20px); /* Full width minus some space for margins */
     padding: 10px; /* Padding for input fields */
