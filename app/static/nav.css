@@ -1,0 +1,32 @@
+/* nav.css */
+header {
+    background-color: #f8f9fa; /* Background color of the navigation bar */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds shadow effect */
+    position: fixed; /* Fixed at the top */
+    width: 100%; /* Full width */
+    top: 0; /* Positioned at the top */
+    left: 0; /* Aligned to the left edge */
+    z-index: 1000; /* Set z-index to appear on top of other elements */
+}
+
+nav ul {
+    list-style: none; /* Removes list styling */
+    padding: 0;
+    margin: 0;
+    display: flex; /* Arranges items horizontally */
+    justify-content: center; /* Centers items */
+}
+
+nav ul li {
+    padding: 10px 20px; /* Adjusts spacing with padding */
+}
+
+nav ul li a {
+    text-decoration: none; /* Removes underline from links */
+    color: black; /* Text color */
+    font-weight: bold; /* Makes text bold */
+}
+
+nav ul li a:hover {
+    color: #0056b3; /* Changes color on hover */
+}

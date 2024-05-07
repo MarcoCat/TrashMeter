@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Sign Up</h2>
     <form method="post">
-        <label for="username">Username:</label>
+        <h2>Join the PickUp3 Movement!</h2>
+        <label for="username">Username <span class="required">*</span></label>
         <input type="text" id="username" name="username"><br>
 
-        <label for="email">Email:</label>
+        <label for="email">Email <span class="required">*</span></label>
         <input type="text" id="email" name="email"><br>
 
-        <label for="first_name">First Name:</label>
+        <label for="first_name">First Name <span class="required">*</span></label>
         <input type="text" id="first_name" name="first_name"><br>
 
-        <label for="last_name">Last Name:</label>
+        <label for="last_name">Last Name <span class="required">*</span></label>
         <input type="text" id="last_name" name="last_name"><br>
 
-        <label for="password">Password:</label>
+        <label for="password">Password <span class="required">*</span></label>
         <input type="password" id="password" name="password"><br>
 
-        <label for="account_type">Account Type:</label>
+        <label for="account_type">Account Type <span class="required">*</span></label>
         <select name="account_type" id="account_type">
             <option value="individual">School</option>
             <option value="company">Company</option>
