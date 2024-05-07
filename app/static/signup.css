@@ -10,12 +10,12 @@ body {
 
 form {
     background-color: #FFFFFF; /* White background for the form */
-    padding: 30px; /* Padding inside the form */
+    padding: 40px; /* Increased padding inside the form for larger edge space */
     margin: 20px auto; /* Margin for top and bottom, auto for horizontal centering */
     border-radius: 8px; /* Rounded corners for the form */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for 3D effect */
     width: 80%; /* Adjust width to be more responsive */
-    max-width: 800px; /* Increased maximum width for larger displays */
+    max-width: 1000px; /* Increased maximum width for larger displays */
     display: grid;
     grid-template-columns: 1fr;
     gap: 15px;
@@ -34,8 +34,9 @@ label {
 }
 
 input[type="text"], input[type="password"], select {
-    width: 100%; /* Full width to fit container */
+    width: calc(100% - 20px); /* Full width minus some space for margins */
     padding: 10px; /* Padding for input fields */
+    margin-right: 10px; /* Right margin to prevent touching the form edge */
     border: 2px solid #D0D0D0; /* Border color and thickness */
     border-radius: 4px; /* Rounded corners for the input fields */
     background-color: #FFFFFF; /* Background color for input fields */
@@ -59,7 +60,7 @@ input[type="submit"]:hover {
 /* Responsive adjustments for smaller screens */
 @media (max-width: 1024px) {
     form {
-        max-width: 600px; /* Adjust maximum width for medium screens */
+        max-width: 800px; /* Adjust maximum width for medium screens */
     }
 }
 
@@ -67,6 +68,6 @@ input[type="submit"]:hover {
     form {
         width: 96%; /* Adjust form width for small screens */
         padding: 20px; /* Adjust padding for smaller forms */
-        max-width: 500px; /* Adjust maximum width for small screens */
+        max-width: 600px; /* Adjust maximum width for small screens */
     }
 }
