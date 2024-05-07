@@ -1,32 +1,32 @@
 /* nav.css */
 header {
-    background-color: #f8f9fa; /* 네비게이션 바의 배경색 */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 그림자 효과 추가 */
-    position: fixed; /* 최상단에 고정 */
-    width: 100%; /* 전체 너비 */
-    top: 0; /* 최상단에 위치 */
-    left: 0; /* 왼쪽 경계에 맞춤 */
-    z-index: 1000; /* 다른 요소들 위에 위치하도록 z-index 설정 */
+    background-color: #f8f9fa; /* Background color of the navigation bar */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds shadow effect */
+    position: fixed; /* Fixed at the top */
+    width: 100%; /* Full width */
+    top: 0; /* Positioned at the top */
+    left: 0; /* Aligned to the left edge */
+    z-index: 1000; /* Set z-index to appear on top of other elements */
 }
 
 nav ul {
-    list-style: none; /* 리스트 스타일 제거 */
+    list-style: none; /* Removes list styling */
     padding: 0;
     margin: 0;
-    display: flex; /* 항목들을 가로로 배치 */
-    justify-content: center; /* 중앙 정렬 */
+    display: flex; /* Arranges items horizontally */
+    justify-content: center; /* Centers items */
 }
 
 nav ul li {
-    padding: 10px 20px; /* 패딩으로 간격 조정 */
+    padding: 10px 20px; /* Adjusts spacing with padding */
 }
 
 nav ul li a {
-    text-decoration: none; /* 링크 밑줄 제거 */
-    color: black; /* 텍스트 색상 */
-    font-weight: bold; /* 글씨 두껍게 */
+    text-decoration: none; /* Removes underline from links */
+    color: black; /* Text color */
+    font-weight: bold; /* Makes text bold */
 }
 
 nav ul li a:hover {
-    color: #0056b3; /* 호버 시 색상 변경 */
+    color: #0056b3; /* Changes color on hover */
 }
