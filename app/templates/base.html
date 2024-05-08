@@ -18,6 +18,10 @@
     {% if request.endpoint == 'login' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     {% endif %}
+    <!-- Include forgot_password.css conditionally -->
+    {% if request.endpoint == 'forgot_password' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='forgot_password.css') }}">
+    {% endif %}
 </head>
 <body>
     {% include 'nav.html' %}
