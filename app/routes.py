@@ -37,6 +37,11 @@ def contact():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Redirect logged in users
+    if 'user_id' in session:
+        flash('You are already logged in.', 'info')
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -48,8 +53,14 @@ def login():
         flash('Invalid email or password.', 'danger')
     return render_template('login.html')
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    # Redirect logged in users
+    if 'user_id' in session:
+        flash('You are already logged in. No need to sign up again.', 'info')
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         username = request.form['username']
         password = generate_password_hash(request.form['password'])
@@ -70,6 +81,7 @@ def signup():
         flash('Signup successful! Please log in.', 'success')
         return redirect(url_for('login'))
     return render_template('signup.html')
+
 
 @app.route('/logout')
 def logout():
