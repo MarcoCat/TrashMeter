@@ -1,0 +1,109 @@
+body {
+    background-color: #E5F5F5;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    background-color: #FFFFFF;
+    padding: 40px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    color: #00AFAD;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    text-align: left;
+    color: #235A70;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #D0D0D0;
+    box-sizing: border-box;
+}
+
+.forgot-password-container {
+    text-align: right;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+}
+
+.link-forgot-password {
+    display: inline-block; /* Ensures text-align right is effective */
+    width: 100%;
+}
+
+.link-forgot-password h4 {
+    color: #14BAC6;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9em;
+    text-decoration: none;
+    display: inline;  /* Keeps the link inline with other text, if any */
+    margin: 0;        /* Removes margin to avoid any unwanted spacing */
+    text-align: right;
+}
+
+input[type="submit"] {
+    background-color: #F5BA2F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    width: calc(50% - 40px);
+    margin-top: 20px;
+}
+
+.account-action {
+    white-space: nowrap;
+    text-align: center;
+    margin-top: 15px;
+}
+
+.text-account, .link-sign-up {
+    display: inline;
+    margin-right: 5px;
+    color: #235A6C;
+    font-size: 1em;
+}
+
+.link-sign-up {
+    color: #345F6E;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+@media only screen and (max-width: 600px) {
+    form {
+        padding: 20px;
+        max-width: 95%;
+    }
+    input[type="text"], input[type="password"], input[type="submit"], .link-forgot-password, .link-sign-up {
+        margin: 5px 0;
+    }
+}

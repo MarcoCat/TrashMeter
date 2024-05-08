@@ -11,6 +11,10 @@
     {% if request.endpoint == 'signup' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
     {% endif %}
+    <!-- Conditionally include the login stylesheet only for the login page -->
+    {% if request.endpoint == 'login' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    {% endif %}
 </head>
 <body>
     {% include 'nav.html' %}

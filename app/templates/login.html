@@ -1,12 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <form method="post">
-        <h2>Login to Your PickUp3 Account!</h2>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password"><br>
-        <input type="submit" value="Login">
-    </form>
+<form method="post">
+    <h2>Login to Your PickUp3 Account!</h2>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username">
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+    <div class="forgot-password-container">
+        <a href="/findpassword.html" class="link-forgot-password"><h4>Forgot Password?</h4></a>
+    </div>
+    <input type="submit" value="Login">
+    <div class="account-action">
+        <span class="text-account">Don’t have any account?</span>
+        <a href="/signup" class="link-sign-up">Sign Up</a>
+    </div>
+</form>
 {% endblock %}
