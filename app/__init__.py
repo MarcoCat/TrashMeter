@@ -33,3 +33,9 @@ from app import routes, models
 def create_database(app):
     with app.app_context():
         db.create_all()
+        
+# For testing only
+def reset_database(app):
+    with app.app_context():
+        db.drop_all()
+        db.create_all() 
