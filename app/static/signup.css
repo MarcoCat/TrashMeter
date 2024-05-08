@@ -39,8 +39,8 @@ label {
 }
 
 .required {
-    color: red; /* Makes the asterisks red */
-    font-weight: bold; /* Optionally make the asterisk bold for emphasis */
+    color: red;
+    font-weight: bold;
 }
 
 input[type="text"], input[type="password"], select {
@@ -49,7 +49,7 @@ input[type="text"], input[type="password"], select {
     margin-bottom: 20px;
     border: 1px solid #D0D0D0;
     box-sizing: border-box;
-    border-radius: 5px; /* *부분 */
+    border-radius: 5px;
 }
 
 .forgot-password-container {
@@ -60,7 +60,7 @@ input[type="text"], input[type="password"], select {
 }
 
 .link-forgot-password {
-    display: inline-block; /* Ensures text-align right is effective */
+    display: inline-block;
     width: 100%;
 }
 
@@ -70,8 +70,8 @@ input[type="text"], input[type="password"], select {
     cursor: pointer;
     font-size: 0.9em;
     text-decoration: none;
-    display: inline;  /* Keeps the link inline with other text, if any */
-    margin: 0;        /* Removes margin to avoid any unwanted spacing */
+    display: inline;
+    margin: 0;
     text-align: right;
 }
 
@@ -85,7 +85,7 @@ input[type="submit"] {
     font-weight: bold;
     width: calc(50% - 40px);
     margin-top: 20px;
-    text-align: center; /* Sign Up 버튼 가운데 정렬 */
+    text-align: center;
 }
 
 .account-action {

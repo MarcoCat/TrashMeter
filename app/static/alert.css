@@ -1,0 +1,49 @@
+.alert-container {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    pointer-events: none;
+}
+
+.alert {
+    pointer-events: auto;
+    width: 80%;
+    max-width: 600px;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.alert-dismissible .btn-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    z-index: 1060;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
