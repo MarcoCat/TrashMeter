@@ -1,8 +1,10 @@
 from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from app import app, db
+from app import app, db, mail
 from app.models import User
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -95,3 +97,46 @@ def profile():
     if g.user is not None:
         return render_template('profile.html', user=g.user)
     return 'User not found', 404
+
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = User.query.filter_by(email=email).first()
+        if user:
+            token = s.dumps(email, salt=app.config['SECURITY_PASSWORD_SALT'])
+            msg = Message('Password Reset Request', 
+                          sender=app.config['MAIL_DEFAULT_SENDER'], 
+                          recipients=[email])
+            link = url_for('reset_password', token=token, _external=True)
+            msg.body = f'Please click on the link to reset your password: {link}'
+            mail.send(msg)
+            return 'Please check your email for a password reset link.'
+    return render_template('forgot_password.html')
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = s.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=3600)  # Token expires after 1 hour
+    except SignatureExpired:
+        flash('The password reset link is expired.', 'danger')
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        if password != confirm_password:
+            flash('Passwords do not match.', 'danger')
+            return redirect(url_for('reset_password', token=token))
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = generate_password_hash(password)
+            db.session.commit()
+            flash('Your password has been updated.', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('User not found.', 'danger')
+            return redirect(url_for('login'))
+    return render_template('reset_password.html', token=token)
