@@ -20,13 +20,13 @@ def contact():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
-            session['username'] = username
+            session['email'] = email
             return redirect(url_for('index'))
-        return 'Invalid username or password'
+        return 'Invalid email or password'
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
