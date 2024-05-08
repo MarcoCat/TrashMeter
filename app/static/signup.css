@@ -1,7 +1,8 @@
-/* Set the font family and background color for the entire page */
+/* signup.css */
+
 body {
-    font-family: Arial, sans-serif;
     background-color: #E5F5F5;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,81 +10,109 @@ body {
     align-items: center;
 }
 
-/* Style for the form */
 form {
     background-color: #FFFFFF;
-    padding: 40px; /* Increase padding for the form */
-    border-radius: 10px;
-    max-width: 800px; /* Increase max width for the form */
-    margin: 20px auto; /* Add margin for the form */
+    padding: 40px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Style for the heading */
 h2 {
     color: #00AFAD;
     font-weight: bold;
     text-align: center;
-    margin-bottom: 0; /* Remove bottom margin for the heading */
+    margin-bottom: 20px;
 }
 
-/* Style for labels */
 label {
-    color: #235A70; /* Text color for labels */
-    display: block; /* Display block for better control over styling */
-    margin-bottom: 10px; /* Add bottom margin for labels */
-}
-
-/* Style for required labels */
-.required {
-    color: red;
-}
-
-/* Style for input fields and select dropdown */
-input[type="text"],
-input[type="password"],
-select {
-    border: 1px solid #D0D0D0;
-    padding: 8px;
-    margin-bottom: 20px; /* Increase bottom margin for input fields */
+    display: block;
+    text-align: left;
+    color: #235A70;
     width: 100%;
-    box-sizing: border-box;
+    margin-bottom: 5px;
 }
 
-/* Style for submit button */
+.required {
+    color: red; /* Makes the asterisks red */
+    font-weight: bold; /* Optionally make the asterisk bold for emphasis */
+}
+
+input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 20px;
+    border: 1px solid #D0D0D0;
+    box-sizing: border-box;
+    border-radius: 5px; /* *부분 */
+}
+
+.forgot-password-container {
+    text-align: right;
+    width: 100%;
+    display: block;
+    margin-top: 10px;
+}
+
+.link-forgot-password {
+    display: inline-block; /* Ensures text-align right is effective */
+    width: 100%;
+}
+
+.link-forgot-password h4 {
+    color: #14BAC6;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9em;
+    text-decoration: none;
+    display: inline;  /* Keeps the link inline with other text, if any */
+    margin: 0;        /* Removes margin to avoid any unwanted spacing */
+    text-align: right;
+}
+
 input[type="submit"] {
     background-color: #F5BA2F;
-    color: #FFFFFF;
+    color: white;
     border: none;
+    padding: 10px 20px;
     border-radius: 5px;
-    padding: 10px;
+    cursor: pointer;
+    font-weight: bold;
     width: calc(50% - 40px);
-    margin: 20px auto 0;
-    display: block;
+    margin-top: 20px;
+    text-align: center; /* Sign Up 버튼 가운데 정렬 */
 }
 
-/* Media query for smaller screens */
-@media screen and (max-width: 480px) {
-    /* Reduce font size for heading */
-    h2 {
-        font-size: 24px;
-    }
+.account-action {
+    white-space: nowrap;
+    text-align: center;
+    margin-top: 15px;
+}
 
-    /* Center align heading */
-    h2 {
-        text-align: center;
-    }
+.text-account, .link-sign-up {
+    display: inline;
+    margin-right: 5px;
+    color: #235A6C;
+    font-size: 1em;
+}
 
-    /* Separate "Movement!" to a new line */
-    h2:after {
-        content: '\A Movement!';
-        white-space: pre;
-        display: block;
-    }
+.link-sign-up {
+    color: #345F6E;
+    font-weight: bold;
+    text-decoration: none;
+}
 
-    /* Add space between input fields and select dropdown */
-    input[type="text"],
-    input[type="password"],
-    select {
-        margin-bottom: 15px;
+@media only screen and (max-width: 600px) {
+    form {
+        padding: 20px;
+        max-width: 95%;
+    }
+    input[type="text"], input[type="password"], input[type="submit"], .link-forgot-password, .link-sign-up {
+        margin: 5px 0;
     }
 }
