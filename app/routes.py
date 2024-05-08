@@ -1,12 +1,32 @@
-from flask import render_template, request, redirect, url_for, session
-from app import app, db
-from app.models import User
+from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
+from functools import wraps
+from app import app, db, mail
+from app.models import User
+from flask_mail import Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+
+# Utility function to check if a user is logged in
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            flash('Please log in to view this page.', 'warning')
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+# Load user before request if user is logged in
+@app.before_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+    if user_id is None:
+        g.user = None
+    else:
+        g.user = User.query.get(user_id)
 
 @app.route('/')
 def index():
-    if 'username' in session:
-        return f'Logged in as {session["username"]}'
     return render_template('home.html')
 
 @app.route('/about')
@@ -19,18 +39,30 @@ def contact():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Redirect logged in users
+    if 'user_id' in session:
+        flash('You are already logged in.', 'info')
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
-            session['username'] = username
+            session['user_id'] = user.id
+            flash('You were successfully logged in.', 'info')
             return redirect(url_for('index'))
-        return 'Invalid username or password'
+        flash('Invalid email or password.', 'danger')
     return render_template('login.html')
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
+    # Redirect logged in users
+    if 'user_id' in session:
+        flash('You are already logged in. No need to sign up again.', 'info')
+        return redirect(url_for('index'))
+
     if request.method == 'POST':
         username = request.form['username']
         password = generate_password_hash(request.form['password'])
@@ -48,10 +80,63 @@ def signup():
                         position=position)
         db.session.add(new_user)
         db.session.commit()
+        flash('Signup successful! Please log in.', 'success')
         return redirect(url_for('login'))
     return render_template('signup.html')
 
+
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
+    session.pop('user_id', None)
+    flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
+
+@app.route('/profile')
+@login_required
+def profile():
+    if g.user is not None:
+        return render_template('profile.html', user=g.user)
+    return 'User not found', 404
+
+s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
+
+@app.route('/forgot_password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form['email']
+        user = User.query.filter_by(email=email).first()
+        if user:
+            token = s.dumps(email, salt=app.config['SECURITY_PASSWORD_SALT'])
+            msg = Message('Password Reset Request', 
+                          sender=app.config['MAIL_DEFAULT_SENDER'], 
+                          recipients=[email])
+            link = url_for('reset_password', token=token, _external=True)
+            msg.body = f'Please click on the link to reset your password: {link}'
+            mail.send(msg)
+            return 'Please check your email for a password reset link.'
+    return render_template('forgot_password.html')
+
+
+@app.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    try:
+        email = s.loads(token, salt=app.config['SECURITY_PASSWORD_SALT'], max_age=3600)  # Token expires after 1 hour
+    except SignatureExpired:
+        flash('The password reset link is expired.', 'danger')
+        return redirect(url_for('login'))
+    if request.method == 'POST':
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        if password != confirm_password:
+            flash('Passwords do not match.', 'danger')
+            return redirect(url_for('reset_password', token=token))
+        user = User.query.filter_by(email=email).first()
+        if user:
+            user.password = generate_password_hash(password)
+            db.session.commit()
+            flash('Your password has been updated.', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('User not found.', 'danger')
+            return redirect(url_for('login'))
+    return render_template('reset_password.html', token=token)
