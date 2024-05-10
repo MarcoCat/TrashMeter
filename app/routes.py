@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
@@ -5,11 +6,19 @@ from app import app, db, mail
 from app.models import User
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+from sqlalchemy import desc
+
+
 
 # Utility function to check if a user is logged in
 
+
 trash_counter = 60000
 personal_counter = 0
+this_beach = ""
+this_date = ""
+this_picked = 0
+trash_history = []
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -33,7 +42,11 @@ def index():
     if 'user_id' not in session:
         flash('Please log in to view this page.', 'warning')
         return redirect(url_for('login'))
-    return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter)
+    # trash_data = TrashData.query.first()
+    return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter,
+                           trash_history=trash_history)
+                           # , this_date=this_date, beach=this_beach, this_picked=this_picked)
+
 
 @app.route('/about')
 def about():
@@ -45,7 +58,6 @@ def contact():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    # Redirect logged in users
     if 'user_id' in session:
         flash('You are already logged in.', 'info')
         return redirect(url_for('index'))
@@ -70,6 +82,7 @@ def signup():
         return redirect(url_for('index'))
 
     if request.method == 'POST':
+        global trash_counter, personal_counter
         username = request.form['username']
         password = generate_password_hash(request.form['password'])
         first_name = request.form['first_name']
@@ -165,12 +178,46 @@ def update_profile():
 
 @app.route('/update', methods=['POST'])
 def update_trash_counter():
-    global trash_counter
-    global personal_counter
+    global trash_counter, personal_counter, this_beach, this_date, this_picked
     # Get the amount of trash picked up from the form
     picked_up = int(request.form['picked_up'])
+    beach = request.form['beach']
+    # trash_history = session.get('trash_history', [])
+    # trash_history.append({
+    #     'date': datetime.now().strftime('%Y-%m-%d'),
+    #     'picked_up': picked_up,
+    #     'beach': beach
+    # })
+    # session['trash_history'] = trash_history
+    # session.modified = True  # Ensure session is saved
     # Update the trash counter
+    this_picked = picked_up
+    this_beach = beach
+
+    trash_history.append({
+        'date': datetime.now().strftime('%Y-%m-%d'),
+        'picked_up': this_picked,
+        'beach': this_beach
+    })
+
+    # this_date = datetime.now().strftime('%Y-%m-%d')
     trash_counter += picked_up
     personal_counter += picked_up
     # Redirect back to the main page
-    return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter)
+    return redirect(url_for('index'))
+
+# @app.route('/update', methods=['POST'])
+# def update_trash_counter():
+#     picked_up = int(request.form['picked_up'])
+#     beach = request.form['beach']
+#     if beach == 'other':
+#         other_beach = request.form['other_beach']
+#         # Save the beach name to the database if it's not already there
+#     trash_data = TrashData.query.first()  # Fetch the global total trash data
+#     trash_data.total_trash_collected += picked_up  # Update global total trash data
+#     db.session.commit()
+#     user_id = session['user_id']
+#     user = User.query.get(user_id)
+#     user.personal_counter += picked_up  # Update user's personal counter
+#     db.session.commit()
+#     return redirect(url_for('index'))
