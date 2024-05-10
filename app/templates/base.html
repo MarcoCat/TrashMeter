@@ -6,37 +6,48 @@
     <!-- Bootstrap CDN for Styling Flash Messages -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Include the global stylesheets -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
     <!-- Include the navigation stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='nav.css') }}">
-    <!-- Conditionally include the signup stylesheet only for the signup page -->
+    <!-- Include the alert stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='alert.css') }}">
+    <!-- Conditionally include the signup and login stylesheets -->
     {% if request.endpoint == 'signup' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
     {% endif %}
-    <!-- Conditionally include the login stylesheet only for the login page -->
     {% if request.endpoint == 'login' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     {% endif %}
+    <!-- Include forgot_password.css conditionally -->
+    {% if request.endpoint == 'forgot_password' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='forgot_password.css') }}">
+    {% endif %}
+    <!-- Include reset_password.css -->
+    {% if request.endpoint == 'reset_password' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='reset_password.css') }}">
+    {% endif %}
+    <!-- Include profile.css -->
+    {% if request.endpoint == 'profile' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    {% endif %}
+
+
 </head>
 <body>
     {% include 'nav.html' %}
-    <div class="container mt-3">
-        <!-- Flash message display area -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    </div>
-    <main style="padding-top: 60px;"> <!-- Add padding to the top of main content -->
-        {% block content %}{% endblock %}
+    {% include 'alert.html' %}
+
+    <main>
+        {% block content %}
+        {% endblock %}
     </main>
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Include reset_password.js -->
+    {% if request.endpoint == 'reset_password' %}
+    <script src="{{ url_for('static', filename='reset_password.js') }}"></script>
+    {% endif %}
 </body>
 </html>
