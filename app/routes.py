@@ -97,13 +97,6 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
 
-@app.route('/profile')
-@login_required
-def profile():
-    if g.user is not None:
-        return render_template('profile.html', user=g.user)
-    return 'User not found', 404
-
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
@@ -146,6 +139,29 @@ def reset_password(token):
             flash('User not found.', 'danger')
             return redirect(url_for('login'))
     return render_template('reset_password.html', token=token)
+
+@app.route('/profile')
+@login_required
+def profile():
+    if g.user is not None:
+        return render_template('profile.html', user=g.user)
+    return 'User not found', 404
+
+@app.route('/update_profile', methods=['POST'])
+@login_required
+def update_profile():
+    if request.method == 'POST':
+        user = User.query.get(g.user.id)
+        user.username = request.form['username']
+        user.first_name = request.form['first_name']
+        user.last_name = request.form['last_name']
+        user.email = request.form['email']
+        user.account_type = request.form['account_type']
+        user.position = request.form['position']
+        db.session.commit()
+        flash('Profile updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
 
 @app.route('/update', methods=['POST'])
 def update_trash_counter():

@@ -14,11 +14,9 @@
     <!-- Include the alert stylesheet -->
     <link rel="stylesheet" href="{{ url_for('static', filename='alert.css') }}">
     <!-- Conditionally include the signup and login stylesheets -->
-    <!-- Conditionally include the signup stylesheet only for the signup page -->
     {% if request.endpoint == 'signup' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='signup.css') }}">
     {% endif %}
-    <!-- Conditionally include the login stylesheet only for the login page -->
     {% if request.endpoint == 'login' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
     {% endif %}
@@ -26,10 +24,16 @@
     {% if request.endpoint == 'forgot_password' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='forgot_password.css') }}">
     {% endif %}
-
-    {% if request.endpoint == 'update' %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='webpage.css') }}">
+    <!-- Include reset_password.css -->
+    {% if request.endpoint == 'reset_password' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='reset_password.css') }}">
     {% endif %}
+    <!-- Include profile.css -->
+    {% if request.endpoint == 'profile' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    {% endif %}
+
+
 </head>
 <body>
     {% include 'nav.html' %}
@@ -39,7 +43,13 @@
         {% block content %}
         {% endblock %}
     </main>
+
     <!-- Bootstrap Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Include reset_password.js -->
+    {% if request.endpoint == 'reset_password' %}
+    <script src="{{ url_for('static', filename='reset_password.js') }}"></script>
+    {% endif %}
 </body>
 </html>
