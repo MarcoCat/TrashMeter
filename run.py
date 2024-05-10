@@ -1,6 +1,7 @@
-from app import app
+# run.py
+from app import create_app
+
+app = create_app()
 
 if __name__ == '__main__':
-    from app import create_database, reset_database
-    create_database(app)
     app.run(debug=True)
