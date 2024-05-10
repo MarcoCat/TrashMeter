@@ -26,6 +26,12 @@
     {% if request.endpoint == 'reset_password' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='reset_password.css') }}">
     {% endif %}
+    <!-- Include profile.css -->
+    {% if request.endpoint == 'profile' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
+    {% endif %}
+
+
 </head>
 <body>
     {% include 'nav.html' %}
