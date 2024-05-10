@@ -1,4 +1,3 @@
-# tests/test_app.py
 import pytest
 from app import create_app, db
 from app.models import User
@@ -14,7 +13,7 @@ def test_client():
 
     db.create_all()
 
-    yield testing_client  # this is where the testing happens!
+    yield testing_client
 
     db.session.remove()
     db.drop_all()
@@ -23,7 +22,7 @@ def test_client():
 def test_example(test_client):
     response = test_client.get('/')
     assert response.status_code == 200
+
+def test_example_fail():
+    assert False
     
-def test_example2(test_client):
-    response = test_client.get('/')
-    assert response.status_code == 200
