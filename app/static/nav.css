@@ -30,3 +30,11 @@ nav ul li a {
 nav ul li a:hover {
     color: #0056b3; /* Changes color on hover */
 }
+
+/* Logo */
+.logo img {
+    height: 80px; /* Adjust the height of the logo */
+    width: auto; /* Allow the width to adjust proportionally */
+    margin: 5px 20px; /* Adjust the margins as needed */
+    float: left;
+}

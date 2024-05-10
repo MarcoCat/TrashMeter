@@ -1,6 +1,63 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Home Page</h2>
-    <p>Welcome to the home page!</p>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Counter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='webpage.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Trash Counter</h1>
+        <div class="counter">
+            <h2>Total Trash Picked Up: {{ trash_counter }}</h2>
+            <div class="progress">
+                {% set max_limit = 500000 %}
+                {% set width_percentage = (trash_counter / max_limit) * 100 %}
+                <div class="progress-bar" style="width: {{ width_percentage }}%"></div>
+            </div>
+
+            <h2>You have picked up: {{ personal_counter }}</h2>
+        </div>
+
+{#        <div class="beach">#}
+{#            <label for="account_type">Account Type <span class="required">*</span></label>#}
+{#        <select name="account_type" id="account_type">#}
+{#            <option value="individual">Individual</option>#}
+{#            <option value="company">Company</option>#}
+{#            <option value="school">School</option>#}
+{#            <option value="volenteer">Volenteer Organization</option>#}
+{#        </select><br>#}
+{#        </div>#}
+
+        <form action="/update" method="post">
+            <label for="beach">Select a beach:</label>
+            <select id="beach" name="beach">
+                <option value="beach1">Beach 1</option>
+                <option value="beach2">Beach 2</option>
+                <option value="beach3">Beach 3</option>
+                <!-- Add more beach options as needed -->
+                <option value="other">Other (Enter beach name below)</option>
+            </select>
+            <input type="text" id="other_beach" name="other_beach" placeholder="Enter beach name">
+            <label for="picked_up">Enter amount of trash picked up:</label>
+            <input type="number" id="picked_up" name="picked_up" required>
+            <button type="submit">Update Counter</button>
+        </form>
+    </div>
+
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/pickup3canada" class="fa fa-facebook"></a>
+            <a href="https://twitter.com/PickUP3Canada" class="fa fa-twitter"></a>
+            <a href="https://www.instagram.com/pickup3canada/" class="fa fa-instagram"></a>
+        </div>
+</footer>
+
+</body>
+</html>
+
 {% endblock %}

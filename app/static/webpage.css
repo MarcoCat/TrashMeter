@@ -1,0 +1,128 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("../static/images/trash_meter_background.jpg"); /* Adjust the path to your image accordingly */
+    background-size: cover; /* Ensure the background image covers the entire viewport */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 30px 40px;
+    background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background color to improve readability */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+.counter {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.progress {
+    width: 100%;
+    background-color: #F0FFFF;
+    border-radius: 5px;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+.progress-bar {
+    background-color: #4caf50;
+    height: 100%;
+    border-radius: 5px;
+    max-width: 100%; /* Ensure the progress bar doesn't exceed 100% width */
+}
+
+form {
+    text-align: center;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="number"] {
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+footer {
+    background-image: url("../static/images/footer-image.jpg");
+    padding: 20px 0;
+    text-align: center;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Style all font awesome icons */
+.fa {
+  padding: 10px;
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+/* Add a hover effect if you want */
+.fa:hover {
+  opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+
+/* Facebook */
+.fa-facebook {
+  background: #3B5998;
+  color: white;
+}
+
+/* Twitter */
+.fa-twitter {
+  background: #55ACEE;
+  color: white;
+}
+
+.fa-instagram {
+    background: radial-gradient(circle at 33% 100%, #fed373 4%, #f15245 30%, #d92e7f 62%, #9b36b7 85%, #515ecf);
+    color: white;
+}
+
+.beach {
+    padding: 40px; /* Increased padding inside the form for larger edge space */
+    margin: 20px auto; /* Margin for top and bottom, auto for horizontal centering */
+    border-radius: 8px; /* Rounded corners for the form */
+    width: 80%; /* Adjust width to be more responsive */
+    max-width: 1000px; /* Increased maximum width for larger displays */
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+    font-size: 30px;
+}

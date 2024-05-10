@@ -7,6 +7,9 @@ from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 # Utility function to check if a user is logged in
+
+trash_counter = 60000
+personal_counter = 0
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -27,7 +30,10 @@ def load_logged_in_user():
 
 @app.route('/')
 def index():
-    return render_template('home.html')
+    if 'user_id' not in session:
+        flash('Please log in to view this page.', 'warning')
+        return redirect(url_for('login'))
+    return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter)
 
 @app.route('/about')
 def about():
@@ -140,3 +146,15 @@ def reset_password(token):
             flash('User not found.', 'danger')
             return redirect(url_for('login'))
     return render_template('reset_password.html', token=token)
+
+@app.route('/update', methods=['POST'])
+def update_trash_counter():
+    global trash_counter
+    global personal_counter
+    # Get the amount of trash picked up from the form
+    picked_up = int(request.form['picked_up'])
+    # Update the trash counter
+    trash_counter += picked_up
+    personal_counter += picked_up
+    # Redirect back to the main page
+    return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter)
