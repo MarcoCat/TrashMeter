@@ -1,8 +1,9 @@
+from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from app import app, db, mail
-from app.models import User
+from . import db, mail  # Adjusted import here
+from .models import User
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
