@@ -8,16 +8,17 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh; /* Full viewport height */
 }
 
 form {
     background-color: #FFFFFF;
     padding: 40px;
-    margin: 20px auto;
+    margin: 10px auto; /* Reduced margin */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 600px;
+    width: 90%; /* Adjusted width */
+    max-width: 600px; /* Max-width to fit wider screens */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,7 +32,8 @@ h2 {
 }
 
 label {
-    display: block;
+    display: flex;
+    align-items: center;
     text-align: left;
     color: #235A70;
     width: 100%;
@@ -50,6 +52,24 @@ input[type="text"], input[type="password"], select {
     border: 1px solid #D0D0D0;
     box-sizing: border-box;
     border-radius: 5px;
+}
+
+input[type="text"][readonly] {
+    background-color: #EFEFEF;
+    cursor: pointer;
+}
+
+#organization_name_field {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+#organization_name_field img {
+    margin-left: 10px;
+    cursor: pointer;
+    vertical-align: middle;
 }
 
 .forgot-password-container {
@@ -108,11 +128,29 @@ input[type="submit"] {
 }
 
 @media only screen and (max-width: 600px) {
-    form {
-        padding: 20px;
-        max-width: 95%;
+    body {
+        justify-content: flex-start; /* Align content to the top */
+        padding-top: 0; /* Remove top padding */
+        margin: 0;
+        width: 100%; /* Ensure full width */
+        height: 100%; /* Ensure full height */
     }
-    input[type="text"], input[type="password"], input[type="submit"], .link-forgot-password, .link-sign-up {
-        margin: 5px 0;
+    form {
+        padding: 15px; /* Smaller padding to use more space */
+        margin: 0; /* Remove margin to use full screen width */
+        width: 95%; /* Increased width */
+        max-width: 95%; /* Maximum width also increased */
+        height: auto; /* Auto-adjust height */
+        border-radius: 0; /* Optional: remove border-radius for full-width effect */
+    }
+    input[type="text"], input[type="password"], input[type="submit"], select, .link-forgot-password, .link-sign-up {
+        margin: 5px 0; /* Reduced vertical spacing */
+    }
+    #organization_name_field {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #organization_name_field label, #organization_name_field input {
+        width: 100%; /* Ensure full width usage */
     }
 }

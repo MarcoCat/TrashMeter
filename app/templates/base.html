@@ -30,8 +30,6 @@
     {% if request.endpoint == 'profile' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='profile.css') }}">
     {% endif %}
-
-
 </head>
 <body>
     {% include 'nav.html' %}
@@ -49,5 +47,10 @@
     {% if request.endpoint == 'reset_password' %}
     <script src="{{ url_for('static', filename='reset_password.js') }}"></script>
     {% endif %}
+    <!-- Include signup.js -->
+    {% if request.endpoint == 'signup' %}
+    <script src="{{ url_for('static', filename='signup.js') }}"></script>
+    {% endif %}
 </body>
 </html>
+
