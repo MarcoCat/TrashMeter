@@ -1,8 +1,9 @@
+from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from app import app, db, mail
-from app.models import User
+from . import db, mail  # Adjusted import here
+from .models import User
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
@@ -133,6 +134,28 @@ def reset_password(token):
             flash('User not found.', 'danger')
             return redirect(url_for('login'))
     return render_template('reset_password.html', token=token)
+
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        old_password = request.form['old_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+        
+        user = User.query.get(g.user.id)
+        if user and check_password_hash(user.password, old_password):
+            if new_password == confirm_password:
+                user.password = generate_password_hash(new_password)
+                db.session.commit()
+                flash('Your password has been updated.', 'success')
+                return redirect(url_for('profile'))
+            else:
+                flash('New passwords do not match.', 'danger')
+        else:
+            flash('Incorrect old password.', 'danger')
+    return render_template('change_password.html')
+
 
 @app.route('/profile')
 @login_required
