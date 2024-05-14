@@ -32,5 +32,6 @@ function getLabelForType(type) {
 }
 
 function redirectToSearch() {
-    window.location.href = 'search.html'; // Update this URL as needed for your project
+    var searchTerm = document.getElementById("organization_name").value;
+    window.location.href = 'search.html?query=' + encodeURIComponent(searchTerm); // Pass search term as a query parameter
 }
