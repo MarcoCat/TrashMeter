@@ -108,23 +108,31 @@ input[type="submit"] {
 }
 
 #organization_name_field {
-    width: 100%; /* Ensure it aligns with other form elements */
-    margin-bottom: 20px; /* Space below the field */
-    display: none; /* Initially hidden */
+    width: 100%;
+    margin-bottom: 20px;
+    display: none;
 }
 
 #organization_label {
-    display: block; /* Consistent with other labels */
-    text-align: left; /* Left align text */
-    color: #235A70; /* Matching label color */
-    margin-bottom: 5px; /* Space above the input */
+    display: block;
+    text-align: left;
+    color: #235A70;
+    margin-bottom: 5px;
 }
 
 #organization_name {
-    width: 100%; /* Full width to match other inputs */
-    padding: 8px; /* Padding for comfort */
-    border: 1px solid #D0D0D0; /* Consistent border styling */
-    box-sizing: border-box; /* Handles padding & border calculations */
-    border-radius: 5px; /* Rounded corners */
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #D0D0D0;
+    box-sizing: border-box;
+    border-radius: 5px;
 }
 
+/* Mobile styles */
+@media (max-width: 768px) {
+    form {
+        width: calc(100% - 40px); /* Adjust width to add margin on sides */
+        padding: 20px;
+        margin: 20px; /* Ensure centered alignment with some margin */
+    }
+}
