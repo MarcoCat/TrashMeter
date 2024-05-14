@@ -8,6 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh; /* Ensure full viewport height */
 }
 
 form {
@@ -107,20 +108,20 @@ input[type="submit"] {
     text-decoration: none;
 }
 
-#organization_name_field {
+#organization_name_field, #position_field {
     width: 100%;
     margin-bottom: 20px;
     display: none;
 }
 
-#organization_label {
+#organization_label, #position_label {
     display: block;
     text-align: left;
     color: #235A70;
     margin-bottom: 5px;
 }
 
-#organization_name {
+#organization_name, input[type="radio"] {
     width: 100%;
     padding: 8px;
     border: 1px solid #D0D0D0;
@@ -128,7 +129,21 @@ input[type="submit"] {
     border-radius: 5px;
 }
 
-/* Mobile styles */
+input[type="radio"] {
+    width: auto; /* Radio buttons should not take full width */
+    padding: 0; /* Remove padding for radio buttons */
+    margin-right: 5px; /* Space between radio buttons and labels */
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+}
+
+.radio-group label {
+    margin-right: 20px; /* Add some space between radio button groups */
+}
+
 @media (max-width: 768px) {
     form {
         width: calc(100% - 40px); /* Adjust width to add margin on sides */

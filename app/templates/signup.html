@@ -24,7 +24,17 @@
             <option value="company">Company</option>
             <option value="school">School</option>
             <option value="volunteer">Volunteer Organization</option>
-        </select><br>
+        </select>
+
+        <div id="position_field" style="display: none;">
+            <label for="position">Position:</label>
+            <div class="radio-group">
+                <input type="radio" id="pos1" name="position" value="teacher">
+                <label for="pos1">Teacher</label>
+                <input type="radio" id="pos2" name="position" value="student">
+                <label for="pos2">Student</label>
+            </div>
+        </div>
 
         <div id="organization_name_field" style="display: none;">
             <label id="organization_label" for="organization_name">Name of your School/Organization/Company:</label>
@@ -33,5 +43,4 @@
 
         <input type="submit" value="Sign Up">
     </form>
-
 {% endblock %}
