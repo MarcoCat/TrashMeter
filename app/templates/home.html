@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>Home Page</h2>
-    <p>Welcome to the home page!</p>
+<div class="hero-section">
+    <img src="{{ url_for('static', filename='images/main1.jpg') }}" alt="Background Image" class="background-image">
+    <div class="content">
+        <h1>PickUp3 is an easy, fun way for each of us to help protect marine life and ocean health.</h1>
+        <button class="join-button">Join the Movement</button>
+    </div>
+</div>
 {% endblock %}
