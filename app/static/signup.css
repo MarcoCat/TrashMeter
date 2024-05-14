@@ -8,17 +8,16 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
 }
 
 form {
     background-color: #FFFFFF;
     padding: 40px;
-    margin: 10px auto; /* Reduced margin */
+    margin: 20px auto;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 90%; /* Adjusted width */
-    max-width: 600px; /* Max-width to fit wider screens */
+    width: 90%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,8 +31,7 @@ h2 {
 }
 
 label {
-    display: flex;
-    align-items: center;
+    display: block;
     text-align: left;
     color: #235A70;
     width: 100%;
@@ -52,24 +50,6 @@ input[type="text"], input[type="password"], select {
     border: 1px solid #D0D0D0;
     box-sizing: border-box;
     border-radius: 5px;
-}
-
-input[type="text"][readonly] {
-    background-color: #EFEFEF;
-    cursor: pointer;
-}
-
-#organization_name_field {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    margin-top: 20px;
-}
-
-#organization_name_field img {
-    margin-left: 10px;
-    cursor: pointer;
-    vertical-align: middle;
 }
 
 .forgot-password-container {
@@ -127,30 +107,24 @@ input[type="submit"] {
     text-decoration: none;
 }
 
-@media only screen and (max-width: 600px) {
-    body {
-        justify-content: flex-start; /* Align content to the top */
-        padding-top: 0; /* Remove top padding */
-        margin: 0;
-        width: 100%; /* Ensure full width */
-        height: 100%; /* Ensure full height */
-    }
-    form {
-        padding: 15px; /* Smaller padding to use more space */
-        margin: 0; /* Remove margin to use full screen width */
-        width: 95%; /* Increased width */
-        max-width: 95%; /* Maximum width also increased */
-        height: auto; /* Auto-adjust height */
-        border-radius: 0; /* Optional: remove border-radius for full-width effect */
-    }
-    input[type="text"], input[type="password"], input[type="submit"], select, .link-forgot-password, .link-sign-up {
-        margin: 5px 0; /* Reduced vertical spacing */
-    }
-    #organization_name_field {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    #organization_name_field label, #organization_name_field input {
-        width: 100%; /* Ensure full width usage */
-    }
+#organization_name_field {
+    width: 100%; /* Ensure it aligns with other form elements */
+    margin-bottom: 20px; /* Space below the field */
+    display: none; /* Initially hidden */
 }
+
+#organization_label {
+    display: block; /* Consistent with other labels */
+    text-align: left; /* Left align text */
+    color: #235A70; /* Matching label color */
+    margin-bottom: 5px; /* Space above the input */
+}
+
+#organization_name {
+    width: 100%; /* Full width to match other inputs */
+    padding: 8px; /* Padding for comfort */
+    border: 1px solid #D0D0D0; /* Consistent border styling */
+    box-sizing: border-box; /* Handles padding & border calculations */
+    border-radius: 5px; /* Rounded corners */
+}
+
