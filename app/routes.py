@@ -189,3 +189,8 @@ def update_trash():
         db.session.commit()
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
+
+@app.route('/leaderboard')
+def leaderboard():
+    users = User.query.order_by(User.trash_collected.desc()).all()
+    return render_template('leaderboard.html', users=users)
