@@ -27,7 +27,7 @@
         </select>
 
         <div id="position_field" style="display: none;">
-            <label for="position">Position:</label>
+            <label for="position">Position <span class="required"> *</span></label>
             <div class="radio-group">
                 <input type="radio" id="pos1" name="position" value="teacher">
                 <label for="pos1">Teacher</label>
@@ -37,8 +37,11 @@
         </div>
 
         <div id="organization_name_field" style="display: none;">
-            <label id="organization_label" for="organization_name">Name of your School/Organization/Company:</label>
-            <input type="text" id="organization_name" name="organization_name" onclick="redirectToSearch()">
+            <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
+            <div class="input-with-icon">
+                <input type="text" id="organization_name" name="organization_name" onclick="redirectToSearch()">
+                <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon">
+            </div>
         </div>
 
         <input type="submit" value="Sign Up">
