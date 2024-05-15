@@ -8,6 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh; /* Ensure full viewport height */
 }
 
 form {
@@ -107,12 +108,57 @@ input[type="submit"] {
     text-decoration: none;
 }
 
-@media only screen and (max-width: 600px) {
+#organization_name_field, #position_field {
+    width: 100%;
+    margin-bottom: 20px;
+    display: none;
+}
+
+#organization_label, #position_label {
+    display: block;
+    text-align: left;
+    color: #235A70;
+    margin-bottom: 5px;
+}
+
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon input[type="text"] {
+    padding-right: 30px; /* Space for the icon */
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 30%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    width: auto; /* Radio buttons should not take full width */
+    padding: 0; /* Remove padding for radio buttons */
+    margin-right: 5px; /* Space between radio buttons and labels */
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+}
+
+.radio-group label {
+    margin-right: 20px; /* Add some space between radio button groups */
+}
+
+@media (max-width: 768px) {
     form {
+        width: calc(100% - 40px); /* Adjust width to add margin on sides */
         padding: 20px;
-        max-width: 95%;
-    }
-    input[type="text"], input[type="password"], input[type="submit"], .link-forgot-password, .link-sign-up {
-        margin: 5px 0;
+        margin: 20px; /* Ensure centered alignment with some margin */
     }
 }
