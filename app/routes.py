@@ -218,8 +218,23 @@ def update_trash():
         db.session.commit()
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
+    
 
 @app.route('/leaderboard')
 def leaderboard():
+    # Leaderboard for all users
     users = User.query.order_by(User.trash_collected.desc()).all()
-    return render_template('leaderboard.html', users=users)
+
+    # Leaderboard for companies
+    companies = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'company').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+
+    # Leaderboard for schools
+    schools = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
