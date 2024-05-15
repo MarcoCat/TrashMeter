@@ -3,7 +3,12 @@
 {% block content %}
 <div class="container">
     <h2>Edit Profile</h2>
-    <form action="{{ url_for('update_profile') }}" method="POST">
+    <form action="{{ url_for('update_profile') }}" method="POST" enctype="multipart/form-data">
+        <div class="profile-image-container">
+            <img id="profileImagePreview" src="{{ url_for('profile_picture', user_id=user.id) }}" alt="Profile Image">
+            <input type="file" id="profile_image" name="profile_image" accept="image/*" onchange="previewImage(event)">
+            <img src="{{ url_for('static', filename='images/image_icon.png') }}" alt="Upload Icon" class="upload-icon" onclick="document.getElementById('profile_image').click();">
+        </div>
         <div class="mb-3">
             <label for="username" class="form-label">Username</label>
             <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}">
@@ -22,26 +27,49 @@
         </div>
         <div class="mb-3">
             <label for="account_type" class="form-label">Account Type</label>
-            <select class="form-control" name="account_type" id="account_type">
+            <select class="form-control" name="account_type" id="account_type" onchange="toggleVisibility()">
                 <option value="individual" {% if user.account_type == 'individual' %}selected{% endif %}>Individual</option>
                 <option value="company" {% if user.account_type == 'company' %}selected{% endif %}>Company</option>
                 <option value="school" {% if user.account_type == 'school' %}selected{% endif %}>School</option>
                 <option value="volunteer" {% if user.account_type == 'volunteer' %}selected{% endif %}>Volunteer Organization</option>
             </select>
         </div>
-        <div class="mb-3">
-            <label for="position" class="form-label">Position</label>
-            <div>
-                <input type="radio" id="pos1" name="position" value="position 1" {% if user.position == 'position 1' %}checked{% endif %}>
-                <label for="pos1">Position 1</label>
-                <input type="radio" id="pos2" name="position" value="position 2" {% if user.position == 'position 2' %}checked{% endif %}>
-                <label for="pos2">Position 2</label>
+        <div id="position_field" class="mb-3" style="display: none;">
+            <label for="position">Position <span class="required"> *</span></label>
+            <div class="radio-group">
+                <input type="radio" id="pos1" name="position" value="teacher" {% if user.position == 'teacher' %}checked{% endif %}>
+                <label for="pos1">Teacher</label>
+                <input type="radio" id="pos2" name="position" value="student" {% if user.position == 'student' %}checked{% endif %}>
+                <label for="pos2">Student</label>
+            </div>
+        </div>
+        <div id="organization_name_field" class="mb-3" style="display: none;">
+            <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
+            <div class="input-with-icon">
+                <input type="text" id="organization_name" name="organization_name" value="{{ user.organization_name }}">
+                <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="redirectToSearch()">
             </div>
         </div>
         <div class="button-container">
             <button type="submit" class="btn btn-primary">Update Profile</button>
-            <a href="{{ url_for('change_password') }}" class="btn btn-secondary ml-2">Change Password</a> <!-- Button to change password -->
+            <a href="{{ url_for('change_password') }}" class="btn btn-secondary">Change Password</a>
         </div>
     </form>
 </div>
+
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        toggleVisibility();
+    });
+
+    function previewImage(event) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var output = document.getElementById('profileImagePreview');
+            output.src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    }
+</script>
 {% endblock %}

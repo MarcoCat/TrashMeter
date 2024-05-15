@@ -1,11 +1,12 @@
 from flask import current_app as app
-from flask import render_template, request, redirect, url_for, session, flash, g
+from flask import render_template, request, redirect, url_for, session, flash, g, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from . import db, mail  # Adjusted import here
-from .models import User
-from flask_mail import Message
+from . import db, mail
+from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+import io
+import os
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -24,7 +25,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User.query.get(user_id)
+        g.user = db.session.get(User, user_id)
 
 @app.route('/')
 def index():
@@ -59,10 +60,11 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # Redirect logged in users
     if 'user_id' in session:
         flash('You are already logged in. No need to sign up again.', 'info')
         return redirect(url_for('index'))
+
+    organizations = Organization.query.all()
 
     if request.method == 'POST':
         username = request.form['username']
@@ -71,19 +73,26 @@ def signup():
         last_name = request.form['last_name']
         account_type = request.form['account_type']
         email = request.form['email']
-        position = request.form['position']
-        new_user = User(username=username,
-                        password=password,
-                        first_name=first_name,
-                        last_name=last_name,
-                        account_type=account_type,
-                        email=email,
-                        position=position)
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Signup successful! Please log in.', 'success')
-        return redirect(url_for('login'))
-    return render_template('signup.html')
+        position = request.form.get('position')
+        organization_id = request.form.get('organization_id')
+        
+        if account_type in ['school', 'company', 'volunteer'] and not organization_id:
+            flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
+        else:
+            new_user = User(username=username,
+                            password=password,
+                            first_name=first_name,
+                            last_name=last_name,
+                            account_type=account_type,
+                            email=email,
+                            position=position,
+                            organization_id=organization_id)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Signup successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+
+    return render_template('signup.html', organizations=organizations)
 
 
 @app.route('/logout')
@@ -167,14 +176,65 @@ def profile():
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
+    user = User.query.get(g.user.id)
+    user.username = request.form['username']
+    user.first_name = request.form['first_name']
+    user.last_name = request.form['last_name']
+    user.email = request.form['email']
+    user.account_type = request.form['account_type']
+    user.position = request.form.get('position')
+
+    profile_picture = request.files.get('profile_image')
+    if profile_picture:
+        user.profile_picture = profile_picture.read()
+
+    db.session.commit()
+    flash('Profile updated successfully!', 'success')
+    return redirect(url_for('profile'))
+
+@app.route('/profile_picture/<int:user_id>')
+def profile_picture(user_id):
+    user = User.query.get(user_id)
+    if user and user.profile_picture:
+        return send_file(
+            io.BytesIO(user.profile_picture),
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name='profile_picture.jpg'
+        )
+    else:
+        # Return the default profile picture if no user or profile picture is found
+        default_image_path = os.path.join(app.root_path, 'static/images/user_icon.png')
+        return send_file(default_image_path, mimetype='image/jpeg')
+
+
+@app.route('/update_trash', methods=['POST'])
+@login_required
+def update_trash():
     if request.method == 'POST':
-        user = User.query.get(g.user.id)
-        user.username = request.form['username']
-        user.first_name = request.form['first_name']
-        user.last_name = request.form['last_name']
-        user.email = request.form['email']
-        user.account_type = request.form['account_type']
-        user.position = request.form['position']
+        trash_amount = int(request.form['trash_amount'])
+        user = db.session.get(User, g.user.id)
+        user.trash_collected += trash_amount
         db.session.commit()
-        flash('Profile updated successfully!', 'success')
+        flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
+    
+
+@app.route('/leaderboard')
+def leaderboard():
+    # Leaderboard for all users
+    users = User.query.order_by(User.trash_collected.desc()).all()
+
+    # Leaderboard for companies
+    companies = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'company').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+
+    # Leaderboard for schools
+    schools = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)

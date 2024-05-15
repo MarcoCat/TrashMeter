@@ -1,3 +1,7 @@
+/* Existing CSS */
+
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee&family=Kaushan+Script&family=Karma:wght@400;700&family=Libre+Bodoni:wght@400;700&display=swap');
+
 body, html {
     margin: 0;
     padding: 0;
@@ -50,4 +54,181 @@ body, html {
 
 .join-button:hover {
     background-color: #FFC107;
+}
+
+/* Additional styles */
+body {
+    line-height: 1.6;
+    color: #4d4d4d;
+}
+
+.hero-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.pickup3-section {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 0 20px;
+    text-align: left; /* Ensure left alignment */
+}
+
+.pickup3-heading {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #005a8b;
+}
+
+.simple-action {
+    color: #00a69c;
+}
+
+.instant-impact {
+    color: #ffb400;
+}
+
+.intro-text {
+    margin: 20px 0;
+    font-size: 1.2rem;
+}
+
+.description {
+    margin: 20px 0;
+    font-size: 1rem;
+}
+
+/* Challenge Section */
+.challenge-section {
+    text-align: center;
+}
+
+.challenge-heading {
+    background-color: #E5F5F5;
+    padding: 20px 0;
+    margin: 0;
+    font-size: 2rem;
+    color: #235A70;
+    font-family: 'Karma', serif; /* Apply Karma font */
+}
+
+.challenge-steps {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+}
+
+.challenge-step {
+    flex: 1;
+    padding: 20px;
+    border-radius: 0;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+}
+
+.challenge-step img {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+}
+
+.challenge-step h3 {
+    font-size: 4rem; /* Increase font size */
+    margin: 10px 0;
+    color: #fff;
+    font-family: 'Kaushan Script', cursive; /* Apply Kaushan Script font */
+    font-weight: bold; /* Make the font bold */
+}
+
+.challenge-step p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #fff;
+    font-family: 'Libre Bodoni', serif; /* Apply Libre Bodoni font */
+}
+
+.learn-more {
+    color: #fff;
+    text-decoration: none;
+    font-family: 'ABeeZee', sans-serif; /* Apply ABeeZee font */
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+    font-size: 0.9rem; /* Make the font size smaller than Libre Bodoni */
+}
+
+.learn-more:hover {
+    text-decoration: underline;
+}
+
+.step-1 {
+    background-color: #235A6C;
+}
+
+.step-2 {
+    background-color: #00AFAD;
+}
+
+.step-3 {
+    background-color: #F5BA2F;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .challenge-steps {
+        flex-direction: column;
+    }
+
+    .challenge-step {
+        width: 100%;
+    }
+}
+
+/* Social Media Section */
+.social-media-section {
+    background-color: #4C7988;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.social-media-section h2 {
+    color: #fff;
+    font-family: 'Libre Bodoni', serif; /* Use Libre Bodoni font for the heading */
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.social-media-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #00AFAD;
+    padding: 5px;
+}
+
+.social-icon:hover {
+    background-color: #008F8C;
+}
+
+/* Additional styles for responsive design */
+@media (max-width: 768px) {
+    .challenge-steps {
+        flex-direction: column;
+    }
+
+    .social-media-buttons {
+        flex-direction: column;
+    }
+
+    .social-icon {
+        margin-bottom: 10px;
+    }
 }
