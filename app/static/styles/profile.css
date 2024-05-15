@@ -51,7 +51,7 @@ input[type="radio"] {
     width: 100%;
 }
 
-button[type="submit"] {
+button[type="submit"], a.btn {
     background-color: #F5BA2F;
     color: white;
     border: none;
@@ -59,8 +59,42 @@ button[type="submit"] {
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
-    width: calc(60% - 40px);
+    width: calc(50% - 40px);
     margin-top: 20px;
     text-align: center;
+    text-decoration: none; /* Remove underline from the link */
+    display: inline-block; /* Ensure a.btn behaves like a button */
+    line-height: normal; /* Ensure proper line height for a.btn */
 }
 
+button[type="submit"]:hover, a.btn:hover {
+    background-color: #E5A622;
+}
+
+a.btn-secondary {
+    background-color: #6c757d; /* Bootstrap secondary button color */
+    color: white;
+    margin-left: 20px; /* Adds space between buttons */
+}
+
+a.btn-secondary:hover {
+    background-color: #5a6268; /* Darker shade for hover */
+}
+.input-with-icon {
+    position: relative;
+    width: 100%;
+}
+
+.input-with-icon input[type="text"] {
+    padding-right: 30px; /* Space for the icon */
+}
+
+.search-icon {
+    position: absolute;
+    right: 10px;
+    top: 30%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
