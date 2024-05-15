@@ -2,7 +2,7 @@ from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from . import db, mail  # Adjusted import here
+from . import db, mail
 from .models import User
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
@@ -24,7 +24,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User.query.get(user_id)
+        g.user = db.session.get(User, user_id)
 
 @app.route('/')
 def index():
@@ -178,3 +178,19 @@ def update_profile():
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))
+
+@app.route('/update_trash', methods=['POST'])
+@login_required
+def update_trash():
+    if request.method == 'POST':
+        trash_amount = int(request.form['trash_amount'])
+        user = db.session.get(User, g.user.id)
+        user.trash_collected += trash_amount
+        db.session.commit()
+        flash('Trash collection updated successfully!', 'success')
+        return redirect(url_for('profile'))
+
+@app.route('/leaderboard')
+def leaderboard():
+    users = User.query.order_by(User.trash_collected.desc()).all()
+    return render_template('leaderboard.html', users=users)

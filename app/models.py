@@ -9,4 +9,4 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     account_type = db.Column(db.String(100), nullable=False)
     position = db.Column(db.String(100), nullable=False)
-
+    trash_collected = db.Column(db.Integer, default=0)
