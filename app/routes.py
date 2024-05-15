@@ -71,7 +71,7 @@ def signup():
         last_name = request.form['last_name']
         account_type = request.form['account_type']
         email = request.form['email']
-        position = request.form['position']
+        position = request.form.get('position')
         new_user = User(username=username,
                         password=password,
                         first_name=first_name,
@@ -174,7 +174,7 @@ def update_profile():
         user.last_name = request.form['last_name']
         user.email = request.form['email']
         user.account_type = request.form['account_type']
-        user.position = request.form['position']
+        user.position = request.form.get('position')
         db.session.commit()
         flash('Profile updated successfully!', 'success')
         return redirect(url_for('profile'))
