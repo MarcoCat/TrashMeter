@@ -31,6 +31,7 @@ def create_test_users():
         User(username='ubc_student', password=generate_password_hash('password123'), first_name='Emma', last_name='Smith', email='emma.smith@ubc.ca', account_type='school', position='student', organization_id=ubc.id, trash_collected=30),
         User(username='bcit_student', password=generate_password_hash('password123'), first_name='Liam', last_name='Johnson', email='liam.johnson@bcit.ca', account_type='school', position='student', organization_id=bcit.id, trash_collected=25),
         User(username='langara_teacher', password=generate_password_hash('password123'), first_name='Olivia', last_name='Williams', email='olivia.williams@langara.ca', account_type='school', position='teacher', organization_id=langara.id, trash_collected=35),
+        User(username='bcit_student2', password=generate_password_hash('password123'), first_name='John', last_name='Chang', email='john.chang@bcit.ca', account_type='school', position='student', organization_id=bcit.id, trash_collected=20),
         
         # Company users
         User(username='telus_employee', password=generate_password_hash('password123'), first_name='James', last_name='Brown', email='james.brown@telus.com', account_type='company', position='employee', organization_id=telus.id, trash_collected=40),
