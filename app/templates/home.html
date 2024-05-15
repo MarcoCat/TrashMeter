@@ -20,14 +20,8 @@
                 <div class="progress-bar" style="width: {{ width_percentage }}%"></div>
             </div>
 
-            <h2>You have picked up: {{ personal_counter }}</h2>
+            <h2>You have picked up: {{ user.trash_collected }}</h2>
         </div>
-
-{#         <h2>Trash Collection History</h2>#}
-{#        {% for record in trash_history %}#}
-{#            <h2>{{ record.date }}      {{ record.picked_up }}     {{ record.beach }}</h2>#}
-{#        {% endfor %}#}
-
 
         <form action="/update" method="post">
             <label for="beach">Select a beach:</label>

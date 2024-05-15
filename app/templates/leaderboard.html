@@ -1,35 +1,45 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Leaderboard</h1>
-    <div class="d-flex justify-content-end">
-        <div class="form-group">
-            <label for="filterSelect">Filter :</label>
-            <select id="filterSelect" class="form-control">
-                <option value="default">Select Filter</option>
-                <option value="desc">Most to Least</option>
-                <option value="asc">Least to Most</option>
-            </select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Collection Leaderboard</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='leaderboards.css') }}">
+    <style></style>
+</head>
+<body>
+    <div class="container">
+        <h1>Trash Collection Leaderboard</h1>
+        <div class="nav-links">
+            <a href="/leaderboard/individual">Individual</a>
+            <a href="/leaderboard/school">School</a>
+            <a href="/leaderboard/company">Company</a>
         </div>
+        <h2>Account Type: {{ account_type }}</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Username</th>
+                    <th>Trash Collected</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rank, user in leaderboard %}
+                <tr>
+                    <td>{{ rank }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.trash_collected }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Username</th>
-                <th scope="col">Trash Collected</th>
-            </tr>
-        </thead>
-        <tbody id="leaderboardBody">
-            {% for user in users %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ user.username }}</td>
-                <td>{{ user.trash_collected }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+</body>
+</html>
+
+
 {% endblock %}

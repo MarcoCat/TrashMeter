@@ -47,8 +47,9 @@ def index():
         flash('Please log in to view this page.', 'warning')
         return redirect(url_for('login'))
     # trash_data = TrashData.query.first()
+    user = db.session.get(User, g.user.id)
     return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter,
-                           trash_history=trash_history)
+                           trash_history=trash_history, user=user)
                            # , this_date=this_date, beach=this_beach, this_picked=this_picked)
 
 
@@ -232,16 +233,16 @@ def update_trash():
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
 
-@app.route('/leaderboard')
-def leaderboard():
-    users = User.query.order_by(User.trash_collected.desc()).all()
-    return render_template('leaderboard.html', users=users)
+# @app.route('/leaderboard')
+# def leaderboard():
+#     users = User.query.order_by(User.trash_collected.desc()).all()
+#     return render_template('leaderboard.html', users=users)
 
 
 @app.route('/update', methods=['POST'])
 def update_trash_counter():
     global trash_counter, personal_counter, this_beach, this_date, this_picked
-    # Get the amount of trash picked up from the form
+    user = db.session.get(User, g.user.id)
     picked_up = int(request.form['picked_up'])
     beach = request.form['beach']
     # trash_history = session.get('trash_history', [])
@@ -262,9 +263,12 @@ def update_trash_counter():
         'beach': this_beach
     })
 
+
+    user.trash_collected += picked_up
+    db.session.commit()
     # this_date = datetime.now().strftime('%Y-%m-%d')
     trash_counter += picked_up
-    personal_counter += picked_up
+    # personal_counter += picked_up
     # Redirect back to the main page
     return redirect(url_for('index'))
 
@@ -283,3 +287,24 @@ def update_trash_counter():
 #     user.personal_counter += picked_up  # Update user's personal counter
 #     db.session.commit()
 #     return redirect(url_for('index'))
+
+@app.route('/leaderboard/<account_type>')
+def leaderboard(account_type):
+    if account_type == 'individual':
+        users = User.query.filter_by(account_type='individual').all()
+    elif account_type == 'school':
+        users = User.query.filter_by(account_type='school').all()
+    elif account_type == 'company':
+        users = User.query.filter_by(account_type='company').all()
+    else:
+        return "Invalid account type"
+
+    # Sort users based on trash collected
+    users_sorted = sorted(users, key=lambda x: x.trash_collected, reverse=True)
+
+    # Generate leaderboard with rank
+    leaderboard = [(i+1, user) for i, user in enumerate(users_sorted)]
+
+    return render_template('leaderboard.html', account_type=account_type, leaderboard=leaderboard)
+
+
