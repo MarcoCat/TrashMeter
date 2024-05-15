@@ -36,7 +36,11 @@
     {% if request.endpoint == 'index' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
     {% endif %}
-
+    <!-- Include change_password.css -->
+    {% if request.endpoint == 'change_password' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/change_password.css') }}">
+    {% endif %}
+    <!-- Include about.css -->
     {% if request.endpoint == 'about' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/about.css') }}">
     {% endif %}
@@ -61,7 +65,7 @@
     <script src="{{ url_for('static', filename='js/reset_password.js') }}"></script>
     {% endif %}
     <!-- Include signup.js -->
-    {% if request.endpoint == 'signup' %}
+    {% if request.endpoint == 'signup' or request.endpoint == 'profile' %}
     <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
     {% endif %}
 </body>
