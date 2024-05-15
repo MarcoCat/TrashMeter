@@ -1,14 +1,18 @@
 from datetime import datetime
 from flask import render_template, request, redirect, url_for, session, flash, g
+from flask import current_app as app
+from flask import render_template, request, redirect, url_for, session, flash, g, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from app import app, db, mail
-from app.models import User
+from . import db, mail
+from .models import User
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from sqlalchemy import desc
 
 
+import io
+import os
 
 # Utility function to check if a user is logged in
 
@@ -35,7 +39,7 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        g.user = User.query.get(user_id)
+        g.user = db.session.get(User, user_id)
 
 @app.route('/')
 def index():
@@ -89,7 +93,7 @@ def signup():
         last_name = request.form['last_name']
         account_type = request.form['account_type']
         email = request.form['email']
-        position = request.form['position']
+        position = request.form.get('position')
         new_user = User(username=username,
                         password=password,
                         first_name=first_name,
@@ -153,6 +157,28 @@ def reset_password(token):
             return redirect(url_for('login'))
     return render_template('reset_password.html', token=token)
 
+@app.route('/change_password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        old_password = request.form['old_password']
+        new_password = request.form['new_password']
+        confirm_password = request.form['confirm_password']
+
+        user = User.query.get(g.user.id)
+        if user and check_password_hash(user.password, old_password):
+            if new_password == confirm_password:
+                user.password = generate_password_hash(new_password)
+                db.session.commit()
+                flash('Your password has been updated.', 'success')
+                return redirect(url_for('profile'))
+            else:
+                flash('New passwords do not match.', 'danger')
+        else:
+            flash('Incorrect old password.', 'danger')
+    return render_template('change_password.html')
+
+
 @app.route('/profile')
 @login_required
 def profile():
@@ -163,17 +189,53 @@ def profile():
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
+    user = User.query.get(g.user.id)
+    user.username = request.form['username']
+    user.first_name = request.form['first_name']
+    user.last_name = request.form['last_name']
+    user.email = request.form['email']
+    user.account_type = request.form['account_type']
+    user.position = request.form.get('position')
+
+    profile_picture = request.files.get('profile_image')
+    if profile_picture:
+        user.profile_picture = profile_picture.read()
+
+    db.session.commit()
+    flash('Profile updated successfully!', 'success')
+    return redirect(url_for('profile'))
+
+@app.route('/profile_picture/<int:user_id>')
+def profile_picture(user_id):
+    user = User.query.get(user_id)
+    if user and user.profile_picture:
+        return send_file(
+            io.BytesIO(user.profile_picture),
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name='profile_picture.jpg'
+        )
+    else:
+        # Return the default profile picture if no user or profile picture is found
+        default_image_path = os.path.join(app.root_path, 'static/images/user_icon.png')
+        return send_file(default_image_path, mimetype='image/jpeg')
+
+
+@app.route('/update_trash', methods=['POST'])
+@login_required
+def update_trash():
     if request.method == 'POST':
-        user = User.query.get(g.user.id)
-        user.username = request.form['username']
-        user.first_name = request.form['first_name']
-        user.last_name = request.form['last_name']
-        user.email = request.form['email']
-        user.account_type = request.form['account_type']
-        user.position = request.form['position']
+        trash_amount = int(request.form['trash_amount'])
+        user = db.session.get(User, g.user.id)
+        user.trash_collected += trash_amount
         db.session.commit()
-        flash('Profile updated successfully!', 'success')
+        flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
+
+@app.route('/leaderboard')
+def leaderboard():
+    users = User.query.order_by(User.trash_collected.desc()).all()
+    return render_template('leaderboard.html', users=users)
 
 
 @app.route('/update', methods=['POST'])

@@ -1,0 +1,62 @@
+.svg-container {
+    position: relative;
+    width: 100%; /* Adjust width to 100% for responsiveness */
+    height: 0; /* Set height to 0 initially */
+    padding-bottom: 100%; /* Maintain aspect ratio of 1:1 */
+    margin: 0 auto; /* Center the container */
+}
+
+.background-svg,
+.outer-trashcan,
+.goal-trashcan {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.outer-trashcan .path-first,
+.outer-trashcan .path-second,
+.outer-trashcan .path-third,
+.outer-trashcan .path-fourth,
+.outer-trashcan .path-fifth {
+    fill: #235A70;
+}
+
+.outer-trashcan .path-inner1,
+.outer-trashcan .path-inner2,
+.outer-trashcan .path-inner3,
+.outer-trashcan .path-inner4,
+.outer-trashcan .path-inner5,
+.outer-trashcan .path-inner6,
+.outer-trashcan .path-inner7,
+.outer-trashcan .path-inner-goal1,
+.outer-trashcan .path-inner-goal2,
+.outer-trashcan .path-inner-goal3,
+.outer-trashcan .path-inner-goal4,
+.outer-trashcan .path-inner-goal5 {
+    fill: #F5BA2F;
+}
+
+.goal-trashcan .path-goal1,
+.goal-trashcan .path-goal2,
+.goal-trashcan .path-goal3,
+.goal-trashcan .path-goal4,
+.goal-trashcan .path-goal5 {
+    fill: #F5BA2F;
+}
+
+.background-svg {
+    fill: #E5F5F5;
+}
+
+.st2 {
+    fill: none;
+    stroke: #F5B92C;
+    stroke-width: 5;
+    stroke-miterlimit: 10;
+}
+.st4 {
+    fill: #F5B92C;
+}

@@ -1,37 +1,49 @@
-<!-- signup.html -->
 {% extends 'base.html' %}
 
 {% block content %}
     <form method="post">
         <h2>Join the PickUp3 Movement!</h2>
-        <label for="username">Username <span class="required">*</span></label>
+        <label for="username">Username <span class="required"> *</span></label>
         <input type="text" id="username" name="username"><br>
 
-        <label for="email">Email <span class="required">*</span></label>
+        <label for="email">Email <span class="required"> *</span></label>
         <input type="text" id="email" name="email"><br>
 
-        <label for="first_name">First Name <span class="required">*</span></label>
+        <label for="first_name">First Name <span class="required"> *</span></label>
         <input type="text" id="first_name" name="first_name"><br>
 
-        <label for="last_name">Last Name <span class="required">*</span></label>
+        <label for="last_name">Last Name <span class="required"> *</span></label>
         <input type="text" id="last_name" name="last_name"><br>
 
-        <label for="password">Password <span class="required">*</span></label>
+        <label for="password">Password <span class="required"> *</span></label>
         <input type="password" id="password" name="password"><br>
 
-        <label for="account_type">Account Type <span class="required">*</span></label>
-        <select name="account_type" id="account_type">
+        <label for="account_type">Account Type <span class="required"> *</span></label>
+        <select name="account_type" id="account_type" onchange="toggleVisibility()">
             <option value="individual">Individual</option>
             <option value="company">Company</option>
             <option value="school">School</option>
-            <option value="volenteer">Volenteer Organization</option>
-        </select><br>
+            <option value="volunteer">Volunteer Organization</option>
+        </select>
 
-        <label for="positon">Positon:</label>
-        <input type="radio" id="pos1" name="position" value="position 1">
-        <label for="html">Position 1</label><br>
-        <input type="radio" id="pos2" name="position" value="position 2">
-        <label for="pos2">Position 2</label><br>
+        <div id="position_field" style="display: none;">
+            <label for="position">Position <span class="required"> *</span></label>
+            <div class="radio-group">
+                <input type="radio" id="pos1" name="position" value="teacher">
+                <label for="pos1">Teacher</label>
+                <input type="radio" id="pos2" name="position" value="student">
+                <label for="pos2">Student</label>
+            </div>
+        </div>
+
+        <div id="organization_name_field" style="display: none;">
+            <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
+            <div class="input-with-icon">
+                <input type="text" id="organization_name" name="organization_name">
+                <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="redirectToSearch()">
+            </div>
+        </div>
+
         <input type="submit" value="Sign Up">
     </form>
 {% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Leaderboard</h1>
+    <div class="d-flex justify-content-end">
+        <div class="form-group">
+            <label for="filterSelect">Filter :</label>
+            <select id="filterSelect" class="form-control">
+                <option value="default">Select Filter</option>
+                <option value="desc">Most to Least</option>
+                <option value="asc">Least to Most</option>
+            </select>
+        </div>
+    </div>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Username</th>
+                <th scope="col">Trash Collected</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+            {% for user in users %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ user.trash_collected }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
