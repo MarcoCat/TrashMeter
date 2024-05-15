@@ -5,7 +5,7 @@
     <h2>Edit Profile</h2>
     <form action="{{ url_for('update_profile') }}" method="POST" enctype="multipart/form-data">
         <div class="profile-image-container">
-            <img id="profileImagePreview" src="{{ url_for('static', filename='images/user_icon.png') }}" alt="Profile Image">
+            <img id="profileImagePreview" src="{{ url_for('profile_picture', user_id=user.id) }}" alt="Profile Image">
             <input type="file" id="profile_image" name="profile_image" accept="image/*" onchange="previewImage(event)">
             <img src="{{ url_for('static', filename='images/image_icon.png') }}" alt="Upload Icon" class="upload-icon" onclick="document.getElementById('profile_image').click();">
         </div>
