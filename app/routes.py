@@ -197,7 +197,7 @@ def profile_picture(user_id):
         )
     else:
         # Return the default profile picture if no user or profile picture is found
-        default_image_path = os.path.join(current_app.root_path, 'static/images/user_icon.png')
+        default_image_path = os.path.join(app.root_path, 'static/images/user_icon.png')
         return send_file(default_image_path, mimetype='image/jpeg')
 
 
