@@ -3,8 +3,7 @@ from flask import render_template, request, redirect, url_for, session, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User
-from flask_mail import Message
+from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
@@ -61,10 +60,11 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # Redirect logged in users
     if 'user_id' in session:
         flash('You are already logged in. No need to sign up again.', 'info')
         return redirect(url_for('index'))
+
+    organizations = Organization.query.all()
 
     if request.method == 'POST':
         username = request.form['username']
@@ -74,18 +74,25 @@ def signup():
         account_type = request.form['account_type']
         email = request.form['email']
         position = request.form.get('position')
-        new_user = User(username=username,
-                        password=password,
-                        first_name=first_name,
-                        last_name=last_name,
-                        account_type=account_type,
-                        email=email,
-                        position=position)
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Signup successful! Please log in.', 'success')
-        return redirect(url_for('login'))
-    return render_template('signup.html')
+        organization_id = request.form.get('organization_id')
+        
+        if account_type in ['school', 'company', 'volunteer'] and not organization_id:
+            flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
+        else:
+            new_user = User(username=username,
+                            password=password,
+                            first_name=first_name,
+                            last_name=last_name,
+                            account_type=account_type,
+                            email=email,
+                            position=position,
+                            organization_id=organization_id)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Signup successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+
+    return render_template('signup.html', organizations=organizations)
 
 
 @app.route('/logout')
@@ -211,8 +218,23 @@ def update_trash():
         db.session.commit()
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
+    
 
 @app.route('/leaderboard')
 def leaderboard():
+    # Leaderboard for all users
     users = User.query.order_by(User.trash_collected.desc()).all()
-    return render_template('leaderboard.html', users=users)
+
+    # Leaderboard for companies
+    companies = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'company').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+
+    # Leaderboard for schools
+    schools = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
