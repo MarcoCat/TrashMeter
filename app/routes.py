@@ -98,6 +98,8 @@ def signup():
         position = request.form.get('position')
         organization_id = request.form.get('organization_id')
 
+        
+
         if account_type in ['school', 'company', 'volunteer'] and not organization_id:
             flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
         else:
@@ -122,7 +124,7 @@ def logout():
     session.pop('user_id', None)
     flash('You have been logged out.', 'info')
     return redirect(url_for('index'))
-
+  
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
 @app.route('/forgot_password', methods=['GET', 'POST'])
@@ -240,6 +242,7 @@ def update_trash():
         db.session.commit()
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
+    
 
 
 @app.route('/update', methods=['POST'])
