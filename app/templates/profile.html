@@ -34,15 +34,6 @@
                 <option value="volunteer" {% if user.account_type == 'volunteer' %}selected{% endif %}>Volunteer Organization</option>
             </select>
         </div>
-        <div id="position_field" class="mb-3" style="display: none;">
-            <label for="position">Position <span class="required"> *</span></label>
-            <div class="radio-group">
-                <input type="radio" id="pos1" name="position" value="teacher" {% if user.position == 'teacher' %}checked{% endif %}>
-                <label for="pos1">Teacher</label>
-                <input type="radio" id="pos2" name="position" value="student" {% if user.position == 'student' %}checked{% endif %}>
-                <label for="pos2">Student</label>
-            </div>
-        </div>
         <div id="organization_name_field" class="mb-3" style="display: none;">
             <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
             <div class="input-with-icon">
@@ -56,20 +47,4 @@
         </div>
     </form>
 </div>
-
-<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        toggleVisibility();
-    });
-
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function() {
-            var output = document.getElementById('profileImagePreview');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
 {% endblock %}
