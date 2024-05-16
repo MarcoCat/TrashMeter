@@ -1,16 +1,21 @@
 <!-- nav.html -->
 <header>
-    <nav>
-        <div class="logo">
-            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Icon">
+    <nav class="navbar">
+        <div class="menu-container">
+            <button class="hamburger" onclick="toggleMenu()">☰</button>
+            <ul id="navList" class="nav-list hidden">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                {% if 'user_id' in session %}
+                    <!-- 로그인한 사용자를 위한 메뉴 항목 -->
+                    <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <!-- 비로그인 사용자를 위한 메뉴 항목 -->
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('contact') }}">Contact</a></li>
+            </ul>
         </div>
-        <ul>
-            <li><a href="{{ url_for('index') }}">Home</a></li>
-            <li><a href="{{ url_for('about') }}">About</a></li>
-            <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-            <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
-        </ul>
     </nav>
 </header>

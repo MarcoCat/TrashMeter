@@ -2,11 +2,11 @@ from datetime import datetime
 from flask import render_template, request, redirect, url_for, session, flash, g
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g, send_file
+from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User
-from flask_mail import Message
+from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 from sqlalchemy import desc
 
@@ -81,10 +81,11 @@ def login():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    # Redirect logged in users
     if 'user_id' in session:
         flash('You are already logged in. No need to sign up again.', 'info')
         return redirect(url_for('index'))
+
+    organizations = Organization.query.all()
 
     if request.method == 'POST':
         global trash_counter, personal_counter
@@ -95,18 +96,25 @@ def signup():
         account_type = request.form['account_type']
         email = request.form['email']
         position = request.form.get('position')
-        new_user = User(username=username,
-                        password=password,
-                        first_name=first_name,
-                        last_name=last_name,
-                        account_type=account_type,
-                        email=email,
-                        position=position)
-        db.session.add(new_user)
-        db.session.commit()
-        flash('Signup successful! Please log in.', 'success')
-        return redirect(url_for('login'))
-    return render_template('signup.html')
+        organization_id = request.form.get('organization_id')
+
+        if account_type in ['school', 'company', 'volunteer'] and not organization_id:
+            flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
+        else:
+            new_user = User(username=username,
+                            password=password,
+                            first_name=first_name,
+                            last_name=last_name,
+                            account_type=account_type,
+                            email=email,
+                            position=position,
+                            organization_id=organization_id)
+            db.session.add(new_user)
+            db.session.commit()
+            flash('Signup successful! Please log in.', 'success')
+            return redirect(url_for('login'))
+
+    return render_template('signup.html', organizations=organizations)
 
 
 @app.route('/logout')
@@ -233,11 +241,6 @@ def update_trash():
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
 
-# @app.route('/leaderboard')
-# def leaderboard():
-#     users = User.query.order_by(User.trash_collected.desc()).all()
-#     return render_template('leaderboard.html', users=users)
-
 
 @app.route('/update', methods=['POST'])
 def update_trash_counter():
@@ -245,15 +248,6 @@ def update_trash_counter():
     user = db.session.get(User, g.user.id)
     picked_up = int(request.form['picked_up'])
     beach = request.form['beach']
-    # trash_history = session.get('trash_history', [])
-    # trash_history.append({
-    #     'date': datetime.now().strftime('%Y-%m-%d'),
-    #     'picked_up': picked_up,
-    #     'beach': beach
-    # })
-    # session['trash_history'] = trash_history
-    # session.modified = True  # Ensure session is saved
-    # Update the trash counter
     this_picked = picked_up
     this_beach = beach
 
@@ -263,48 +257,28 @@ def update_trash_counter():
         'beach': this_beach
     })
 
-
     user.trash_collected += picked_up
     db.session.commit()
-    # this_date = datetime.now().strftime('%Y-%m-%d')
     trash_counter += picked_up
     # personal_counter += picked_up
     # Redirect back to the main page
     return redirect(url_for('index'))
 
-# @app.route('/update', methods=['POST'])
-# def update_trash_counter():
-#     picked_up = int(request.form['picked_up'])
-#     beach = request.form['beach']
-#     if beach == 'other':
-#         other_beach = request.form['other_beach']
-#         # Save the beach name to the database if it's not already there
-#     trash_data = TrashData.query.first()  # Fetch the global total trash data
-#     trash_data.total_trash_collected += picked_up  # Update global total trash data
-#     db.session.commit()
-#     user_id = session['user_id']
-#     user = User.query.get(user_id)
-#     user.personal_counter += picked_up  # Update user's personal counter
-#     db.session.commit()
-#     return redirect(url_for('index'))
+@app.route('/leaderboard')
+def leaderboard():
+    # Leaderboard for all users
+    users = User.query.order_by(User.trash_collected.desc()).all()
 
-@app.route('/leaderboard/<account_type>')
-def leaderboard(account_type):
-    if account_type == 'individual':
-        users = User.query.filter_by(account_type='individual').all()
-    elif account_type == 'school':
-        users = User.query.filter_by(account_type='school').all()
-    elif account_type == 'company':
-        users = User.query.filter_by(account_type='company').all()
-    elif account_type == 'total':
-        users = User.query.filter_by(account_type=account_type).all()
+    # Leaderboard for companies
+    companies = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'company').group_by(Organization.name).order_by(db.desc('total_trash')).all()
 
-    # Sort users based on trash collected
-    users_sorted = sorted(users, key=lambda x: x.trash_collected, reverse=True)
+    # Leaderboard for schools
+    schools = db.session.query(
+        Organization.name,
+        db.func.sum(User.trash_collected).label('total_trash')
+    ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
 
-    # Generate leaderboard with rank
-    leaderboard = [(i+1, user) for i, user in enumerate(users_sorted)]
-
-    return render_template('leaderboard.html', account_type=account_type, leaderboard=leaderboard)
-
-
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
