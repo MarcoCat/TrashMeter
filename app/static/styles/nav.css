@@ -1,31 +1,68 @@
-header {
-    background-color: #f8f9fa; /* Background color of the navigation bar */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Adds shadow effect */
-    position: fixed; /* Fixed at the top */
-    width: 100%; /* Full width */
-    top: 0; /* Positioned at the top */
-    left: 0; /* Aligned to the left edge */
-    z-index: 1000; /* Set z-index to appear on top of other elements */
+/* nav.css */
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 0 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    height: 60px;
 }
 
-nav ul {
-    list-style: none; /* Removes list styling */
+.menu-container {
+    display: flex;
+    align-items: center;
+}
+
+.hamburger {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px 15px; /* Adjust padding to reduce excessive width */
+    margin-right: 10px; /* Optional: for space between menu and the next element */
+}
+
+.nav-list {
+    list-style-type: none;
     padding: 0;
     margin: 0;
-    display: flex; /* Arranges items horizontally */
-    justify-content: center; /* Centers items */
+    background-color: #444;
+    position: absolute;
+    top: 60px; /* Adjusted to the height of the navbar */
+    left: 0; /* Start from the left edge of the viewport */
+    display: none;
+    width: auto; /* Adjust width to fit content */
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
 }
 
-nav ul li {
-    padding: 10px 20px; /* Adjusts spacing with padding */
+.nav-list li {
+    white-space: nowrap; /* Ensure the text does not wrap */
+    padding: 12px 20px; /* Adjust padding to fit content */
 }
 
-nav ul li a {
-    text-decoration: none; /* Removes underline from links */
-    color: black; /* Text color */
-    font-weight: bold; /* Makes text bold */
+.nav-list li a {
+    color: white;
+    text-decoration: none;
+    display: block;
 }
 
-nav ul li a:hover {
-    color: #0056b3; /* Changes color on hover */
+.nav-list li a:hover {
+    background-color: #555;
+}
+
+.navbar-center, .navbar-right {
+    flex: 0 1 auto;
+}
+
+.navbar-center img, .navbar-right img {
+    max-height: 100%;
+    padding: 10px;
 }
