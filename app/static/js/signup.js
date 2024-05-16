@@ -10,6 +10,7 @@ function toggleVisibility() {
     if (["company", "school", "volunteer"].includes(accountType)) {
         organizationNameDiv.style.display = "block";
         organizationLabel.textContent = getLabelForType(accountType);
+        filterOrganizations(accountType);
     } else {
         organizationNameDiv.style.display = "none";
     }
@@ -28,9 +29,20 @@ function getLabelForType(type) {
     }
 }
 
-function redirectToSearch() {
-    var searchTerm = document.getElementById("organization_name").value;
-    window.location.href = 'search.html?query=' + encodeURIComponent(searchTerm); // Pass search term as a query parameter
+function filterOrganizations(accountType) {
+    var organizationSelect = document.getElementById("organization_id");
+    var options = organizationSelect.options;
+    
+    for (var i = 0; i < options.length; i++) {
+        var option = options[i];
+        var orgType = option.getAttribute('data-type');
+
+        if (accountType === orgType || option.value === "") {
+            option.style.display = "block";
+        } else {
+            option.style.display = "none";
+        }
+    }
 }
 
 function previewImage(event) {
