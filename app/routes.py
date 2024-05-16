@@ -296,8 +296,8 @@ def leaderboard(account_type):
         users = User.query.filter_by(account_type='school').all()
     elif account_type == 'company':
         users = User.query.filter_by(account_type='company').all()
-    else:
-        return "Invalid account type"
+    elif account_type == 'total':
+        users = User.query.filter_by(account_type=account_type).all()
 
     # Sort users based on trash collected
     users_sorted = sorted(users, key=lambda x: x.trash_collected, reverse=True)
