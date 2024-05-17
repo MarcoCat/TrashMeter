@@ -2,41 +2,42 @@ from app import create_app, db
 from app.models import User, Organization
 from werkzeug.security import generate_password_hash
 
-def get_or_create(model, **kwargs):
+def get_or_create(model, defaults=None, **kwargs):
     instance = model.query.filter_by(**kwargs).first()
     if instance:
         return instance
     else:
-        instance = model(**kwargs)
+        params = kwargs.copy()
+        if defaults:
+            params.update(defaults)
+        instance = model(**params)
         db.session.add(instance)
         db.session.commit()
         return instance
 
 def create_test_users():
-    # Create or get existing organizations
     ubc = get_or_create(Organization, name='University of British Columbia', type='school')
     bcit = get_or_create(Organization, name='British Columbia Institute of Technology', type='school')
     langara = get_or_create(Organization, name='Langara College', type='school')
-    telus = get_or_create(Organization, name='Telus', type='company')
-    rbc = get_or_create(Organization, name='RBC', type='company')
-    vancity = get_or_create(Organization, name='Vancity', type='company')
+    telus = get_or_create(Organization, name='Telus', type='company', defaults={'total_trash': 100})
+    rbc = get_or_create(Organization, name='RBC', type='company', defaults={'total_trash': 150})
+    vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'total_trash': 120})
 
     users = [
         # Individual users
-        User(username='john_doe', password=generate_password_hash('password123'), first_name='John', last_name='Doe', email='john.doe@example.com', account_type='individual', trash_collected=10),
-        User(username='alice_jones', password=generate_password_hash('password123'), first_name='Alice', last_name='Jones', email='alice.jones@example.com', account_type='individual', trash_collected=20),
-        User(username='bob_brown', password=generate_password_hash('password123'), first_name='Bob', last_name='Brown', email='bob.brown@example.com', account_type='individual', trash_collected=15),
+        User(username='john_doe', password=generate_password_hash('password123'), first_name='John', last_name='Doe', email='john.doe@example.com', account_type='individual', trash_collected=10, unallocated_trash=5),
+        User(username='alice_jones', password=generate_password_hash('password123'), first_name='Alice', last_name='Jones', email='alice.jones@example.com', account_type='individual', trash_collected=20, unallocated_trash=10),
+        User(username='bob_brown', password=generate_password_hash('password123'), first_name='Bob', last_name='Brown', email='bob.brown@example.com', account_type='individual', trash_collected=15, unallocated_trash=5),
         
         # School users
-        User(username='ubc_student', password=generate_password_hash('password123'), first_name='Emma', last_name='Smith', email='emma.smith@ubc.ca', account_type='school', position='student', organization_id=ubc.id, trash_collected=30),
-        User(username='bcit_student', password=generate_password_hash('password123'), first_name='Liam', last_name='Johnson', email='liam.johnson@bcit.ca', account_type='school', position='student', organization_id=bcit.id, trash_collected=25),
-        User(username='langara_teacher', password=generate_password_hash('password123'), first_name='Olivia', last_name='Williams', email='olivia.williams@langara.ca', account_type='school', position='teacher', organization_id=langara.id, trash_collected=35),
-        User(username='bcit_student2', password=generate_password_hash('password123'), first_name='John', last_name='Chang', email='john.chang@bcit.ca', account_type='school', position='student', organization_id=bcit.id, trash_collected=20),
+        User(username='ubc_student', password=generate_password_hash('password123'), first_name='Emma', last_name='Smith', email='emma.smith@ubc.ca', account_type='school', position='student', organization_id=ubc.id, trash_collected=30, unallocated_trash=15),
+        User(username='bcit_student', password=generate_password_hash('password123'), first_name='Liam', last_name='Johnson', email='liam.johnson@bcit.ca', account_type='school', position='student', organization_id=bcit.id, trash_collected=25, unallocated_trash=10),
+        User(username='langara_teacher', password=generate_password_hash('password123'), first_name='Olivia', last_name='Williams', email='olivia.williams@langara.ca', account_type='school', position='teacher', organization_id=langara.id, trash_collected=35, unallocated_trash=20),
         
         # Company users
-        User(username='telus_employee', password=generate_password_hash('password123'), first_name='James', last_name='Brown', email='james.brown@telus.com', account_type='company', position='employee', organization_id=telus.id, trash_collected=40),
-        User(username='rbc_employee', password=generate_password_hash('password123'), first_name='Sophia', last_name='Martinez', email='sophia.martinez@rbc.com', account_type='company', position='employee', organization_id=rbc.id, trash_collected=50),
-        User(username='vancity_employee', password=generate_password_hash('password123'), first_name='William', last_name='Garcia', email='william.garcia@vancity.com', account_type='company', position='employee', organization_id=vancity.id, trash_collected=45)
+        User(username='telus_employee', password=generate_password_hash('password123'), first_name='James', last_name='Brown', email='james.brown@telus.com', account_type='company', position='employee', organization_id=telus.id, trash_collected=40, unallocated_trash=20),
+        User(username='rbc_employee', password=generate_password_hash('password123'), first_name='Sophia', last_name='Martinez', email='sophia.martinez@rbc.com', account_type='company', position='employee', organization_id=rbc.id, trash_collected=50, unallocated_trash=25),
+        User(username='vancity_employee', password=generate_password_hash('password123'), first_name='William', last_name='Garcia', email='william.garcia@vancity.com', account_type='company', position='employee', organization_id=vancity.id, trash_collected=45, unallocated_trash=15)
     ]
 
     for user in users:
