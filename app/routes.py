@@ -240,7 +240,7 @@ def leaderboard():
     return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
 
 
-@app.route('/allocate_trash', methods=['POST'])
+@app.route('/allocate_trash', methods=['GET', 'POST'])
 @login_required
 def allocate_trash():
     if request.method == 'POST':
@@ -250,7 +250,7 @@ def allocate_trash():
 
         if trash_amount > user.unallocated_trash:
             flash('You cannot allocate more trash than you have unallocated.', 'danger')
-            return redirect(url_for('profile'))
+            return redirect(url_for('allocate_trash'))
 
         user.unallocated_trash -= trash_amount
 
@@ -264,3 +264,6 @@ def allocate_trash():
             flash('Organization not found.', 'danger')
 
         return redirect(url_for('profile'))
+    
+    organizations = Organization.query.all()
+    return render_template('allocate_trash.html', organizations=organizations)
