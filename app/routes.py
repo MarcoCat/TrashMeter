@@ -215,10 +215,10 @@ def update_trash():
         trash_amount = int(request.form['trash_amount'])
         user = db.session.get(User, g.user.id)
         user.trash_collected += trash_amount
+        user.unallocated_trash += trash_amount
         db.session.commit()
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
-    
 
 @app.route('/leaderboard')
 def leaderboard():
