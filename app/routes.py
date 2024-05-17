@@ -238,3 +238,28 @@ def leaderboard():
     ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
 
     return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
+
+@app.route('/allocate_trash', methods=['POST'])
+@login_required
+def allocate_trash():
+    if request.method == 'POST':
+        organization_id = int(request.form['organization_id'])
+        trash_amount = int(request.form['trash_amount'])
+        user = db.session.get(User, g.user.id)
+
+        if trash_amount > user.unallocated_trash:
+            flash('You cannot allocate more trash than you have unallocated.', 'danger')
+            return redirect(url_for('profile'))
+
+        user.unallocated_trash -= trash_amount
+
+        # Update organization score
+        organization = db.session.get(Organization, organization_id)
+        if organization:
+            organization.total_trash = (organization.total_trash or 0) + trash_amount
+            db.session.commit()
+            flash(f'{trash_amount} pieces of trash allocated to {organization.name} successfully!', 'success')
+        else:
+            flash('Organization not found.', 'danger')
+
+        return redirect(url_for('profile'))
