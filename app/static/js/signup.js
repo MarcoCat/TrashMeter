@@ -1,8 +1,11 @@
+document.addEventListener("DOMContentLoaded", function() {
+    toggleVisibility();
+});
+
 function toggleVisibility() {
     var accountType = document.getElementById("account_type").value;
     var organizationNameDiv = document.getElementById("organization_name_field");
     var organizationLabel = document.getElementById("organization_label");
-    var positionField = document.getElementById("position_field");
 
     if (["company", "school", "volunteer"].includes(accountType)) {
         organizationNameDiv.style.display = "block";
@@ -10,12 +13,6 @@ function toggleVisibility() {
         filterOrganizations(accountType);
     } else {
         organizationNameDiv.style.display = "none";
-    }
-
-    if (accountType === "school") {
-        positionField.style.display = "block";
-    } else {
-        positionField.style.display = "none";
     }
 }
 
@@ -46,4 +43,13 @@ function filterOrganizations(accountType) {
             option.style.display = "none";
         }
     }
+}
+
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('profileImagePreview');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
 }

@@ -31,13 +31,13 @@
             <img src="{{ url_for('static', filename='images/challenge2.png') }}" alt="Step 2" class="challenge-image">
             <h3>2</h3>
             <p>Pick up at least 3 pieces of garbage</p>
-            <a href="#" class="learn-more">LEARN MORE »</a>
+            <a href="javascript:void(0)" class="learn-more" id="learn-more-btn">LEARN MORE »</a>
         </div>
         <div class="challenge-step step-3">
             <img src="{{ url_for('static', filename='images/challenge3.png') }}" alt="Step 3" class="challenge-image">
             <h3>3</h3>
             <p>Scan & record your trash count online</p>
-            <a href="#" class="learn-more">LEARN HOW »</a>
+            <a href="javascript:void(0)" class="learn-more" id="learn-how-btn">LEARN HOW »</a>
         </div>
     </div>
 </section>
@@ -57,4 +57,88 @@
     </div>
 </section>
 
+<!-- Modal Structure for "LEARN HOW" -->
+<div id="learn-how-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <img src="{{ url_for('static', filename='images/scan.jpg') }}" alt="Step 3" class="modal-image">
+        <h2>How to record your garbage count:</h2>
+        <ol>
+            <li>Use the camera app on your mobile phone to scan the QR code on event posters or participating beach garbage cans.</li>
+            <li>Click on the link that pops up in the image.</li>
+            <li>Enter in your trash count on the web page!</li>
+        </ol>
+        <p>If you can’t find the QR code, don’t worry, you can still contribute!</p>
+        <p>Visit <a href="https://pickup3.org/trash-meter/">pickup3.org/trash-meter/</a> and select (or enter) the beach name and number of pieces of garbage you collected from the beach.</p>
+        <p>Every week we will update our trash meter on the home page so you can see how your simple actions have directly impacted your local beach!</p>
+        <p>Don’t forget to share your contributions on social media and use <strong>#PickUp3</strong></p>
+    </div>
+</div>
+
+<!-- Modal Structure for "LEARN MORE" -->
+<div id="learn-more-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <img src="{{ url_for('static', filename='images/safety.jpg') }}" alt="Safety Tips" class="modal-image">
+        <h2>Safety tips:</h2>
+        <ul>
+            <li>Be extra cautious when looking for garbage near driftwood logs, cliffs, or other potentially hazardous areas.</li>
+            <li>Don’t pick up any needles, unless you are an adult who has a suitable sharps container.</li>
+            <li>Don’t pick up any kind of medical waste, oil, oiled materials, or any other debris that could be hazardous.</li>
+            <li>Don’t touch any dead or injured animals. If you believe an animal is in distress, call your local authority.</li>
+        </ul>
+        <h3>Top 5 items found at beach cleanups:</h3>
+        <ul>
+            <li>Cigarette butts</li>
+            <li>Food wrappers</li>
+            <li>Plastic beverage bottles</li>
+            <li>Plastic bottle caps</li>
+            <li>Plastic grocery bags</li>
+        </ul>
+        <p><em>Source: Ocean Conservancy</em></p>
+    </div>
+</div>
+
+<!-- How to get involved section -->
+<section class="involved-section" style="background-image: url('{{ url_for('static', filename='images/main2.jpg') }}');">
+    <h2>How to get involved</h2>
+    <div class="involved-options">
+        <div class="option">
+            <div class="icon-container">
+                <img src="{{ url_for('static', filename='images/paper_plane.png') }}" alt="Individuals" class="icon">
+            </div>
+            <h3>Individuals</h3>
+            <p>Stay in the know about upcoming events, challenges, and contests.</p>
+        </div>
+        <div class="option">
+            <div class="icon-container">
+                <img src="{{ url_for('static', filename='images/handshake.png') }}" alt="Volunteers" class="icon">
+            </div>
+            <h3>Volunteers</h3>
+            <p>An opportunity to gain volunteer & leadership experience.</p>
+        </div>
+        <div class="option">
+            <div class="icon-container">
+                <img src="{{ url_for('static', filename='images/school.png') }}" alt="Schools" class="icon">
+            </div>
+            <h3>Schools</h3>
+            <p>Take education to the beach. Challenge schools, classrooms, families!</p>
+        </div>
+        <div class="option">
+            <div class="icon-container">
+                <img src="{{ url_for('static', filename='images/building.png') }}" alt="Businesses" class="icon">
+            </div>
+            <h3>Businesses</h3>
+            <p>Become involved in your community through sponsorship and events.</p>
+        </div>
+        <div class="option">
+            <div class="icon-container">
+                <img src="{{ url_for('static', filename='images/multiple-users-silhouette.png') }}" alt="Community" class="icon">
+            </div>
+            <h3>Community</h3>
+            <p>Sponsor your community and lead your own PickUp3 movement.</p>
+        </div>
+    </div>
+    <button class="involved-button">FIND OUT HOW TO GET INVOLVED</button>
+</section>
 {% endblock %}

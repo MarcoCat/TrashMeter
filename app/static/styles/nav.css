@@ -46,7 +46,6 @@
 .nav-list li {
     white-space: nowrap; /* Ensure the text does not wrap */
     padding: 12px 20px; /* Adjust padding to fit content */
-}
 
 .nav-list li a {
     color: white;
@@ -60,6 +59,11 @@
 
 .navbar-center, .navbar-right {
     flex: 0 1 auto;
+}
+
+.navbar-center img, .navbar-right img {
+    max-height: 100%;
+    padding: 10px;
 }
 
 .navbar-center img, .navbar-right img {
