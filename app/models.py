@@ -21,3 +21,5 @@ class Organization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     type = db.Column(db.String(50), nullable=False)
+    total_trash = db.Column(db.Integer, default=0)
+    
