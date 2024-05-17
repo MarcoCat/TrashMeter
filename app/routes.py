@@ -228,16 +228,17 @@ def leaderboard():
     # Leaderboard for companies
     companies = db.session.query(
         Organization.name,
-        db.func.sum(User.trash_collected).label('total_trash')
-    ).join(User).filter(Organization.type == 'company').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+        Organization.total_trash
+    ).filter(Organization.type == 'company').order_by(db.desc(Organization.total_trash)).all()
 
     # Leaderboard for schools
     schools = db.session.query(
         Organization.name,
-        db.func.sum(User.trash_collected).label('total_trash')
-    ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+        Organization.total_trash
+    ).filter(Organization.type == 'school').order_by(db.desc(Organization.total_trash)).all()
 
     return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
+
 
 @app.route('/allocate_trash', methods=['POST'])
 @login_required
