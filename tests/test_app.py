@@ -1,8 +1,11 @@
 import pytest
 import io
+from flask import url_for
 from app import create_app, db
 from app.models import User, Organization
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeTimedSerializer
+from flask_mail import Message
 
 @pytest.fixture(scope='module')
 def test_client():
@@ -36,7 +39,6 @@ def test_client():
 
 @pytest.fixture(scope='module')
 def login_test_user(test_client):
-    """Log in the test user."""
     response = test_client.post('/login', data={
         'email': 'test@example.com',
         'password': 'password123'
@@ -48,7 +50,6 @@ def test_example(test_client):
     assert response.status_code == 200
 
 def test_update_trash(test_client, login_test_user):
-    """Test updating trash collected."""
     response = test_client.post('/update_trash', data={
         'trash_amount': 5
     }, follow_redirects=True)
@@ -56,13 +57,11 @@ def test_update_trash(test_client, login_test_user):
     assert response.status_code == 200
     assert b'Trash collection updated successfully!' in response.data
 
-    # Verify the user's trash_collected value is updated
     with test_client.application.app_context():
         user = User.query.filter_by(username='testuser').first()
         assert user.trash_collected == 5
 
 def test_allocate_trash(test_client, login_test_user):
-    """Test allocating trash to an organization."""
     with test_client.application.app_context():
         user = User.query.filter_by(username='testuser').first()
         user.unallocated_trash = 10
@@ -83,7 +82,6 @@ def test_allocate_trash(test_client, login_test_user):
         assert org.total_trash == 5
 
 def test_profile_update(test_client, login_test_user):
-    """Test updating user profile."""
     response = test_client.post('/update_profile', data={
         'username': 'updateduser',
         'first_name': 'Updated',
@@ -96,7 +94,6 @@ def test_profile_update(test_client, login_test_user):
     assert response.status_code == 200
     assert b'Profile updated successfully!' in response.data
 
-    # Verify the user's profile is updated
     with test_client.application.app_context():
         user = User.query.filter_by(username='updateduser').first()
         assert user is not None
@@ -104,7 +101,6 @@ def test_profile_update(test_client, login_test_user):
         assert user.email == 'updated@example.com'
 
 def test_image_upload(test_client, login_test_user):
-    """Test uploading and saving profile image."""
     data = {
         'username': 'testuser',
         'first_name': 'Test',
@@ -125,7 +121,6 @@ def test_image_upload(test_client, login_test_user):
         assert user.profile_picture is not None
 
 def test_create_test_users(test_client):
-    """Test creating test users."""
     with test_client.application.app_context():
         users = User.query.all()
         assert len(users) == 1
@@ -160,3 +155,26 @@ def create_test_users():
     for user in users:
         db.session.add(user)
     db.session.commit()
+
+def test_leaderboard(test_client, login_test_user):
+    response = test_client.get('/leaderboard')
+    assert response.status_code == 200
+    assert b'Leaderboard' in response.data
+
+def test_logout(test_client, login_test_user):
+    response = test_client.get('/logout', follow_redirects=True)
+    assert response.status_code == 200
+    assert b'You have been logged out.' in response.data
+
+def test_signup(test_client):
+    response = test_client.post('/signup', data={
+        'username': 'newuser',
+        'password': 'password123',
+        'first_name': 'New',
+        'last_name': 'User',
+        'account_type': 'regular',
+        'email': 'newuser@example.com'
+    }, follow_redirects=True)
+    
+    assert response.status_code == 200
+    assert b'Signup successful! Please log in.' in response.data
