@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Create {{ account_type|capitalize }} Information</h2>
 <form method="post" enctype="multipart/form-data" action="{{ url_for('create_information') }}">
+<h2>Create {{ account_type|capitalize }} Information</h2>
     <label for="organization_name">{{ account_type|capitalize }} Name <span class="required"> *</span></label>
     <input type="text" id="organization_name" name="organization_name" required><br>
 

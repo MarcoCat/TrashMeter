@@ -52,6 +52,10 @@
     {% if request.endpoint == 'search' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/search.css') }}">
     {% endif %}
+    <!-- Include create_information.css -->
+    {% if request.endpoint == 'create_information' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/create_information.css') }}">
+    {% endif %}
 
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
 
