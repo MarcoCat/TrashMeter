@@ -44,9 +44,13 @@
     {% if request.endpoint == 'about' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/about.css') }}">
     {% endif %}
-<!-- Include leaderboard.css -->
+    <!-- Include leaderboard.css -->
     {% if request.endpoint == 'leaderboard' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/leaderboard.css') }}">
+    {% endif %}
+    <!-- Include search.css -->
+    {% if request.endpoint == 'search' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/search.css') }}">
     {% endif %}
 
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
@@ -79,8 +83,16 @@
     {% if request.endpoint == 'profile' %}
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
     {% endif %}
+    <!-- Include create_information.js if the endpoint is profile -->
+    {% if request.endpoint == 'create_information' %}
+    <script src="{{ url_for('static', filename='js/create_information.js') }}"></script>
+    {% endif %}
+        <!-- Include search.js if the endpoint is profile -->
+    {% if request.endpoint == 'search' %}
+    <script src="{{ url_for('static', filename='js/search.js') }}"></script>
+    {% endif %}
     <script src="{{ url_for('static', filename='js/nav.js') }}"></script>
-     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 
 </body>
 </html>

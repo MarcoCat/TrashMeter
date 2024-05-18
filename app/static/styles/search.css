@@ -1,0 +1,58 @@
+.input-with-icon {
+            position: relative;
+            display: flex;
+            align-items: center;
+            max-width: 400px; /* Adjust the max width as needed */
+            margin: 0 auto; /* Center the search bar */
+        }
+        .input-with-icon input[type="text"] {
+            width: 100%; /* Full width within the max-width constraint */
+            padding: 10px;
+            padding-right: 40px;  /* Adjust padding to accommodate the icon */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .input-with-icon .search-icon {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            width: 20px;
+            height: 20px;
+        }
+        .result-box {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .result-box img {
+            border-radius: 10px;
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+        .result-box .info {
+            display: flex;
+            flex-direction: column;
+        }
+        .result-box .info h3 {
+            margin: 0;
+            font-size: 1.2em;
+        }
+        .result-box .info p {
+            margin: 5px 0;
+        }
+        .result-box .info .type {
+            display: flex;
+            align-items: center;
+        }
+        .result-box .info .type img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }

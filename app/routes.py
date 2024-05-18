@@ -267,3 +267,40 @@ def allocate_trash():
     
     organizations = Organization.query.all()
     return render_template('allocate_trash.html', organizations=organizations)
+
+# notice! Under the Code Sohee created to view search.html and create_information.html (can be deleted or modified)
+@app.route('/createinformation', methods=['GET', 'POST'])
+def create_information():
+    if request.method == 'POST':
+        # Handle image upload
+        image_file = request.files.get('organization_image')
+        image_filename = None
+        if image_file and allowed_file(image_file.filename):
+            image_filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+
+        new_org = Organization(
+            name=request.form['organization_name'],
+            type=request.form['organization_type'],
+            address=request.form['organization_address'],
+            image=image_filename
+        )
+        db.session.add(new_org)
+        db.session.commit()
+        return redirect(url_for('search', type=request.form['organization_type']))
+
+    org_type = request.args.get('type', 'organization')
+    return render_template('create_information.html', account_type=org_type)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    query = request.args.get('query', '')
+    org_type = request.args.get('type', '')
+
+    if query:
+        results = [org for org in organizations if query.lower() in org['name'].lower() and org['type'].lower() == org_type.lower()]
+    else:
+        results = []
+
+    return render_template('search.html', results=results, org_type=org_type)
