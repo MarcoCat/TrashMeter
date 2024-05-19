@@ -33,6 +33,7 @@ function performSearch() {
 
             if (data.length === 0) {
                 resultsDiv.textContent = 'No results found.';
+                document.getElementById('addButton').style.display = 'block';
             } else {
                 data.forEach(org => {
                     var orgDiv = document.createElement('div');
@@ -43,6 +44,7 @@ function performSearch() {
                     };
                     resultsDiv.appendChild(orgDiv);
                 });
+                document.getElementById('addButton').style.display = 'none';
             }
         });
 }

@@ -26,13 +26,11 @@
             </ul>
         {% else %}
             <p>No results found.</p>
+            <button id="addButton" onclick="redirectToCreate()">Add it!</button>
         {% endif %}
     </div>
-    <button id="addButton" onclick="redirectToCreate()">Add it!</button>
+{% endblock %}
 
-    <script>
-        function redirectToCreate() {
-            window.location.href = "{{ url_for('create_information') }}";
-        }
-    </script>
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 {% endblock %}
