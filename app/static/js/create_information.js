@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
             break;
         case 'volunteer':
             formTitle.textContent = 'Create Volunteer Organization Information';
-            organizationTypeInput.value = 'Volunteer Organization';
+            organizationTypeInput.value = 'Volunteer';
             break;
         default:
             formTitle.textContent = 'Create Organization Information';
@@ -34,6 +34,7 @@ function previewImage(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 }
+
 function redirectToCreate() {
     var urlParams = new URLSearchParams(window.location.search);
     var type = urlParams.get('type');

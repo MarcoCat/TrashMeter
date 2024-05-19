@@ -2,20 +2,28 @@
 
 {% block content %}
 <form method="post" enctype="multipart/form-data" action="{{ url_for('create_information') }}">
-<h2>Create {{ account_type|capitalize }} Information</h2>
+    <h2 id="formTitle">Create {{ account_type|capitalize }} Information</h2>
     <label for="organization_name">{{ account_type|capitalize }} Name <span class="required"> *</span></label>
     <input type="text" id="organization_name" name="organization_name" required><br>
 
     <label for="organization_type">{{ account_type|capitalize }} Type <span class="required"> *</span></label>
-    <input type="text" id="organization_type" name="organization_type" readonly required><br>
+    <select id="organization_type" name="organization_type" required>
+        <option value="school">School</option>
+        <option value="company">Company</option>
+        <option value="volunteer">Volunteer</option>
+    </select><br>
 
     <label for="organization_address">{{ account_type|capitalize }} Address <span class="required"> *</span></label>
     <input type="text" id="organization_address" name="organization_address" required><br>
 
     <label for="organization_image">{{ account_type|capitalize }} Image</label>
     <input type="file" id="organization_image" name="organization_image" accept="image/*" onchange="previewImage(event)">
-    <img id="organizationImagePreview" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;">
+    <img id="organizationImagePreview" alt="Image Preview" style="display: none; max-width: 100px; max-height: 100px;"><br>
 
     <input type="submit" value="Create">
 </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 {% endblock %}
