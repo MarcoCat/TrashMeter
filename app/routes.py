@@ -237,7 +237,13 @@ def leaderboard():
         Organization.total_trash
     ).filter(Organization.type == 'school').order_by(db.desc(Organization.total_trash)).all()
 
-    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
+    # Leaderboard for volunteer organizations
+    volunteers = db.session.query(
+        Organization.name,
+        Organization.total_trash
+    ).filter(Organization.type == 'volunteer').order_by(db.desc(Organization.total_trash)).all()
+
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools, volunteers=volunteers)
 
 
 @app.route('/allocate_trash', methods=['GET', 'POST'])

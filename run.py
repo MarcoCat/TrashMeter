@@ -23,6 +23,11 @@ def create_test_users():
     rbc = get_or_create(Organization, name='RBC', type='company', defaults={'address': '202 RBC Blvd', 'image': None, 'total_trash': 150})
     vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'address': '303 Vancity Rd', 'image': None, 'total_trash': 120})
 
+    # Adding volunteer organizations
+    red_cross = get_or_create(Organization, name='Red Cross', type='volunteer', address='404 Volunteer Ln', image=None, defaults={'total_trash': 200})
+    greenpeace = get_or_create(Organization, name='Greenpeace', type='volunteer', address='505 Environmental Rd', image=None, defaults={'total_trash': 250})
+    habitat_humanity = get_or_create(Organization, name='Habitat for Humanity', type='volunteer', address='606 Build St', image=None, defaults={'total_trash': 180})
+
     users = [
         # Individual users
         User(username='john_doe', password=generate_password_hash('password123'), first_name='John', last_name='Doe', email='john.doe@example.com', account_type='individual', trash_collected=10, unallocated_trash=5),
@@ -37,7 +42,12 @@ def create_test_users():
         # Company users
         User(username='telus_employee', password=generate_password_hash('password123'), first_name='James', last_name='Brown', email='james.brown@telus.com', account_type='company', position='employee', organization_id=telus.id, trash_collected=40, unallocated_trash=20),
         User(username='rbc_employee', password=generate_password_hash('password123'), first_name='Sophia', last_name='Martinez', email='sophia.martinez@rbc.com', account_type='company', position='employee', organization_id=rbc.id, trash_collected=50, unallocated_trash=25),
-        User(username='vancity_employee', password=generate_password_hash('password123'), first_name='William', last_name='Garcia', email='william.garcia@vancity.com', account_type='company', position='employee', organization_id=vancity.id, trash_collected=45, unallocated_trash=15)
+        User(username='vancity_employee', password=generate_password_hash('password123'), first_name='William', last_name='Garcia', email='william.garcia@vancity.com', account_type='company', position='employee', organization_id=vancity.id, trash_collected=45, unallocated_trash=15),
+
+        # Volunteer users
+        User(username='red_cross_volunteer', password=generate_password_hash('password123'), first_name='Anna', last_name='Taylor', email='anna.taylor@redcross.org', account_type='volunteer', position='volunteer', organization_id=red_cross.id, trash_collected=60, unallocated_trash=30),
+        User(username='greenpeace_volunteer', password=generate_password_hash('password123'), first_name='Ethan', last_name='Clark', email='ethan.clark@greenpeace.org', account_type='volunteer', position='volunteer', organization_id=greenpeace.id, trash_collected=70, unallocated_trash=35),
+        User(username='habitat_humanity_volunteer', password=generate_password_hash('password123'), first_name='Sophia', last_name='White', email='sophia.white@habitat.org', account_type='volunteer', position='volunteer', organization_id=habitat_humanity.id, trash_collected=55, unallocated_trash=25)
     ]
 
     for user in users:
