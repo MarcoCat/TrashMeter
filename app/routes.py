@@ -301,15 +301,21 @@ def create_information():
     org_type = request.args.get('type', 'organization')
     return render_template('create_information.html', account_type=org_type)
 
-
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search', methods=['GET'])
 def search():
-    query = request.args.get('query', '')
+    query = request.args.get('searchQuery', '')
     org_type = request.args.get('type', '')
 
+    if org_type not in ['school', 'company', 'volunteer']:
+        org_type = ''
+
     if query:
-        results = [org for org in organizations if query.lower() in org['name'].lower() and org['type'].lower() == org_type.lower()]
+        results = Organization.query.filter(
+            Organization.name.ilike(f"%{query}%"),
+            Organization.type.ilike(f"%{org_type}%")
+        ).all()
     else:
         results = []
 
-    return render_template('search.html', results=results, org_type=org_type)
+    return render_template('search.html', results=results, query=query, org_type=org_type)
+
