@@ -16,12 +16,12 @@ def get_or_create(model, defaults=None, **kwargs):
         return instance
 
 def create_test_users():
-    ubc = get_or_create(Organization, name='University of British Columbia', type='school')
-    bcit = get_or_create(Organization, name='British Columbia Institute of Technology', type='school')
-    langara = get_or_create(Organization, name='Langara College', type='school')
-    telus = get_or_create(Organization, name='Telus', type='company', defaults={'total_trash': 100})
-    rbc = get_or_create(Organization, name='RBC', type='company', defaults={'total_trash': 150})
-    vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'total_trash': 120})
+    ubc = get_or_create(Organization, name='University of British Columbia', type='school', address='123 University Blvd', image=None)
+    bcit = get_or_create(Organization, name='British Columbia Institute of Technology', type='school', address='456 Institute Rd', image=None)
+    langara = get_or_create(Organization, name='Langara College', type='school', address='789 College St', image=None)
+    telus = get_or_create(Organization, name='Telus', type='company', defaults={'address': '101 Telus Ave', 'image': None, 'total_trash': 100})
+    rbc = get_or_create(Organization, name='RBC', type='company', defaults={'address': '202 RBC Blvd', 'image': None, 'total_trash': 150})
+    vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'address': '303 Vancity Rd', 'image': None, 'total_trash': 120})
 
     users = [
         # Individual users
