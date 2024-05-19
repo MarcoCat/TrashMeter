@@ -268,26 +268,35 @@ def allocate_trash():
     organizations = Organization.query.all()
     return render_template('allocate_trash.html', organizations=organizations)
 
-# notice! Under the Code Sohee created to view search.html and create_information.html (can be deleted or modified)
+
 @app.route('/createinformation', methods=['GET', 'POST'])
 def create_information():
+    
+    def allowed_file(filename):
+        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
     if request.method == 'POST':
         # Handle image upload
         image_file = request.files.get('organization_image')
-        image_filename = None
+        image_data = None
         if image_file and allowed_file(image_file.filename):
-            image_filename = secure_filename(image_file.filename)
-            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], image_filename))
+            image_data = image_file.read()
+
+        org_type = request.form['organization_type']
+        if org_type not in ['school', 'company', 'volunteer']:
+            flash("Invalid organization type.")
+            return redirect(request.url)
 
         new_org = Organization(
             name=request.form['organization_name'],
-            type=request.form['organization_type'],
+            type=org_type,
             address=request.form['organization_address'],
-            image=image_filename
+            image=image_data
         )
         db.session.add(new_org)
         db.session.commit()
-        return redirect(url_for('search', type=request.form['organization_type']))
+        return redirect(url_for('search', type=org_type))
 
     org_type = request.args.get('type', 'organization')
     return render_template('create_information.html', account_type=org_type)
