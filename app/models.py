@@ -1,5 +1,6 @@
 from app import db
 from sqlalchemy import LargeBinary
+from sqlalchemy import CheckConstraint
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,3 +25,7 @@ class Organization(db.Model):
     address = db.Column(db.String(200), nullable=False)
     image = db.Column(db.LargeBinary, nullable=True)
     total_trash = db.Column(db.Integer, default=0)
+
+    __table_args__ = (
+        CheckConstraint(type.in_(['school', 'company', 'volunteer']), name='check_organization_type'),
+    )
