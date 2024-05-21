@@ -54,3 +54,4 @@ function redirectToCreate() {
     var type = urlParams.get('type');
     window.location.href = '/createinformation?type=' + encodeURIComponent(type);
 }
+
