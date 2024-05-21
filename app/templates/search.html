@@ -1,33 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2 id="searchTitle">Search</h2>
-    <form id="searchForm" class="input-with-icon" method="get" action="{{ url_for('search') }}">
-        <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter search term" value="{{ query }}">
-        <select name="type">
-            <option value="" {% if org_type == '' %}selected{% endif %}>All</option>
-            <option value="school" {% if org_type == 'school' %}selected{% endif %}>School</option>
-            <option value="company" {% if org_type == 'company' %}selected{% endif %}>Company</option>
-            <option value="volunteer" {% if org_type == 'volunteer' %}selected{% endif %}>Volunteer</option>
-        </select>
-        <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="document.getElementById('searchForm').submit()">
-    </form>
-    <div id="searchResults">
-        {% if results %}
-            <ul>
-                {% for org in results %}
-                    <li>
-                        <strong>{{ org.name }}</strong><br>
-                        Type: {{ org.type }}<br>
-                        Address: {{ org.address }}<br>
-                        Total Trash: {{ org.total_trash }}
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No results found.</p>
-            <button id="addButton" onclick="redirectToCreate()">Add it!</button>
-        {% endif %}
+    <div class="search-container">
+        <h2 id="searchTitle">Search</h2>
+        <form id="searchForm" class="input-with-icon" method="get" action="{{ url_for('search') }}">
+            <div class="input-container">
+                <input type="text" id="searchQuery" name="searchQuery" placeholder="Enter search term" value="{{ query }}">
+                <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="document.getElementById('searchForm').submit()">
+            </div>
+            <select name="type">
+                <option value="" {% if org_type == '' %}selected{% endif %}>All</option>
+                <option value="school" {% if org_type == 'school' %}selected{% endif %}>School</option>
+                <option value="company" {% if org_type == 'company' %}selected{% endif %}>Company</option>
+                <option value="volunteer" {% if org_type == 'volunteer' %}selected{% endif %}>Volunteer</option>
+            </select>
+        </form>
+        <div id="searchResults">
+            {% if results %}
+                <ul>
+                    {% for org in results %}
+                        <li>
+                            <strong>{{ org.name }}</strong><br>
+                            Type: {{ org.type }}<br>
+                            Address: {{ org.address }}<br>
+                            Total Trash: {{ org.total_trash }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No results found.</p>
+                <button id="addButton" onclick="redirectToCreate()">Add it!</button>
+            {% endif %}
+        </div>
     </div>
 {% endblock %}
 
