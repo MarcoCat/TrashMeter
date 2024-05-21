@@ -74,10 +74,9 @@ def signup():
         last_name = request.form['last_name']
         account_type = request.form['account_type']
         email = request.form['email']
-        position = request.form.get('position')
-        organization_id = request.form.get('organization_id')
-        
-        if account_type in ['school', 'company', 'volunteer'] and not organization_id:
+        organization_name = request.form.get('organization_name')
+
+        if account_type in ['school', 'company', 'volunteer'] and not organization_name:
             flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
         else:
             new_user = User(username=username,
@@ -94,6 +93,7 @@ def signup():
             return redirect(url_for('login'))
 
     return render_template('signup.html', organizations=organizations)
+
 
 
 @app.route('/logout')
