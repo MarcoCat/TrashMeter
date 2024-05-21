@@ -12,7 +12,7 @@
     top: 0;
     left: 0;
     z-index: 1000;
-    height: 60px;
+    height: 80px;
 }
 
 .menu-container {
@@ -46,31 +46,28 @@
 .nav-list li {
     white-space: nowrap; /* Ensure the text does not wrap */
     padding: 12px 20px; /* Adjust padding to fit content */
-}
 
-.nav-list li a {
-    color: white;
-    text-decoration: none;
-    display: block;
-}
+    .nav-list li a {
+        color: white;
+        text-decoration: none;
+        display: block;
+    }
 
-.nav-list li a:hover {
-    background-color: #555;
-}
+    .nav-list li a:hover {
+        background-color: #555;
+    }
 
-.navbar-center, .navbar-right {
-    flex: 0 1 auto;
-}
+    .navbar-center, .navbar-right {
+        flex: 0 1 auto;
+    }
 
-.navbar-center img, .navbar-right img {
-    max-height: 100%;
-    padding: 10px;
-}
+    .navbar-center img, .navbar-right img {
+        max-height: 100%;
+        padding: 10px;
+    }
 
-/* Logo */
-.logo img {
-    height: 80px; /* Adjust the height of the logo */
-    width: auto; /* Allow the width to adjust proportionally */
-    margin: 5px 20px; /* Adjust the margins as needed */
-    float: left;
+    .navbar-center img, .navbar-right img {
+        max-height: 100%;
+        padding: 10px;
+    }
 }
