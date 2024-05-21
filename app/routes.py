@@ -48,7 +48,7 @@ def index():
         return redirect(url_for('login'))
     # trash_data = TrashData.query.first()
     user = db.session.get(User, g.user.id)
-    return render_template('home.html', trash_counter=trash_counter, personal_counter=personal_counter,
+    return render_template('trash_meter.html', trash_counter=trash_counter, personal_counter=personal_counter,
                            trash_history=trash_history, user=user)
                            # , this_date=this_date, beach=this_beach, this_picked=this_picked)
 
