@@ -24,7 +24,6 @@ function performSearch() {
     var urlParams = new URLSearchParams(window.location.search);
     var type = urlParams.get('type');
 
-    // Assuming there's an endpoint to search organizations by type
     fetch(`/api/search_organizations?type=${type}&query=` + encodeURIComponent(query))
         .then(response => response.json())
         .then(data => {
@@ -35,15 +34,13 @@ function performSearch() {
                 resultsDiv.textContent = 'No results found.';
                 document.getElementById('addButton').style.display = 'block';
             } else {
+                var ul = document.createElement('ul');
                 data.forEach(org => {
-                    var orgDiv = document.createElement('div');
-                    orgDiv.textContent = org.name;
-                    orgDiv.onclick = function() {
-                        window.opener.loadSelectedOrganization(org.id, org.name);
-                        window.close();
-                    };
-                    resultsDiv.appendChild(orgDiv);
+                    var li = document.createElement('li');
+                    li.innerHTML = `<strong>${org.name}</strong><br>Type: ${org.type}<br>Address: ${org.address}<br>Total Trash: ${org.total_trash}`;
+                    ul.appendChild(li);
                 });
+                resultsDiv.appendChild(ul);
                 document.getElementById('addButton').style.display = 'none';
             }
         });

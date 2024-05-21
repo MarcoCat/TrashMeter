@@ -7,6 +7,7 @@ from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
+from fuzzywuzzy import fuzz
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -315,13 +316,13 @@ def search():
     if org_type not in ['school', 'company', 'volunteer']:
         org_type = ''
 
+    results = []
     if query:
-        results = Organization.query.filter(
-            Organization.name.ilike(f"%{query}%"),
-            Organization.type.ilike(f"%{org_type}%")
-        ).all()
-    else:
-        results = []
+        organizations = Organization.query.all()
+        for org in organizations:
+            if org_type and org.type.lower() != org_type.lower():
+                continue
+            if fuzz.partial_ratio(query.lower(), org.name.lower()) > 85:
+                results.append(org)
 
     return render_template('search.html', results=results, query=query, org_type=org_type)
-
