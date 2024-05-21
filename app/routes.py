@@ -85,7 +85,6 @@ def signup():
                             last_name=last_name,
                             account_type=account_type,
                             email=email,
-                            position=position,
                             organization_id=organization_id)
             db.session.add(new_user)
             db.session.commit()
@@ -183,7 +182,6 @@ def update_profile():
     user.last_name = request.form['last_name']
     user.email = request.form['email']
     user.account_type = request.form['account_type']
-    user.position = request.form.get('position')
 
     profile_picture = request.files.get('profile_image')
     if profile_picture:
