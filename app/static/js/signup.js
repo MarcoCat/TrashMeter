@@ -10,7 +10,6 @@ function toggleVisibility() {
     if (["company", "school", "volunteer"].includes(accountType)) {
         organizationNameDiv.style.display = "block";
         organizationLabel.textContent = getLabelForType(accountType);
-        filterOrganizations(accountType);
     } else {
         organizationNameDiv.style.display = "none";
     }
@@ -29,20 +28,15 @@ function getLabelForType(type) {
     }
 }
 
-function filterOrganizations(accountType) {
-    var organizationSelect = document.getElementById("organization_id");
-    var options = organizationSelect.options;
-    
-    for (var i = 0; i < options.length; i++) {
-        var option = options[i];
-        var orgType = option.getAttribute('data-type');
+function redirectToSearch() {
+    var accountType = document.getElementById("account_type").value;
+    var url = '/search?type=' + encodeURIComponent(accountType);
+    window.location.href = url;
+}
 
-        if (accountType === orgType || option.value === "") {
-            option.style.display = "block";
-        } else {
-            option.style.display = "none";
-        }
-    }
+function loadSelectedOrganization(id, name) {
+    document.getElementById('organization_name').value = name;
+    document.getElementById('organization_id').value = id;
 }
 
 function previewImage(event) {

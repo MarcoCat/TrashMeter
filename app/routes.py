@@ -237,7 +237,13 @@ def leaderboard():
         Organization.total_trash
     ).filter(Organization.type == 'school').order_by(db.desc(Organization.total_trash)).all()
 
-    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
+    # Leaderboard for volunteer organizations
+    volunteers = db.session.query(
+        Organization.name,
+        Organization.total_trash
+    ).filter(Organization.type == 'volunteer').order_by(db.desc(Organization.total_trash)).all()
+
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools, volunteers=volunteers)
 
 
 @app.route('/allocate_trash', methods=['GET', 'POST'])
@@ -267,3 +273,55 @@ def allocate_trash():
     
     organizations = Organization.query.all()
     return render_template('allocate_trash.html', organizations=organizations)
+
+
+@app.route('/createinformation', methods=['GET', 'POST'])
+def create_information():
+    
+    def allowed_file(filename):
+        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+    if request.method == 'POST':
+        # Handle image upload
+        image_file = request.files.get('organization_image')
+        image_data = None
+        if image_file and allowed_file(image_file.filename):
+            image_data = image_file.read()
+
+        org_type = request.form['organization_type']
+        if org_type not in ['school', 'company', 'volunteer']:
+            flash("Invalid organization type.")
+            return redirect(request.url)
+
+        new_org = Organization(
+            name=request.form['organization_name'],
+            type=org_type,
+            address=request.form['organization_address'],
+            image=image_data
+        )
+        db.session.add(new_org)
+        db.session.commit()
+        return redirect(url_for('search', type=org_type))
+
+    org_type = request.args.get('type', 'organization')
+    return render_template('create_information.html', account_type=org_type)
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('searchQuery', '')
+    org_type = request.args.get('type', '')
+
+    if org_type not in ['school', 'company', 'volunteer']:
+        org_type = ''
+
+    if query:
+        results = Organization.query.filter(
+            Organization.name.ilike(f"%{query}%"),
+            Organization.type.ilike(f"%{org_type}%")
+        ).all()
+    else:
+        results = []
+
+    return render_template('search.html', results=results, query=query, org_type=org_type)
+

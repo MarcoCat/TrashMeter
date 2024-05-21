@@ -17,8 +17,8 @@ def test_client():
     with app.app_context():
         db.create_all()
 
-        org1 = Organization(name='Org1', type='company', total_trash=0)
-        org2 = Organization(name='Org2', type='company', total_trash=0)
+        org1 = Organization(name='Org1', type='company', address='123 Company St', total_trash=0)
+        org2 = Organization(name='Org2', type='company', address='456 Company Rd', total_trash=0)
         db.session.add_all([org1, org2])
         
         test_user = User(username='testuser',
@@ -144,8 +144,8 @@ def get_or_create(model, defaults=None, **kwargs):
         return instance
 
 def create_test_users():
-    org1 = get_or_create(Organization, name='Org1', type='company')
-    org2 = get_or_create(Organization, name='Org2', type='company')
+    org1 = get_or_create(Organization, name='Org1', type='company', address='123 Company St')
+    org2 = get_or_create(Organization, name='Org2', type='company', address='456 Company Rd')
 
     users = [
         User(username='user1', password=generate_password_hash('password123'), first_name='User', last_name='One', email='user1@example.com', account_type='regular', position='user'),
