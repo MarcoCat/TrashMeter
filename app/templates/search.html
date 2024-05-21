@@ -17,7 +17,9 @@
             <ul>
                 {% for org in results %}
                     <li>
-                        <strong>{{ org.name }}</strong><br>
+                        <a href="{{ url_for('signup', org_name=org.name) }}">
+                            <strong>{{ org.name }}</strong>
+                        </a><br>
                         Type: {{ org.type }}<br>
                         Address: {{ org.address }}<br>
                         Total Trash: {{ org.total_trash }}

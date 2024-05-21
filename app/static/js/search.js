@@ -37,7 +37,8 @@ function performSearch() {
                 var ul = document.createElement('ul');
                 data.forEach(org => {
                     var li = document.createElement('li');
-                    li.innerHTML = `<strong>${org.name}</strong><br>Type: ${org.type}<br>Address: ${org.address}<br>Total Trash: ${org.total_trash}`;
+                    li.innerHTML = `<a href="/signup?org_name=${encodeURIComponent(org.name)}">
+                        <strong>${org.name}</strong></a><br>Type: ${org.type}<br>Address: ${org.address}<br>Total Trash: ${org.total_trash}`;
                     ul.appendChild(li);
                 });
                 resultsDiv.appendChild(ul);

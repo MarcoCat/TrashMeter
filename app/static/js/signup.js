@@ -1,5 +1,10 @@
 document.addEventListener("DOMContentLoaded", function() {
     toggleVisibility();
+    const urlParams = new URLSearchParams(window.location.search);
+    const orgName = urlParams.get('org_name');
+    if (orgName) {
+        document.getElementById('organization_name').value = orgName;
+    }
 });
 
 function toggleVisibility() {
