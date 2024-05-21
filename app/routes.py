@@ -78,9 +78,12 @@ def signup():
 
         organization = Organization.query.filter_by(name=organization_name).first()
         organization_id = organization.id if organization else None
+        organization_type = organization.type if organization else None
 
         if account_type in ['school', 'company', 'volunteer'] and not organization_id:
             flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
+        elif account_type in ['school', 'company', 'volunteer'] and organization_type != account_type:
+            flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
             new_user = User(username=username,
                             password=password,
@@ -95,6 +98,7 @@ def signup():
             return redirect(url_for('login'))
 
     return render_template('signup.html', organizations=organizations)
+
 
 
 
