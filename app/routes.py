@@ -76,7 +76,10 @@ def signup():
         email = request.form['email']
         organization_name = request.form.get('organization_name')
 
-        if account_type in ['school', 'company', 'volunteer'] and not organization_name:
+        organization = Organization.query.filter_by(name=organization_name).first()
+        organization_id = organization.id if organization else None
+
+        if account_type in ['school', 'company', 'volunteer'] and not organization_id:
             flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
         else:
             new_user = User(username=username,
@@ -92,6 +95,7 @@ def signup():
             return redirect(url_for('login'))
 
     return render_template('signup.html', organizations=organizations)
+
 
 
 
