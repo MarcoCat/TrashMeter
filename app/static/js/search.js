@@ -59,3 +59,4 @@ function previewImage(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 }
+
