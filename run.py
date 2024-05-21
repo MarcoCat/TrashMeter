@@ -67,6 +67,6 @@ def create_test_users():
 app = create_app()
 
 if __name__ == '__main__':
-    with app.app_context():
-        create_test_users()
+    # with app.app_context():
+    #     create_test_users()
     app.run(debug=True)

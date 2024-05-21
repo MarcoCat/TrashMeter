@@ -1,54 +1,61 @@
 document.addEventListener("DOMContentLoaded", function() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var type = urlParams.get('type');
-    var searchTitle = document.getElementById('searchTitle');
+    toggleVisibility();
 
-    switch (type) {
-        case 'company':
-            searchTitle.textContent = 'Search Company';
-            break;
-        case 'school':
-            searchTitle.textContent = 'Search School';
-            break;
-        case 'volunteer':
-            searchTitle.textContent = 'Search Volunteer Organization';
-            break;
-        default:
-            searchTitle.textContent = 'Search';
-            break;
+    // Check if the organization name is provided in the URL and set it
+    const urlParams = new URLSearchParams(window.location.search);
+    const orgName = urlParams.get('org_name');
+    if (orgName) {
+        document.getElementById('organization_name').value = orgName;
     }
+
+    // Prefill other form fields from URL parameters
+    document.getElementById('username').value = urlParams.get('username') || '';
+    document.getElementById('email').value = urlParams.get('email') || '';
+    document.getElementById('first_name').value = urlParams.get('first_name') || '';
+    document.getElementById('last_name').value = urlParams.get('last_name') || '';
+    document.getElementById('password').value = urlParams.get('password') || '';
+    document.getElementById('account_type').value = urlParams.get('account_type') || 'individual';
+    toggleVisibility();  // Ensure the organization field is displayed if needed
 });
 
-function performSearch() {
-    var query = document.getElementById('searchQuery').value;
-    var urlParams = new URLSearchParams(window.location.search);
-    var type = urlParams.get('type');
+function toggleVisibility() {
+    var accountType = document.getElementById("account_type").value;
+    var organizationNameDiv = document.getElementById("organization_name_field");
 
-    fetch(`/api/search_organizations?type=${type}&query=` + encodeURIComponent(query))
-        .then(response => response.json())
-        .then(data => {
-            var resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = '';
-
-            if (data.length === 0) {
-                resultsDiv.textContent = 'No results found.';
-                document.getElementById('addButton').style.display = 'block';
-            } else {
-                var ul = document.createElement('ul');
-                data.forEach(org => {
-                    var li = document.createElement('li');
-                    li.innerHTML = `<a href="/signup?org_name=${encodeURIComponent(org.name)}">
-                        <strong>${org.name}</strong></a><br>Type: ${org.type}<br>Address: ${org.address}<br>Total Trash: ${org.total_trash}`;
-                    ul.appendChild(li);
-                });
-                resultsDiv.appendChild(ul);
-                document.getElementById('addButton').style.display = 'none';
-            }
-        });
+    if (["company", "school", "volunteer"].includes(accountType)) {
+        organizationNameDiv.style.display = "block";
+    } else {
+        organizationNameDiv.style.display = "none";
+    }
 }
 
-function redirectToCreate() {
-    var urlParams = new URLSearchParams(window.location.search);
-    var type = urlParams.get('type');
-    window.location.href = '/createinformation?type=' + encodeURIComponent(type);
+function redirectToSearch() {
+    var accountType = document.getElementById("account_type").value;
+    var url = '/search?type=' + encodeURIComponent(accountType);
+
+    // Append current form data to the URL
+    var formData = new URLSearchParams({
+        username: document.getElementById('username').value,
+        email: document.getElementById('email').value,
+        first_name: document.getElementById('first_name').value,
+        last_name: document.getElementById('last_name').value,
+        password: document.getElementById('password').value,
+        account_type: document.getElementById('account_type').value
+    }).toString();
+
+    window.location.href = url + '&' + formData;
+}
+
+function loadSelectedOrganization(id, name) {
+    document.getElementById('organization_name').value = name;
+    document.getElementById('organization_id').value = id;
+}
+
+function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var output = document.getElementById('profileImagePreview');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
 }
