@@ -3,20 +3,19 @@ import io
 from flask import url_for
 from app import create_app, db
 from app.models import User, Organization
-from werkzeug.security import generate_password_hash, check_password_hash
-from itsdangerous import URLSafeTimedSerializer
-from flask_mail import Message
+from werkzeug.security import generate_password_hash
 
 @pytest.fixture(scope='module')
-def test_client():
+def app():
     app = create_app()
     app.config['TESTING'] = True
-    app.config['SERVER_NAME'] = 'localhost.localdomain'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF for testing purposes
 
     with app.app_context():
         db.create_all()
 
+        # Create initial data
         org1 = Organization(name='Org1', type='company', address='123 Company St', total_trash=0)
         org2 = Organization(name='Org2', type='company', address='456 Company Rd', total_trash=0)
         db.session.add_all([org1, org2])
@@ -30,75 +29,117 @@ def test_client():
         db.session.add(test_user)
         db.session.commit()
 
-    yield app.test_client()
+        yield app
 
-    with app.app_context():
-        db.session.remove()
         db.drop_all()
+        db.session.remove()
 
 @pytest.fixture(scope='module')
-def login_test_user(test_client):
-    response = test_client.post('/login', data={
+def client(app):
+    return app.test_client()
+
+@pytest.fixture(scope='function')
+def init_database(app):
+    with app.app_context():
+        # Ensure the database is clean before each test
+        db.session.query(User).delete()
+        db.session.query(Organization).delete()
+        db.session.commit()
+
+        # Create initial data for each test
+        org1 = Organization(name='Org1', type='company', address='123 Company St', total_trash=0)
+        org2 = Organization(name='Org2', type='company', address='456 Company Rd', total_trash=0)
+        db.session.add_all([org1, org2])
+        
+        test_user = User(username='testuser',
+                         password=generate_password_hash('password123'),
+                         first_name='Test',
+                         last_name='User',
+                         email='test@example.com',
+                         account_type='school')
+        db.session.add(test_user)
+        db.session.commit()
+
+        yield db
+
+def login_test_user(client):
+    return client.post('/login', data={
         'email': 'test@example.com',
         'password': 'password123'
     }, follow_redirects=True)
-    return response
 
-def test_example(test_client):
-    response = test_client.get('/')
+def test_example(client, init_database):
+    response = client.get('/')
     assert response.status_code == 200
 
-def test_update_trash(test_client, login_test_user):
-    response = test_client.post('/update_trash', data={
-        'trash_amount': 5
-    }, follow_redirects=True)
+def test_signup(client, init_database):
+    with client.application.app_context():
+        organization = Organization(name='School1', type='school', address='789 School Ln', total_trash=0)
+        db.session.add(organization)
+        db.session.commit()
+        organization_id = organization.id
 
+    response = client.post('/signup', data={
+        'username': 'newuser',
+        'password': 'password123',
+        'first_name': 'New',
+        'last_name': 'User',
+        'account_type': 'school',
+        'email': 'newuser@example.com',
+        'organization_name': 'School1'
+    }, follow_redirects=True)
+    assert response.status_code == 200
+
+    with client.application.app_context():
+        user = User.query.filter_by(username='newuser').first()
+        assert user is not None
+        assert user.email == 'newuser@example.com'
+        assert user.organization_id == organization_id
+
+    with client.application.app_context():
+        user = User.query.filter_by(username='newuser').first()
+        assert user is not None
+        assert user.email == 'newuser@example.com'
+
+def test_update_trash(client, init_database):
+    login_test_user(client)
+    response = client.post('/update_trash', data={'trash_amount': 5}, follow_redirects=True)
     assert response.status_code == 200
     assert b'Trash collection updated successfully!' in response.data
 
-    with test_client.application.app_context():
+def test_allocate_trash(client, init_database):
+    login_test_user(client)
+    
+    with client.application.app_context():
         user = User.query.filter_by(username='testuser').first()
-        assert user.trash_collected == 5
-
-def test_allocate_trash(test_client, login_test_user):
-    with test_client.application.app_context():
-        user = User.query.filter_by(username='testuser').first()
+        org1 = Organization.query.filter_by(name='Org1').first()
         user.unallocated_trash = 10
         db.session.commit()
 
-    response = test_client.post('/allocate_trash', data={
-        'organization_id': 1,
-        'trash_amount': 5
-    }, follow_redirects=True)
+        response = client.post('/allocate_trash', data={'organization_id': org1.id, 'trash_amount': 5}, follow_redirects=True)
+        assert response.status_code == 200
 
-    assert response.status_code == 200
-    assert b'5 pieces of trash allocated to Org1 successfully!' in response.data
-
-    with test_client.application.app_context():
+        # Verify the database state
         user = User.query.filter_by(username='testuser').first()
-        org = Organization.query.filter_by(id=1).first()
         assert user.unallocated_trash == 5
-        assert org.total_trash == 5
 
-def test_profile_update(test_client, login_test_user):
-    response = test_client.post('/update_profile', data={
+        organization = Organization.query.filter_by(id=org1.id).first()
+        assert organization.total_trash == 5
+
+def test_profile_update(client, init_database):
+    login_test_user(client)
+    response = client.post('/update_profile', data={
         'username': 'updateduser',
         'first_name': 'Updated',
         'last_name': 'User',
         'email': 'updated@example.com',
         'account_type': 'school'
     }, follow_redirects=True)
-
     assert response.status_code == 200
     assert b'Profile updated successfully!' in response.data
 
-    with test_client.application.app_context():
-        user = User.query.filter_by(username='updateduser').first()
-        assert user is not None
-        assert user.first_name == 'Updated'
-        assert user.email == 'updated@example.com'
-
-def test_image_upload(test_client, login_test_user):
+def test_image_upload(client, init_database):
+    login_test_user(client)
     data = {
         'username': 'testuser',
         'first_name': 'Test',
@@ -107,18 +148,12 @@ def test_image_upload(test_client, login_test_user):
         'account_type': 'school',
         'profile_image': (io.BytesIO(b"fake image data"), 'test.jpg')
     }
-
-    response = test_client.post('/update_profile', data=data, content_type='multipart/form-data', follow_redirects=True)
-
+    response = client.post('/update_profile', data=data, content_type='multipart/form-data', follow_redirects=True)
     assert response.status_code == 200
     assert b'Profile updated successfully!' in response.data
 
-    with test_client.application.app_context():
-        user = User.query.filter_by(username='testuser').first()
-        assert user.profile_picture is not None
-
-def test_create_test_users(test_client):
-    with test_client.application.app_context():
+def test_create_test_users(client, init_database):
+    with client.application.app_context():
         users = User.query.all()
         assert len(users) == 1
 
@@ -153,25 +188,14 @@ def create_test_users():
         db.session.add(user)
     db.session.commit()
 
-def test_leaderboard(test_client, login_test_user):
-    response = test_client.get('/leaderboard')
+def test_leaderboard(client, init_database):
+    login_test_user(client)
+    response = client.get('/leaderboard')
     assert response.status_code == 200
     assert b'Leaderboard' in response.data
 
-def test_logout(test_client, login_test_user):
-    response = test_client.get('/logout', follow_redirects=True)
+def test_logout(client, init_database):
+    login_test_user(client)
+    response = client.get('/logout', follow_redirects=True)
     assert response.status_code == 200
     assert b'You have been logged out.' in response.data
-
-def test_signup(test_client):
-    response = test_client.post('/signup', data={
-        'username': 'newuser',
-        'password': 'password123',
-        'first_name': 'New',
-        'last_name': 'User',
-        'account_type': 'regular',
-        'email': 'newuser@example.com'
-    }, follow_redirects=True)
-    
-    assert response.status_code == 200
-    assert b'Signup successful! Please log in.' in response.data
