@@ -1,8 +1,6 @@
-// leaderboard.js
 document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("filterSelect").addEventListener("change", function() {
-        var filterValue = this.value;
-        var tbody = document.getElementById("leaderboardBody");
+    function sortTable(tbodyId, filterValue) {
+        var tbody = document.getElementById(tbodyId);
         var rows = Array.from(tbody.getElementsByTagName("tr"));
 
         rows.sort(function(a, b) {
@@ -25,5 +23,21 @@ document.addEventListener("DOMContentLoaded", function() {
         rows.forEach(function(row) {
             tbody.appendChild(row);
         });
+    }
+
+    document.getElementById("allUsersFilter").addEventListener("change", function() {
+        sortTable("allUsersBody", this.value);
+    });
+
+    document.getElementById("companiesFilter").addEventListener("change", function() {
+        sortTable("companiesBody", this.value);
+    });
+
+    document.getElementById("schoolsFilter").addEventListener("change", function() {
+        sortTable("schoolsBody", this.value);
+    });
+
+    document.getElementById("volunteersFilter").addEventListener("change", function() {
+        sortTable("volunteersBody", this.value);
     });
 });

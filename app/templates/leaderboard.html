@@ -4,88 +4,132 @@
 <div class="container mt-5">
     <h1 class="text-center">Leaderboard</h1>
 
-    <!-- All Users Leaderboard -->
-    <h2 class="mt-5">All Users</h2>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Username</th>
-                <th scope="col">Trash Collected</th>
-            </tr>
-        </thead>
-        <tbody id="leaderboardBody">
-            {% for user in users %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ user.username }}</td>
-                <td>{{ user.trash_collected }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Tabs Navigation -->
+    <ul class="nav nav-tabs" id="leaderboardTabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="all-users-tab" data-bs-toggle="tab" href="#all-users" role="tab" aria-controls="all-users" aria-selected="true">Total</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="companies-tab" data-bs-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="false">Companies</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="schools-tab" data-bs-toggle="tab" href="#schools" role="tab" aria-controls="schools" aria-selected="false">Schools</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="volunteers-tab" data-bs-toggle="tab" href="#volunteers" role="tab" aria-controls="volunteers" aria-selected="false">Volunteer Organizations</a>
+        </li>
+    </ul>
 
-    <!-- Companies Leaderboard -->
-    <h2 class="mt-5">Companies</h2>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Company</th>
-                <th scope="col">Total Trash Collected</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for company in companies %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ company.name }}</td>
-                <td>{{ company.total_trash }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Schools Leaderboard -->
-    <h2 class="mt-5">Schools</h2>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">School</th>
-                <th scope="col">Total Trash Collected</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for school in schools %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ school.name }}</td>
-                <td>{{ school.total_trash }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Volunteer Organizations Leaderboard -->
-    <h2 class="mt-5">Volunteer Organizations</h2>
-    <table class="table table-striped mt-4">
-        <thead>
-            <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Volunteer Organization</th>
-                <th scope="col">Total Trash Collected</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for volunteer in volunteers %}
-            <tr>
-                <th scope="row">{{ loop.index }}</th>
-                <td>{{ volunteer.name }}</td>
-                <td>{{ volunteer.total_trash }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <!-- Tabs Content -->
+    <div class="tab-content" id="leaderboardTabsContent">
+        <div class="tab-pane fade show active" id="all-users" role="tabpanel" aria-labelledby="all-users-tab">
+            <!-- All Users Leaderboard -->
+            <h2 class="mt-5">All Users</h2>
+            <select id="allUsersFilter" class="form-control mb-4">
+                <option value="">Sort by</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Trash Collected</th>
+                    </tr>
+                </thead>
+                <tbody id="allUsersBody">
+                    {% for user in users %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.trash_collected }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="companies" role="tabpanel" aria-labelledby="companies-tab">
+            <!-- Companies Leaderboard -->
+            <h2 class="mt-5">Companies</h2>
+            <select id="companiesFilter" class="form-control mb-4">
+                <option value="">Sort by</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Company</th>
+                        <th scope="col">Total Trash Collected</th>
+                    </tr>
+                </thead>
+                <tbody id="companiesBody">
+                    {% for company in companies %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ company.name }}</td>
+                        <td>{{ company.total_trash }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="schools" role="tabpanel" aria-labelledby="schools-tab">
+            <!-- Schools Leaderboard -->
+            <h2 class="mt-5">Schools</h2>
+            <select id="schoolsFilter" class="form-control mb-4">
+                <option value="">Sort by</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">School</th>
+                        <th scope="col">Total Trash Collected</th>
+                    </tr>
+                </thead>
+                <tbody id="schoolsBody">
+                    {% for school in schools %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ school.name }}</td>
+                        <td>{{ school.total_trash }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="tab-pane fade" id="volunteers" role="tabpanel" aria-labelledby="volunteers-tab">
+            <!-- Volunteer Organizations Leaderboard -->
+            <h2 class="mt-5">Volunteer Organizations</h2>
+            <select id="volunteersFilter" class="form-control mb-4">
+                <option value="">Sort by</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+            <table class="table table-striped mt-4">
+                <thead>
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Volunteer Organization</th>
+                        <th scope="col">Total Trash Collected</th>
+                    </tr>
+                </thead>
+                <tbody id="volunteersBody">
+                    {% for volunteer in volunteers %}
+                    <tr>
+                        <th scope="row">{{ loop.index }}</th>
+                        <td>{{ volunteer.name }}</td>
+                        <td>{{ volunteer.total_trash }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 {% endblock %}
