@@ -26,19 +26,34 @@ h1, h2 {
     margin-bottom: 20px;
 }
 
-.progress {
-    width: 100%;
-    background-color: #F0FFFF;
-    border-radius: 5px;
-    height: 20px;
-    margin-bottom: 10px;
+.trash-can {
+    position: relative;
+    width: 500px; /* Adjust size as needed */
+    height: 500px; /* Adjust size as needed */
+    background-image: url("../static/images/trash_bin.png") ;
+    background-size: contain;
+    background-repeat: no-repeat;
+    /*background-position: center;*/
+    margin-bottom: 20px;
 }
 
-.progress-bar {
-    background-color: #4caf50;
+.progress-bars {
+    position: absolute;
+    display: flex;
+    justify-content: center; /* Center the progress bars horizontally */
+    align-items: flex-end; /* Align progress bars to the bottom */
+    width: 100%;
     height: 100%;
-    border-radius: 5px;
-    max-width: 100%; /* Ensure the progress bar doesn't exceed 100% width */
+    padding: 0 0px; /* Add padding to create space between progress bars and edges */
+    box-sizing: border-box;
+}
+
+.progress {
+    background-color: #00cc00; /* Progress bar color */
+    width: 6%; /* Adjust width to shrink the progress bar */
+    /* Add margin to space out progress bars */
+    margin: 0 29px 57px;
+    border-radius: 11%; /* Rounded edges for cylinder shape */
 }
 
 form {

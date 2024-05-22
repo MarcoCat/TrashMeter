@@ -14,12 +14,13 @@
         <h1>Trash Counter</h1>
         <div class="counter">
             <h2>Total Trash Picked Up: {{ trash_counter }}</h2>
-            <div class="progress">
-                {% set max_limit = 500000 %}
-                {% set width_percentage = (trash_counter / max_limit) * 100 %}
-                <div class="progress-bar" style="width: {{ width_percentage }}%"></div>
+             <div class="trash-can">
+            <div class="progress-bars">
+                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
+                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
+                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
             </div>
-
+        </div>
             <h2>You have picked up: {{ user.trash_collected }}</h2>
         </div>
 
