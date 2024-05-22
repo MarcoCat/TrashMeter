@@ -99,10 +99,6 @@ def signup():
 
     return render_template('signup.html', organizations=organizations)
 
-
-
-
-
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
