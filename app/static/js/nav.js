@@ -1,9 +1,22 @@
 // nav.js
-function toggleMenu() {
-    var navList = document.getElementById('navList');
-    if (navList.style.display === 'block') {
-        navList.style.display = 'none';
+function toggleBeachesMenu() {
+    var menu = document.getElementById('beachesMenu');
+    if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.style.display = 'flex';
     } else {
-        navList.style.display = 'block';
+        menu.classList.add('hidden');
+        menu.style.display = 'none';
+    }
+}
+
+function toggleUserMenu() {
+    var menu = document.getElementById('userMenu');
+    if (menu.classList.contains('hidden')) {
+        menu.classList.remove('hidden');
+        menu.style.display = 'flex';
+    } else {
+        menu.classList.add('hidden');
+        menu.style.display = 'none';
     }
 }
