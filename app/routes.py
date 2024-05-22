@@ -1,5 +1,4 @@
 from datetime import datetime
-from flask import render_template, request, redirect, url_for, session, flash, g
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g, send_file
 from flask_mail import Message
@@ -13,6 +12,13 @@ import os
 from fuzzywuzzy import fuzz
 
 # Utility function to check if a user is logged in
+
+# with app.app_context():
+#     db.create_all()
+#     if TrashCounter.query.count() == 0:
+#         db.session.add(TrashCounter(total_trash_collected=60000))
+#         db.session.commit()
+
 
 
 trash_counter = 60000
@@ -49,6 +55,10 @@ def index():
     return render_template('trash_meter.html', trash_counter=trash_counter, personal_counter=personal_counter,
                            trash_history=trash_history, user=user)
                            # , this_date=this_date, beach=this_beach, this_picked=this_picked)
+
+# @app.route('/')
+# def index():
+#     return render_template('home.html')
 
 
 @app.route('/about')

@@ -29,3 +29,7 @@ class Organization(db.Model):
     __table_args__ = (
         CheckConstraint(type.in_(['school', 'company', 'volunteer']), name='check_organization_type'),
     )
+
+# class TrashCounter(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     total_trash_collected = db.Column(db.Integer, default=60000)
