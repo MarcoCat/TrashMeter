@@ -26,8 +26,7 @@ def test_client():
                          first_name='Test',
                          last_name='User',
                          email='test@example.com',
-                         account_type='regular',
-                         position='user')
+                         account_type='school')
         db.session.add(test_user)
         db.session.commit()
 
@@ -87,8 +86,7 @@ def test_profile_update(test_client, login_test_user):
         'first_name': 'Updated',
         'last_name': 'User',
         'email': 'updated@example.com',
-        'account_type': 'regular',
-        'position': 'user'
+        'account_type': 'school'
     }, follow_redirects=True)
 
     assert response.status_code == 200
@@ -106,8 +104,7 @@ def test_image_upload(test_client, login_test_user):
         'first_name': 'Test',
         'last_name': 'User',
         'email': 'test@example.com',
-        'account_type': 'regular',
-        'position': 'user',
+        'account_type': 'school',
         'profile_image': (io.BytesIO(b"fake image data"), 'test.jpg')
     }
 
@@ -148,8 +145,8 @@ def create_test_users():
     org2 = get_or_create(Organization, name='Org2', type='company', address='456 Company Rd')
 
     users = [
-        User(username='user1', password=generate_password_hash('password123'), first_name='User', last_name='One', email='user1@example.com', account_type='regular', position='user'),
-        User(username='user2', password=generate_password_hash('password123'), first_name='User', last_name='Two', email='user2@example.com', account_type='regular', position='user')
+        User(username='user1', password=generate_password_hash('password123'), first_name='User', last_name='One', email='user1@example.com', account_type='school'),
+        User(username='user2', password=generate_password_hash('password123'), first_name='User', last_name='Two', email='user2@example.com', account_type='school')
     ]
 
     for user in users:

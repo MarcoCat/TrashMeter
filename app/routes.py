@@ -7,6 +7,7 @@ from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
+from fuzzywuzzy import fuzz
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -73,11 +74,16 @@ def signup():
         last_name = request.form['last_name']
         account_type = request.form['account_type']
         email = request.form['email']
-        position = request.form.get('position')
-        organization_id = request.form.get('organization_id')
-        
+        organization_name = request.form.get('organization_name')
+
+        organization = Organization.query.filter_by(name=organization_name).first()
+        organization_id = organization.id if organization else None
+        organization_type = organization.type if organization else None
+
         if account_type in ['school', 'company', 'volunteer'] and not organization_id:
             flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
+        elif account_type in ['school', 'company', 'volunteer'] and organization_type != account_type:
+            flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
             new_user = User(username=username,
                             password=password,
@@ -85,7 +91,6 @@ def signup():
                             last_name=last_name,
                             account_type=account_type,
                             email=email,
-                            position=position,
                             organization_id=organization_id)
             db.session.add(new_user)
             db.session.commit()
@@ -93,6 +98,9 @@ def signup():
             return redirect(url_for('login'))
 
     return render_template('signup.html', organizations=organizations)
+
+
+
 
 
 @app.route('/logout')
@@ -182,7 +190,6 @@ def update_profile():
     user.last_name = request.form['last_name']
     user.email = request.form['email']
     user.account_type = request.form['account_type']
-    user.position = request.form.get('position')
 
     profile_picture = request.files.get('profile_image')
     if profile_picture:
@@ -315,13 +322,13 @@ def search():
     if org_type not in ['school', 'company', 'volunteer']:
         org_type = ''
 
+    results = []
     if query:
-        results = Organization.query.filter(
-            Organization.name.ilike(f"%{query}%"),
-            Organization.type.ilike(f"%{org_type}%")
-        ).all()
-    else:
-        results = []
+        organizations = Organization.query.all()
+        for org in organizations:
+            if org_type and org.type.lower() != org_type.lower():
+                continue
+            if fuzz.partial_ratio(query.lower(), org.name.lower()) > 85:
+                results.append(org)
 
     return render_template('search.html', results=results, query=query, org_type=org_type)
-
