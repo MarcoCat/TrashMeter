@@ -83,10 +83,7 @@
     {% if request.endpoint == 'signup' or request.endpoint == 'profile' %}
     <script src="{{ url_for('static', filename='js/signup.js') }}"></script>
     {% endif %}
-    <!-- Include profile.js if the endpoint is profile -->
-    {% if request.endpoint == 'profile' %}
-    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
-    {% endif %}
+
     <!-- Include create_information.js if the endpoint is profile -->
     {% if request.endpoint == 'create_information' %}
     <script src="{{ url_for('static', filename='js/create_information.js') }}"></script>

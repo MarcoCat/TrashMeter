@@ -35,10 +35,10 @@
                 <option value="volunteer" {% if user.account_type == 'volunteer' %}selected{% endif %}>Volunteer Organization</option>
             </select>
         </div>
-        <div id="organization_name_field" class="mb-3" style="display: none;">
+        <div id="organization_name_field" style="display: none;">
             <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
             <div class="input-with-icon">
-                <input type="text" id="organization_name" name="organization_name" value="{{ user.organization_name }}">
+                <input type="text" id="organization_name" name="organization_name" readonly value="{{ request.args.get('org_name', '') }}">
                 <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="redirectToSearch()">
             </div>
         </div>
