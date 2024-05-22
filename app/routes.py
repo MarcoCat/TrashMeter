@@ -180,7 +180,7 @@ def profile():
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
-    user = User.query.get(g.user.id)
+    user = db.session.get(User, g.user.id)
     user.username = request.form['username']
     user.first_name = request.form['first_name']
     user.last_name = request.form['last_name']
