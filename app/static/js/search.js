@@ -46,6 +46,12 @@ function redirectToSearch() {
     window.location.href = url + '&' + formData;
 }
 
+function redirectToCreate() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var type = urlParams.get('type');
+    window.location.href = '/createinformation?type=' + encodeURIComponent(type);
+}
+
 function loadSelectedOrganization(id, name) {
     document.getElementById('organization_name').value = name;
     document.getElementById('organization_id').value = id;
