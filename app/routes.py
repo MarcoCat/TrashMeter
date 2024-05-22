@@ -7,6 +7,7 @@ from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
+from fuzzywuzzy import fuzz
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -73,11 +74,16 @@ def signup():
         last_name = request.form['last_name']
         account_type = request.form['account_type']
         email = request.form['email']
-        position = request.form.get('position')
-        organization_id = request.form.get('organization_id')
-        
+        organization_name = request.form.get('organization_name')
+
+        organization = Organization.query.filter_by(name=organization_name).first()
+        organization_id = organization.id if organization else None
+        organization_type = organization.type if organization else None
+
         if account_type in ['school', 'company', 'volunteer'] and not organization_id:
             flash(f'You must select an {account_type} for {account_type} accounts.', 'danger')
+        elif account_type in ['school', 'company', 'volunteer'] and organization_type != account_type:
+            flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
             new_user = User(username=username,
                             password=password,
@@ -85,7 +91,6 @@ def signup():
                             last_name=last_name,
                             account_type=account_type,
                             email=email,
-                            position=position,
                             organization_id=organization_id)
             db.session.add(new_user)
             db.session.commit()
@@ -93,6 +98,9 @@ def signup():
             return redirect(url_for('login'))
 
     return render_template('signup.html', organizations=organizations)
+
+
+
 
 
 @app.route('/logout')
@@ -182,7 +190,6 @@ def update_profile():
     user.last_name = request.form['last_name']
     user.email = request.form['email']
     user.account_type = request.form['account_type']
-    user.position = request.form.get('position')
 
     profile_picture = request.files.get('profile_image')
     if profile_picture:
@@ -215,10 +222,10 @@ def update_trash():
         trash_amount = int(request.form['trash_amount'])
         user = db.session.get(User, g.user.id)
         user.trash_collected += trash_amount
+        user.unallocated_trash += trash_amount
         db.session.commit()
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
-    
 
 @app.route('/leaderboard')
 def leaderboard():
@@ -228,13 +235,100 @@ def leaderboard():
     # Leaderboard for companies
     companies = db.session.query(
         Organization.name,
-        db.func.sum(User.trash_collected).label('total_trash')
-    ).join(User).filter(Organization.type == 'company').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+        Organization.total_trash
+    ).filter(Organization.type == 'company').order_by(db.desc(Organization.total_trash)).all()
 
     # Leaderboard for schools
     schools = db.session.query(
         Organization.name,
-        db.func.sum(User.trash_collected).label('total_trash')
-    ).join(User).filter(Organization.type == 'school').group_by(Organization.name).order_by(db.desc('total_trash')).all()
+        Organization.total_trash
+    ).filter(Organization.type == 'school').order_by(db.desc(Organization.total_trash)).all()
 
-    return render_template('leaderboard.html', users=users, companies=companies, schools=schools)
+    # Leaderboard for volunteer organizations
+    volunteers = db.session.query(
+        Organization.name,
+        Organization.total_trash
+    ).filter(Organization.type == 'volunteer').order_by(db.desc(Organization.total_trash)).all()
+
+    return render_template('leaderboard.html', users=users, companies=companies, schools=schools, volunteers=volunteers)
+
+
+@app.route('/allocate_trash', methods=['GET', 'POST'])
+@login_required
+def allocate_trash():
+    if request.method == 'POST':
+        organization_id = int(request.form['organization_id'])
+        trash_amount = int(request.form['trash_amount'])
+        user = db.session.get(User, g.user.id)
+
+        if trash_amount > user.unallocated_trash:
+            flash('You cannot allocate more trash than you have unallocated.', 'danger')
+            return redirect(url_for('allocate_trash'))
+
+        user.unallocated_trash -= trash_amount
+
+        # Update organization score
+        organization = db.session.get(Organization, organization_id)
+        if organization:
+            organization.total_trash = (organization.total_trash or 0) + trash_amount
+            db.session.commit()
+            flash(f'{trash_amount} pieces of trash allocated to {organization.name} successfully!', 'success')
+        else:
+            flash('Organization not found.', 'danger')
+
+        return redirect(url_for('profile'))
+    
+    organizations = Organization.query.all()
+    return render_template('allocate_trash.html', organizations=organizations)
+
+
+@app.route('/createinformation', methods=['GET', 'POST'])
+def create_information():
+    
+    def allowed_file(filename):
+        ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+    if request.method == 'POST':
+        # Handle image upload
+        image_file = request.files.get('organization_image')
+        image_data = None
+        if image_file and allowed_file(image_file.filename):
+            image_data = image_file.read()
+
+        org_type = request.form['organization_type']
+        if org_type not in ['school', 'company', 'volunteer']:
+            flash("Invalid organization type.")
+            return redirect(request.url)
+
+        new_org = Organization(
+            name=request.form['organization_name'],
+            type=org_type,
+            address=request.form['organization_address'],
+            image=image_data
+        )
+        db.session.add(new_org)
+        db.session.commit()
+        return redirect(url_for('search', type=org_type))
+
+    org_type = request.args.get('type', 'organization')
+    return render_template('create_information.html', account_type=org_type)
+
+@app.route('/search', methods=['GET'])
+def search():
+    query = request.args.get('searchQuery', '')
+    org_type = request.args.get('type', '')
+
+    if org_type not in ['school', 'company', 'volunteer']:
+        org_type = ''
+
+    results = []
+    if query:
+        organizations = Organization.query.all()
+        for org in organizations:
+            if org_type and org.type.lower() != org_type.lower():
+                continue
+            if fuzz.partial_ratio(query.lower(), org.name.lower()) > 85:
+                results.append(org)
+
+    return render_template('search.html', results=results, query=query, org_type=org_type)

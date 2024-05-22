@@ -66,5 +66,26 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <!-- Volunteer Organizations Leaderboard -->
+    <h2 class="mt-5">Volunteer Organizations</h2>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr>
+                <th scope="col">Rank</th>
+                <th scope="col">Volunteer Organization</th>
+                <th scope="col">Total Trash Collected</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for volunteer in volunteers %}
+            <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ volunteer.name }}</td>
+                <td>{{ volunteer.total_trash }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
