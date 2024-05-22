@@ -10,7 +10,6 @@ class User(db.Model):
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     account_type = db.Column(db.String(100), nullable=False)
-    position = db.Column(db.String(100), nullable=True)
     trash_collected = db.Column(db.Integer, default=0)
     unallocated_trash = db.Column(db.Integer, default=0)
     profile_picture = db.Column(db.LargeBinary, nullable=True)

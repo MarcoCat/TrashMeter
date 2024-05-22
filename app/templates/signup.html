@@ -30,7 +30,7 @@
         <div id="organization_name_field" style="display: none;">
             <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
             <div class="input-with-icon">
-                <input type="text" id="organization_name" name="organization_name" readonly>
+                <input type="text" id="organization_name" name="organization_name" readonly value="{{ request.args.get('org_name', '') }}">
                 <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="redirectToSearch()">
             </div>
         </div>
@@ -39,4 +39,8 @@
 
         <input type="submit" value="Sign Up">
     </form>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/signup.js') }}"></script>
 {% endblock %}

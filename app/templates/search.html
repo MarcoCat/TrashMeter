@@ -14,13 +14,23 @@
                 <option value="company" {% if org_type == 'company' %}selected{% endif %}>Company</option>
                 <option value="volunteer" {% if org_type == 'volunteer' %}selected{% endif %}>Volunteer</option>
             </select>
+
+            <!-- Include hidden fields for the current form data -->
+            <input type="hidden" name="username" value="{{ request.args.get('username', '') }}">
+            <input type="hidden" name="email" value="{{ request.args.get('email', '') }}">
+            <input type="hidden" name="first_name" value="{{ request.args.get('first_name', '') }}">
+            <input type="hidden" name="last_name" value="{{ request.args.get('last_name', '') }}">
+            <input type="hidden" name="password" value="{{ request.args.get('password', '') }}">
+            <input type="hidden" name="account_type" value="{{ request.args.get('account_type', 'individual') }}">
         </form>
         <div id="searchResults">
             {% if results %}
                 <ul>
                     {% for org in results %}
                         <li>
-                            <strong>{{ org.name }}</strong><br>
+                            <a href="{{ url_for('signup', org_name=org.name, username=request.args.get('username', ''), email=request.args.get('email', ''), first_name=request.args.get('first_name', ''), last_name=request.args.get('last_name', ''), password=request.args.get('password', ''), account_type=request.args.get('account_type', 'individual')) }}">
+                                <strong>{{ org.name }}</strong>
+                            </a><br>
                             Type: {{ org.type }}<br>
                             Address: {{ org.address }}<br>
                             Total Trash: {{ org.total_trash }}
