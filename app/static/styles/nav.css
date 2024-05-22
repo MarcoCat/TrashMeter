@@ -15,37 +15,32 @@
     height: 60px;
 }
 
-.menu-container {
+.logo-container {
     display: flex;
     align-items: center;
 }
 
-.hamburger {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 10px 15px; /* Adjust padding to reduce excessive width */
-    margin-right: 10px; /* Optional: for space between menu and the next element */
+.navbar-logo {
+    max-height: 40px; /* Adjust logo height */
+}
+
+.menu-container {
+    display: flex;
+    align-items: center;
 }
 
 .nav-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    background-color: #444;
-    position: absolute;
-    top: 60px; /* Adjusted to the height of the navbar */
-    left: 0; /* Start from the left edge of the viewport */
-    display: none;
-    width: auto; /* Adjust width to fit content */
-    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    display: flex; /* 웹에서는 가로로 나열 */
+    align-items: center;
 }
 
 .nav-list li {
-    white-space: nowrap; /* Ensure the text does not wrap */
-    padding: 12px 20px; /* Adjust padding to fit content */
+    white-space: nowrap;
+    padding: 12px 20px;
+    position: relative;
 }
 
 .nav-list li a {
@@ -58,11 +53,88 @@
     background-color: #555;
 }
 
-.navbar-center, .navbar-right {
-    flex: 0 1 auto;
+.hamburger {
+    cursor: pointer;
 }
 
-.navbar-center img, .navbar-right img {
-    max-height: 100%;
-    padding: 10px;
+.beaches-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 60px; /* Adjust based on the height of the navbar */
+    left: 0;
+    background-color: #444;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column; /* 세로 나열 */
+    width: 200px; /* Adjust as needed */
+}
+
+.beaches-menu li {
+    padding: 12px 20px;
+}
+
+.beaches-menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.beaches-menu li a:hover {
+    background-color: #555;
+}
+
+.user-icon {
+    max-height: 40px; /* Adjust user icon image height */
+    cursor: pointer;
+}
+
+.user-menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 60px; /* Adjust based on the height of the navbar */
+    right: 0;
+    background-color: #444;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    display: none;
+    flex-direction: column; /* 세로 나열 */
+    width: auto; /* Adjust as needed */
+}
+
+.user-menu li {
+    padding: 12px 20px;
+}
+
+.user-menu li a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+
+.user-menu li a:hover {
+    background-color: #555;
+}
+
+.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .nav-list {
+        position: absolute;
+        top: 60px;
+        right: 0; /* 오른쪽 끝에서 시작 */
+        display: none; /* 모바일에서는 기본적으로 숨김 */
+        flex-direction: column; /* 세로 나열 */
+        background-color: #444;
+        width: 100%; /* 너비를 100%로 설정 */
+        box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    }
+
+    .nav-list.show {
+        display: flex; /* 햄버거 메뉴 클릭 시 표시 */
+    }
 }

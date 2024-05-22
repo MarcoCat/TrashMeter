@@ -1,21 +1,39 @@
 <!-- nav.html -->
 <header>
     <nav class="navbar">
-        <div class="menu-container">
-            <button class="hamburger" onclick="toggleMenu()">☰</button>
-            <ul id="navList" class="nav-list hidden">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                {% if 'user_id' in session %}
-                    <!-- 로그인한 사용자를 위한 메뉴 항목 -->
-                    <li><a href="{{ url_for('profile') }}">Profile</a></li>
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-                {% else %}
-                    <!-- 비로그인 사용자를 위한 메뉴 항목 -->
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
-                    <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
-                {% endif %}
-                <li><a href="{{ url_for('contact') }}">Contact</a></li>
-            </ul>
+        <div class="logo-container">
+            <img src="{{ url_for('static', filename='images/challenge1.png') }}" alt="Logo" class="navbar-logo">
         </div>
+        <div class="menu-container">
+            <ul id="navList" class="nav-list">
+                <li class="hamburger-container">
+                    <a href="#" class="hamburger" onclick="toggleBeachesMenu()">Beaches ▼</a>
+                    <ul id="beachesMenu" class="beaches-menu hidden">
+                        <li><a href="#">Delta</a></li>
+                        <li><a href="#">Surfside</a></li>
+                        <li><a href="#">Malibu</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ url_for('update_trash') }}">Trash Meter</a></li> <!-- 올바른 엔드포인트로 수정 -->
+                <li><a href="#">Leaderboard</a></li>
+                <li><a href="#">Contact Us</a></li>
+            </ul>
+            <img src="{{ url_for('static', filename='images/user_icon.png') }}" alt="Menu" class="user-icon" onclick="toggleUserMenu()">
+        </div>
+        <ul id="userMenu" class="user-menu hidden">
+            {% if 'user_id' in session %}
+                <!-- 로그인한 사용자를 위한 메뉴 항목 -->
+                <li><a href="{{ url_for('profile') }}">Profile</a></li>
+                <li><a href="{{ url_for('update_trash') }}">Trash Meter</a></li> <!-- 올바른 엔드포인트로 수정 -->
+                <li><a href="#">Leaderboard</a></li>
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <!-- 비로그인 사용자를 위한 메뉴 항목 -->
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+            {% endif %}
+        </ul>
     </nav>
 </header>
+
+<script src="{{ url_for('static', filename='js/nav.js') }}"></script>
