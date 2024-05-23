@@ -328,3 +328,4 @@ def search():
                 results.append(org)
 
     return render_template('search.html', results=results, query=query, org_type=org_type)
+

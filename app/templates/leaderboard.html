@@ -4,18 +4,19 @@
 <div class="container mt-5">
     <h1 class="text-center">Leaderboard</h1>
 
-    <!-- Filter Bar for Mobile View -->
-    <div class="filter-container d-block d-md-none mb-4">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
-            LeaderBoard Filter
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
-            <li><a class="dropdown-item" href="#all-users" data-bs-toggle="tab">Total</a></li>
-            <li><a class="dropdown-item" href="#companies" data-bs-toggle="tab">Companies</a></li>
-            <li><a class="dropdown-item" href="#schools" data-bs-toggle="tab">Schools</a></li>
-            <li><a class="dropdown-item" href="#volunteers" data-bs-toggle="tab">Volunteer Organizations</a></li>
-        </ul>
-    </div>
+<!-- Filter Bar for Mobile View -->
+<div class="filter-container d-block d-md-none mb-4">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
+        LeaderBoard Filter
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
+        <li><a class="dropdown-item" href="#" data-filter="#all-users">Total</a></li>
+        <li><a class="dropdown-item" href="#" data-filter="#companies">Companies</a></li>
+        <li><a class="dropdown-item" href="#" data-filter="#schools">Schools</a></li>
+        <li><a class="dropdown-item" href="#" data-filter="#volunteers">Volunteer Organizations</a></li>
+    </ul>
+</div>
+
 
     <!-- Tabs Navigation -->
     <ul class="nav nav-tabs d-none d-md-flex" id="leaderboardTabs" role="tablist">

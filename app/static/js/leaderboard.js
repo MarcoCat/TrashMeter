@@ -40,4 +40,14 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("volunteersFilter").addEventListener("change", function() {
         sortTable("volunteersBody", this.value);
     });
+
+    // Handle mobile filter click events
+    document.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function(event) {
+            event.preventDefault();
+            var targetTab = this.getAttribute('data-filter');
+            var tabTrigger = new bootstrap.Tab(document.querySelector(targetTab + '-tab'));
+            tabTrigger.show();
+        });
+    });
 });
