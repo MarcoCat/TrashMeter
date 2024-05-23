@@ -4,8 +4,21 @@
 <div class="container mt-5">
     <h1 class="text-center">Leaderboard</h1>
 
+    <!-- Filter Bar for Mobile View -->
+    <div class="filter-container d-block d-md-none mb-4">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
+            LeaderBoard Filter
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
+            <li><a class="dropdown-item" href="#all-users" data-bs-toggle="tab">Total</a></li>
+            <li><a class="dropdown-item" href="#companies" data-bs-toggle="tab">Companies</a></li>
+            <li><a class="dropdown-item" href="#schools" data-bs-toggle="tab">Schools</a></li>
+            <li><a class="dropdown-item" href="#volunteers" data-bs-toggle="tab">Volunteer Organizations</a></li>
+        </ul>
+    </div>
+
     <!-- Tabs Navigation -->
-    <ul class="nav nav-tabs" id="leaderboardTabs" role="tablist">
+    <ul class="nav nav-tabs d-none d-md-flex" id="leaderboardTabs" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" id="all-users-tab" data-bs-toggle="tab" href="#all-users" role="tab" aria-controls="all-users" aria-selected="true">Total</a>
         </li>
@@ -44,7 +57,12 @@
                     {% for user in users %}
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
-                        <td>{{ user.username }}</td>
+                        <td>
+                            <div class="user-info">
+                                <img src="{{ url_for('profile_picture', user_id=user.id) }}" alt="Profile Image" class="profile-image">
+                                <span>{{ user.username }}</span>
+                            </div>
+                        </td>
                         <td>{{ user.trash_collected }}</td>
                     </tr>
                     {% endfor %}
@@ -66,7 +84,7 @@
                     <tr>
                         <th scope="col">Rank</th>
                         <th scope="col">Company</th>
-                        <th scope="col">Total Trash Collected</th>
+                        <th scope="col">Trash Collected</th>
                     </tr>
                 </thead>
                 <tbody id="companiesBody">
@@ -95,7 +113,7 @@
                     <tr>
                         <th scope="col">Rank</th>
                         <th scope="col">School</th>
-                        <th scope="col">Total Trash Collected</th>
+                        <th scope="col">Trash Collected</th>
                     </tr>
                 </thead>
                 <tbody id="schoolsBody">
@@ -124,7 +142,7 @@
                     <tr>
                         <th scope="col">Rank</th>
                         <th scope="col">Volunteer Organization</th>
-                        <th scope="col">Total Trash Collected</th>
+                        <th scope="col">Trash Collected</th>
                     </tr>
                 </thead>
                 <tbody id="volunteersBody">

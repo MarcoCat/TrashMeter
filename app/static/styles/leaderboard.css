@@ -3,9 +3,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .container {
@@ -72,20 +69,26 @@ td {
     color: #235A70;
 }
 
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; /* Space between image and username */
+}
+
 @media (max-width: 576px) {
     .nav-tabs {
-        display: flex;
-        flex-direction: column;
+        display: none; /* Hide tabs for mobile */
     }
 
-    .nav-tabs .nav-item {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .btn-group {
+    .filter-container {
         display: flex;
-        flex-direction: column;
+        justify-content: flex-start; /* Align filter bar to the left */
     }
 
     .btn-group .form-control {
