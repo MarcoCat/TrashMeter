@@ -4,19 +4,18 @@
 <div class="container mt-5">
     <h1 class="text-center">Leaderboard</h1>
 
-<!-- Filter Bar for Mobile View -->
-<div class="filter-container d-block d-md-none mb-4">
-    <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
-        LeaderBoard Filter
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
-        <li><a class="dropdown-item" href="#" data-filter="#all-users">Total</a></li>
-        <li><a class="dropdown-item" href="#" data-filter="#companies">Companies</a></li>
-        <li><a class="dropdown-item" href="#" data-filter="#schools">Schools</a></li>
-        <li><a class="dropdown-item" href="#" data-filter="#volunteers">Volunteer Organizations</a></li>
-    </ul>
-</div>
-
+    <!-- Filter Bar for Mobile View -->
+    <div class="filter-container d-block d-md-none mb-4">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
+            LeaderBoard Filter
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
+            <li><a class="dropdown-item" href="#" data-filter="#all-users">Total</a></li>
+            <li><a class="dropdown-item" href="#" data-filter="#companies">Companies</a></li>
+            <li><a class="dropdown-item" href="#" data-filter="#schools">Schools</a></li>
+            <li><a class="dropdown-item" href="#" data-filter="#volunteers">Volunteer Organizations</a></li>
+        </ul>
+    </div>
 
     <!-- Tabs Navigation -->
     <ul class="nav nav-tabs d-none d-md-flex" id="leaderboardTabs" role="tablist">
@@ -69,6 +68,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="pagination-controls">
+                <button class="btn btn-primary" id="prevPageAllUsers">Previous</button>
+                <button class="btn btn-primary" id="nextPageAllUsers">Next</button>
+            </div>
         </div>
         <div class="tab-pane fade" id="companies" role="tabpanel" aria-labelledby="companies-tab">
             <!-- Companies Leaderboard -->
@@ -98,6 +101,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="pagination-controls">
+                <button class="btn btn-primary" id="prevPageCompanies">Previous</button>
+                <button class="btn btn-primary" id="nextPageCompanies">Next</button>
+            </div>
         </div>
         <div class="tab-pane fade" id="schools" role="tabpanel" aria-labelledby="schools-tab">
             <!-- Schools Leaderboard -->
@@ -127,6 +134,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="pagination-controls">
+                <button class="btn btn-primary" id="prevPageSchools">Previous</button>
+                <button class="btn btn-primary" id="nextPageSchools">Next</button>
+            </div>
         </div>
         <div class="tab-pane fade" id="volunteers" role="tabpanel" aria-labelledby="volunteers-tab">
             <!-- Volunteer Organizations Leaderboard -->
@@ -156,6 +167,10 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <div class="pagination-controls">
+                <button class="btn btn-primary" id="prevPageVolunteers">Previous</button>
+                <button class="btn btn-primary" id="nextPageVolunteers">Next</button>
+            </div>
         </div>
     </div>
 </div>
