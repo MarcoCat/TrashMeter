@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hero-section">
+    <img src="{{ url_for('static', filename='images/delta_image.jpg') }}" alt="Background Image" class="background-image">
+    <div class="content">
+        <h1 class="hero-heading">PickUp3 welcomes Delta as a participating community!</h1>
+        <button class="join-button">Join the Movement</button>
+    </div>
+</div>
+<section class="delta-section">
+    <h1 class="delta-heading">Welcome to Delta!.</h1>
+    <p class="description">
+        As a participating beach community, local Delta businesses and organizations have come together to sponsor events,
+        promotional materials, and leadership education for 50 young people who will lead the movement in Delta.
+        Our core team of youth volunteers will lead events at local schools, beaches,
+        and shopping areas to spread the word about PickUp3.
+    </p>
+    <img src="{{ url_for('static', filename='images/delta_1.jpg') }}" alt="Background Image" class="background-image">
+</section>
+{% endblock %}
