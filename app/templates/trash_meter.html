@@ -21,8 +21,12 @@
                 <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
             </div>
         </div>
-            <h2>Current trash count: {{ trash_counter }}</h2>
-            <h2>You have picked up: {{ user.trash_collected }}</h2>
+            <h2>Current trash count: {{ total_trash }}</h2>
+            <h2>You have picked up in total: {{ user.trash_collected }}</h2>
+            <h2>You have {{ user.unallocated_trash }} unallocated and have donated {{ user.trash_collected - user.unallocated_trash }}! </h2>
+            <a href="{{ url_for('allocate_trash') }}">
+                <button type="button">Donate to an Organization!</button>
+            </a>
         </div>
     </div>
 

@@ -5,7 +5,7 @@ from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User, Organization
+from .models import User, Organization, TrashCounter
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
@@ -52,8 +52,9 @@ def index():
         return redirect(url_for('login'))
     # trash_data = TrashData.query.first()
     user = db.session.get(User, g.user.id)
+    total_trash = TrashCounter.query.first()
     return render_template('trash_meter.html', trash_counter=trash_counter, personal_counter=personal_counter,
-                           trash_history=trash_history, user=user)
+                           trash_history=trash_history, user=user, total_trash=total_trash.total_trash_collected)
                            # , this_date=this_date, beach=this_beach, this_picked=this_picked)
 
 # @app.route('/')
@@ -254,6 +255,8 @@ def update_trash():
 def update_trash_counter():
     global trash_counter, personal_counter, this_beach, this_date, this_picked
     user = db.session.get(User, g.user.id)
+    total_trash = TrashCounter.query.first()
+    session['total_trash'] = total_trash.total_trash_collected
     picked_up = int(request.form['picked_up'])
     beach = request.form['beach']
     this_picked = picked_up
@@ -267,8 +270,10 @@ def update_trash_counter():
 
     user.trash_collected += picked_up
     user.unallocated_trash += picked_up
+    total_trash.total_trash_collected += picked_up
+    user.beach = beach
     db.session.commit()
-    trash_counter += picked_up
+
     # personal_counter += picked_up
     # Redirect back to the main page
     return redirect(url_for('index'))

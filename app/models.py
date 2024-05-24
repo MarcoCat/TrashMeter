@@ -16,6 +16,7 @@ class User(db.Model):
     profile_picture = db.Column(db.LargeBinary, nullable=True)
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
     organization = db.relationship('Organization', backref=db.backref('users', lazy=True))
+    beach = db.Column(db.String(100), nullable=True)
 
 
 class Organization(db.Model):
