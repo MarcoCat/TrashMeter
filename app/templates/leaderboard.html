@@ -115,7 +115,12 @@
                     {% for company in companies %}
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
-                        <td>{{ company.name }}</td>
+                        <td>
+                            <div class="user-info">
+                                <img src="{{ url_for('organization_image', organization_id=company.id) }}" alt="{{ company.name }} Image" class="profile-image" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';">
+                                <span>{{ company.name }}</span>
+                            </div>
+                        </td>
                         <td>{{ company.total_trash }}</td>
                     </tr>
                     {% endfor %}
@@ -148,7 +153,12 @@
                     {% for school in schools %}
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
-                        <td>{{ school.name }}</td>
+                        <td>
+                            <div class="user-info">
+                                <img src="{{ url_for('organization_image', organization_id=school.id) }}" alt="{{ school.name }} Image" class="profile-image" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';">
+                                <span>{{ school.name }}</span>
+                            </div>
+                        </td>
                         <td>{{ school.total_trash }}</td>
                     </tr>
                     {% endfor %}
@@ -181,7 +191,12 @@
                     {% for volunteer in volunteers %}
                     <tr>
                         <th scope="row">{{ loop.index }}</th>
-                        <td>{{ volunteer.name }}</td>
+                        <td>
+                            <div class="user-info">
+                                <img src="{{ url_for('organization_image', organization_id=volunteer.id) }}" alt="{{ volunteer.name }} Image" class="profile-image" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';">
+                                <span>{{ volunteer.name }}</span>
+                            </div>
+                        </td>
                         <td>{{ volunteer.total_trash }}</td>
                     </tr>
                     {% endfor %}
