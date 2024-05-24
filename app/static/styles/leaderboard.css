@@ -97,6 +97,7 @@ h1#leaderboardTitle {
     }
 }
 
+
 /* Adjust font size and table cell styles for mobile view */
 @media (max-width: 767.98px) {
     .table thead th,
