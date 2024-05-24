@@ -280,26 +280,10 @@ def update_trash_counter():
 
 @app.route('/leaderboard')
 def leaderboard():
-    # Leaderboard for all users
     users = User.query.order_by(User.trash_collected.desc()).all()
-
-    # Leaderboard for companies
-    companies = db.session.query(
-        Organization.name,
-        Organization.total_trash
-    ).filter(Organization.type == 'company').order_by(db.desc(Organization.total_trash)).all()
-
-    # Leaderboard for schools
-    schools = db.session.query(
-        Organization.name,
-        Organization.total_trash
-    ).filter(Organization.type == 'school').order_by(db.desc(Organization.total_trash)).all()
-
-    # Leaderboard for volunteer organizations
-    volunteers = db.session.query(
-        Organization.name,
-        Organization.total_trash
-    ).filter(Organization.type == 'volunteer').order_by(db.desc(Organization.total_trash)).all()
+    companies = Organization.query.filter_by(type='company').order_by(Organization.total_trash.desc()).all()
+    schools = Organization.query.filter_by(type='school').order_by(Organization.total_trash.desc()).all()
+    volunteers = Organization.query.filter_by(type='volunteer').order_by(Organization.total_trash.desc()).all()
 
     return render_template('leaderboard.html', users=users, companies=companies, schools=schools, volunteers=volunteers)
 
