@@ -97,7 +97,6 @@ h1#leaderboardTitle {
     }
 }
 
-
 /* Adjust font size and table cell styles for mobile view */
 @media (max-width: 767.98px) {
     .table thead th,
@@ -191,4 +190,101 @@ h1#leaderboardTitle {
     .nav-tabs .nav-link {
         margin-right: 5px;
     }
+}
+
+/* Hall of Fame Styles */
+.hall-of-fame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hof-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 0 10px;
+    border-radius: 10px;
+    position: relative;
+    width: 100px;
+    height: 150px;
+    text-align: center;
+}
+
+.hof-1 {
+    background-color: #00B0AD;
+}
+
+.hof-2 {
+    background-color: #BBE3DE;
+}
+
+.hof-3 {
+    background-color: #BBE3DE;
+}
+
+.hof-profile {
+    position: relative;
+}
+
+.hof-profile .hof-profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 5px solid transparent;
+}
+
+.hof-profile .hof-rank {
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.hof-rank-1 {
+    background-color: #FFAA00;
+    color: #fff;
+}
+
+.hof-rank-2 {
+    background-color: #009BD6;
+    color: #fff;
+}
+
+.hof-rank-3 {
+    background-color: #00D95F;
+    color: #fff;
+}
+
+.hof-info {
+    margin-top: 10px;
+}
+
+.hof-username {
+    display: block;
+    font-weight: bold;
+    color: #235A70;
+}
+
+.hof-trash {
+    display: block;
+    font-size: 1.2rem;
+}
+
+/* Ensure profile images have a circle with colored border behind them */
+.hof-1 .hof-profile-image {
+    border-color: #FFAA00;
+}
+
+.hof-2 .hof-profile-image {
+    border-color: #009BD6;
+}
+
+.hof-3 .hof-profile-image {
+    border-color: #00D95F;
 }
