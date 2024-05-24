@@ -274,6 +274,7 @@ def update_trash_counter():
     })
 
     user.trash_collected += picked_up
+    user.unallocated_trash += picked_up
     db.session.commit()
     trash_counter += picked_up
     # personal_counter += picked_up

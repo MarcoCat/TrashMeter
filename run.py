@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash
 def get_or_create(model, defaults=None, **kwargs):
     instance = model.query.filter_by(**kwargs).first()
     if instance:
+        print('a')
         return instance
     else:
         params = kwargs.copy()
@@ -13,12 +14,14 @@ def get_or_create(model, defaults=None, **kwargs):
         instance = model(**params)
         db.session.add(instance)
         db.session.commit()
+        print('b')
         return instance
 
 def create_test_users():
     ubc = get_or_create(Organization, name='University of British Columbia', type='school', address='123 University Blvd', image=None)
     bcit = get_or_create(Organization, name='British Columbia Institute of Technology', type='school', address='456 Institute Rd', image=None)
     langara = get_or_create(Organization, name='Langara College', type='school', address='789 College St', image=None)
+    southridge = get_or_create(Organization, name='Southridge', type='school', address='789 College St', image=None)
     telus = get_or_create(Organization, name='Telus', type='company', defaults={'address': '101 Telus Ave', 'image': None, 'total_trash': 100})
     rbc = get_or_create(Organization, name='RBC', type='company', defaults={'address': '202 RBC Blvd', 'image': None, 'total_trash': 150})
     vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'address': '303 Vancity Rd', 'image': None, 'total_trash': 120})
@@ -38,6 +41,7 @@ def create_test_users():
         User(username='ubc_student', password=generate_password_hash('password123'), first_name='Emma', last_name='Smith', email='emma.smith@ubc.ca', account_type='school', organization_id=ubc.id, trash_collected=30, unallocated_trash=15),
         User(username='bcit_student', password=generate_password_hash('password123'), first_name='Liam', last_name='Johnson', email='liam.johnson@bcit.ca', account_type='school', organization_id=bcit.id, trash_collected=25, unallocated_trash=10),
         User(username='langara_teacher', password=generate_password_hash('password123'), first_name='Olivia', last_name='Williams', email='olivia.williams@langara.ca', account_type='school', organization_id=langara.id, trash_collected=35, unallocated_trash=20),
+
         
         # Company users
         User(username='telus_employee', password=generate_password_hash('password123'), first_name='James', last_name='Brown', email='james.brown@telus.com', account_type='company', organization_id=telus.id, trash_collected=40, unallocated_trash=20),
@@ -69,4 +73,5 @@ app = create_app()
 if __name__ == '__main__':
     with app.app_context():
         create_test_users()
+    print("hellow yesasdfasdfasfasdfasfda")
     app.run(debug=True)
