@@ -3,7 +3,6 @@
 {% block content %}
 <div class="container">
     <h2>Edit Profile</h2>
-    <a href="{{ url_for('allocate_trash') }}" class="btn btn-primary">Allocate Trash</a>
     <form action="{{ url_for('update_profile') }}" method="POST" enctype="multipart/form-data">
         <div class="profile-image-container">
             <img id="profileImagePreview" src="{{ url_for('profile_picture', user_id=user.id) }}" alt="Profile Image">
@@ -25,22 +24,6 @@
         <div class="mb-3">
             <label for="email" class="form-label">Email Address</label>
             <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}">
-        </div>
-        <div class="mb-3">
-            <label for="account_type" class="form-label">Account Type</label>
-            <select class="form-control" name="account_type" id="account_type" onchange="toggleVisibility()">
-                <option value="individual" {% if user.account_type == 'individual' %}selected{% endif %}>Individual</option>
-                <option value="company" {% if user.account_type == 'company' %}selected{% endif %}>Company</option>
-                <option value="school" {% if user.account_type == 'school' %}selected{% endif %}>School</option>
-                <option value="volunteer" {% if user.account_type == 'volunteer' %}selected{% endif %}>Volunteer Organization</option>
-            </select>
-        </div>
-        <div id="organization_name_field" class="mb-3" style="display: none;">
-            <label id="organization_label" for="organization_name">Name of your School/Organization/Company <span class="required"> *</span></label>
-            <div class="input-with-icon">
-                <input type="text" id="organization_name" name="organization_name" value="{{ user.organization_name }}">
-                <img src="{{ url_for('static', filename='images/search_icon.png') }}" alt="Search Icon" class="search-icon" onclick="redirectToSearch()">
-            </div>
         </div>
         <div class="button-container">
             <button type="submit" class="btn btn-primary">Update Profile</button>
