@@ -1,6 +1,7 @@
 from app import create_app, db
 from app.models import User, Organization
 from werkzeug.security import generate_password_hash
+import os
 
 def get_or_create(model, defaults=None, **kwargs):
     instance = model.query.filter_by(**kwargs).first()
@@ -15,18 +16,33 @@ def get_or_create(model, defaults=None, **kwargs):
         db.session.commit()
         return instance
 
+def read_image(file_path):
+    if not os.path.exists(file_path):
+        print(f"Image file {file_path} not found.")
+        return None
+    with open(file_path, 'rb') as file:
+        return file.read()
+    
 def create_test_users():
-    ubc = get_or_create(Organization, name='University of British Columbia', type='school', address='123 University Blvd', image=None)
-    bcit = get_or_create(Organization, name='British Columbia Institute of Technology', type='school', address='456 Institute Rd', image=None)
-    langara = get_or_create(Organization, name='Langara College', type='school', address='789 College St', image=None)
-    telus = get_or_create(Organization, name='Telus', type='company', defaults={'address': '101 Telus Ave', 'image': None, 'total_trash': 100})
-    rbc = get_or_create(Organization, name='RBC', type='company', defaults={'address': '202 RBC Blvd', 'image': None, 'total_trash': 150})
-    vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'address': '303 Vancity Rd', 'image': None, 'total_trash': 120})
+    ubc_image = read_image(os.path.join('app', 'static', 'uploads', 'ubc.jpg'))
+    bcit_image = read_image(os.path.join('app', 'static', 'uploads', 'bcit.jpg'))
+    langara_image = read_image(os.path.join('app', 'static', 'uploads', 'langara.jpg'))
+    telus_image = read_image(os.path.join('app', 'static', 'uploads', 'telus.jpg'))
+    rbc_image = read_image(os.path.join('app', 'static', 'uploads', 'rbc.jpg'))
+    vancity_image = read_image(os.path.join('app', 'static', 'uploads', 'vancity.jpg'))
+    red_cross_image = read_image(os.path.join('app', 'static', 'uploads', 'red_cross.jpg'))
+    greenpeace_image = read_image(os.path.join('app', 'static', 'uploads', 'greenpeace.jpg'))
+    habitat_humanity_image = read_image(os.path.join('app', 'static', 'uploads', 'habitat_humanity.jpg'))
 
-    # Adding volunteer organizations
-    red_cross = get_or_create(Organization, name='Red Cross', type='volunteer', address='404 Volunteer Ln', image=None, defaults={'total_trash': 200})
-    greenpeace = get_or_create(Organization, name='Greenpeace', type='volunteer', address='505 Environmental Rd', image=None, defaults={'total_trash': 250})
-    habitat_humanity = get_or_create(Organization, name='Habitat for Humanity', type='volunteer', address='606 Build St', image=None, defaults={'total_trash': 180})
+    ubc = get_or_create(Organization, name='University of British Columbia', type='school', address='123 University Blvd', image=ubc_image)
+    bcit = get_or_create(Organization, name='British Columbia Institute of Technology', type='school', address='456 Institute Rd', image=bcit_image)
+    langara = get_or_create(Organization, name='Langara College', type='school', address='789 College St', image=langara_image)
+    telus = get_or_create(Organization, name='Telus', type='company', defaults={'address': '101 Telus Ave', 'image': telus_image, 'total_trash': 100})
+    rbc = get_or_create(Organization, name='RBC', type='company', defaults={'address': '202 RBC Blvd', 'image': rbc_image, 'total_trash': 150})
+    vancity = get_or_create(Organization, name='Vancity', type='company', defaults={'address': '303 Vancity Rd', 'image': vancity_image, 'total_trash': 120})
+    red_cross = get_or_create(Organization, name='Red Cross', type='volunteer', address='404 Volunteer Ln', image=red_cross_image, defaults={'total_trash': 200})
+    greenpeace = get_or_create(Organization, name='Greenpeace', type='volunteer', address='505 Environmental Rd', image=greenpeace_image, defaults={'total_trash': 250})
+    habitat_humanity = get_or_create(Organization, name='Habitat for Humanity', type='volunteer', address='606 Build St', image=habitat_humanity_image, defaults={'total_trash': 180})
 
     users = [
         # Individual users
