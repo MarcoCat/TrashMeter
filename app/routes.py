@@ -129,10 +129,6 @@ def signup():
 
     return render_template('signup.html', organizations=organizations)
 
-
-
-
-
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
@@ -203,23 +199,19 @@ def change_password():
             flash('Incorrect old password.', 'danger')
     return render_template('change_password.html')
 
-
 @app.route('/profile')
 @login_required
 def profile():
-    if g.user is not None:
-        return render_template('profile.html', user=g.user)
-    return 'User not found', 404
+    return render_template('profile.html', user=g.user)
 
 @app.route('/update_profile', methods=['POST'])
 @login_required
 def update_profile():
-    user = User.query.get(g.user.id)
+    user = db.session.get(User, g.user.id)
     user.username = request.form['username']
     user.first_name = request.form['first_name']
     user.last_name = request.form['last_name']
     user.email = request.form['email']
-    user.account_type = request.form['account_type']
 
     profile_picture = request.files.get('profile_image')
     if profile_picture:
@@ -386,3 +378,16 @@ def search():
                 results.append(org)
 
     return render_template('search.html', results=results, query=query, org_type=org_type)
+
+@app.route('/organization_image/<int:organization_id>')
+def organization_image(organization_id):
+    organization = Organization.query.get_or_404(organization_id)
+    if organization.image:
+        return send_file(
+            io.BytesIO(organization.image),
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name=f'{organization.name}.jpg'
+        )
+    else:
+        return redirect(url_for('static', filename='images/user_icon.png'))
