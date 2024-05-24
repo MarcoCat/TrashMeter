@@ -1,208 +1,184 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <h1 class="text-center">Leaderboard</h1>
+<!-- Filter Bar for Mobile View -->
+<div class="filter-container d-block d-md-none mb-4">
+    <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
+        LeaderBoard Filter
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
+        <li><a class="dropdown-item" href="#all-users" data-bs-toggle="tab" data-filter="#all-users" data-title="All Users Leaderboard">All Users</a></li>
+        <li><a class="dropdown-item" href="#companies" data-bs-toggle="tab" data-filter="#companies" data-title="Companies Leaderboard">Companies</a></li>
+        <li><a class="dropdown-item" href="#schools" data-bs-toggle="tab" data-filter="#schools" data-title="Schools Leaderboard">Schools</a></li>
+        <li><a class="dropdown-item" href="#volunteers" data-bs-toggle="tab" data-filter="#volunteers" data-title="Volunteer Organizations Leaderboard">Volunteer Organizations</a></li>
+    </ul>
+</div>
 
-    <!-- Filter Bar for Mobile View -->
-    <div class="filter-container d-block d-md-none mb-4">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="leaderboardFilterButton" data-bs-toggle="dropdown" aria-expanded="false">
-            LeaderBoard Filter
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="leaderboardFilterButton">
-            <li><a class="dropdown-item" href="#" data-filter="#all-users">Total</a></li>
-            <li><a class="dropdown-item" href="#" data-filter="#companies">Companies</a></li>
-            <li><a class="dropdown-item" href="#" data-filter="#schools">Schools</a></li>
-            <li><a class="dropdown-item" href="#" data-filter="#volunteers">Volunteer Organizations</a></li>
-        </ul>
-    </div>
-
-    <!-- Tabs Navigation -->
+<!-- Tabs Navigation -->
+<div class="tabs-wrapper">
     <ul class="nav nav-tabs d-none d-md-flex" id="leaderboardTabs" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" id="all-users-tab" data-bs-toggle="tab" href="#all-users" role="tab" aria-controls="all-users" aria-selected="true">Total</a>
+            <a class="nav-link active" id="all-users-tab" data-bs-toggle="tab" href="#all-users" role="tab" aria-controls="all-users" aria-selected="true" data-title="All Users Leaderboard">All Users</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="companies-tab" data-bs-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="false">Companies</a>
+            <a class="nav-link" id="companies-tab" data-bs-toggle="tab" href="#companies" role="tab" aria-controls="companies" aria-selected="false" data-title="Companies Leaderboard">Companies</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="schools-tab" data-bs-toggle="tab" href="#schools" role="tab" aria-controls="schools" aria-selected="false">Schools</a>
+            <a class="nav-link" id="schools-tab" data-bs-toggle="tab" href="#schools" role="tab" aria-controls="schools" aria-selected="false" data-title="Schools Leaderboard">Schools</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="volunteers-tab" data-bs-toggle="tab" href="#volunteers" role="tab" aria-controls="volunteers" aria-selected="false">Volunteer Organizations</a>
+            <a class="nav-link" id="volunteers-tab" data-bs-toggle="tab" href="#volunteers" role="tab" aria-controls="volunteers" aria-selected="false" data-title="Volunteer Organizations Leaderboard">Volunteer Organizations</a>
         </li>
     </ul>
+</div>
 
+<h1 class="text-center" id="leaderboardTitle">All Users Leaderboard</h1>
+
+<!-- White Box Content -->
+<div class="container mt-5">
     <!-- Tabs Content -->
     <div class="tab-content" id="leaderboardTabsContent">
         <div class="tab-pane fade show active" id="all-users" role="tabpanel" aria-labelledby="all-users-tab">
-            <!-- Top 3 Users -->
-            <div class="top-users-container mt-5 text-center">
-                {% set top_users = users[:3] %}
-                <div class="top-user" id="top1">
-                    <img src="{{ url_for('profile_picture', user_id=top_users[0].id) }}" alt="Profile Image" class="profile-image top-image">
-                    <p>{{ top_users[0].username }}</p>
-                    <p>{{ top_users[0].trash_collected }}</p>
-                </div>
-                <div class="top-user" id="top2">
-                    <img src="{{ url_for('profile_picture', user_id=top_users[1].id) }}" alt="Profile Image" class="profile-image top-image">
-                    <p>{{ top_users[1].username }}</p>
-                    <p>{{ top_users[1].trash_collected }}</p>
-                </div>
-                <div class="top-user" id="top3">
-                    <img src="{{ url_for('profile_picture', user_id=top_users[2].id) }}" alt="Profile Image" class="profile-image top-image">
-                    <p>{{ top_users[2].username }}</p>
-                    <p>{{ top_users[2].trash_collected }}</p>
-                </div>
-            </div>
-
             <!-- All Users Leaderboard -->
-            <h2 class="mt-5">All Users</h2>
             <div class="filter-container">
+                <label for="allUsersFilter" class="filter-label">Filter:</label>
                 <select id="allUsersFilter" class="form-control">
                     <option value="">Sort by</option>
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
             </div>
-            <table class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th scope="col">Rank</th>
-                        <th scope="col">Username</th>
-                        <th scope="col">Trash Collected</th>
-                    </tr>
-                </thead>
-                <tbody id="allUsersBody">
-                    {% for user in users %}
-                    <tr>
-                        <th scope="row">{{ loop.index }}</th>
-                        <td>
-                            <div class="user-info">
-                                <img src="{{ url_for('profile_picture', user_id=user.id) }}" alt="Profile Image" class="profile-image">
-                                <span>{{ user.username }}</span>
-                            </div>
-                        </td>
-                        <td>{{ user.trash_collected }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="pagination-controls">
+            <div class="table-responsive">
+                <table class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Trash Collected</th>
+                        </tr>
+                    </thead>
+                    <tbody id="allUsersBody">
+                        {% for user in users %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>
+                                <div class="user-info">
+                                    <img src="{{ url_for('profile_picture', user_id=user.id) }}" alt="Profile Image" class="profile-image">
+                                    <span>{{ user.username }}</span>
+                                </div>
+                            </td>
+                            <td>{{ user.trash_collected }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-controls" data-tbody-id="allUsersBody">
                 <button class="btn btn-primary" id="prevPageAllUsers">Previous</button>
                 <button class="btn btn-primary" id="nextPageAllUsers">Next</button>
             </div>
         </div>
         <div class="tab-pane fade" id="companies" role="tabpanel" aria-labelledby="companies-tab">
             <!-- Companies Leaderboard -->
-            <h2 class="mt-5">Companies</h2>
             <div class="filter-container">
+                <label for="companiesFilter" class="filter-label">Filter:</label>
                 <select id="companiesFilter" class="form-control">
                     <option value="">Sort by</option>
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
             </div>
-            <table class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th scope="col">Rank</th>
-                        <th scope="col">Company</th>
-                        <th scope="col">Trash Collected</th>
-                    </tr>
-                </thead>
-                <tbody id="companiesBody">
-                    {% for company in companies %}
-                    <tr>
-                        <th scope="row">{{ loop.index }}</th>
-                        <td>
-                            <div class="user-info">
-                                <img src="{{ url_for('organization_image', organization_id=company.id) }}" alt="{{ company.name }} Image" class="profile-image" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';">
-                                <span>{{ company.name }}</span>
-                            </div>
-                        </td>
-                        <td>{{ company.total_trash }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="pagination-controls">
+            <div class="table-responsive">
+                <table class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Company</th>
+                            <th scope="col">Trash Collected</th>
+                        </tr>
+                    </thead>
+                    <tbody id="companiesBody">
+                        {% for company in companies %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ company.name }}</td>
+                            <td>{{ company.total_trash }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-controls" data-tbody-id="companiesBody">
                 <button class="btn btn-primary" id="prevPageCompanies">Previous</button>
                 <button class="btn btn-primary" id="nextPageCompanies">Next</button>
             </div>
         </div>
         <div class="tab-pane fade" id="schools" role="tabpanel" aria-labelledby="schools-tab">
             <!-- Schools Leaderboard -->
-            <h2 class="mt-5">Schools</h2>
             <div class="filter-container">
+                <label for="schoolsFilter" class="filter-label">Filter:</label>
                 <select id="schoolsFilter" class="form-control">
                     <option value="">Sort by</option>
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
             </div>
-            <table class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th scope="col">Rank</th>
-                        <th scope="col">School</th>
-                        <th scope="col">Trash Collected</th>
-                    </tr>
-                </thead>
-                <tbody id="schoolsBody">
-                    {% for school in schools %}
-                    <tr>
-                        <th scope="row">{{ loop.index }}</th>
-                        <td>
-                            <div class="user-info">
-                                <img src="{{ url_for('organization_image', organization_id=school.id) }}" alt="{{ school.name }} Image" class="profile-image" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';">
-                                <span>{{ school.name }}</span>
-                            </div>
-                        </td>
-                        <td>{{ school.total_trash }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="pagination-controls">
+            <div class="table-responsive">
+                <table class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">School</th>
+                            <th scope="col">Trash Collected</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schoolsBody">
+                        {% for school in schools %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ school.name }}</td>
+                            <td>{{ school.total_trash }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-controls" data-tbody-id="schoolsBody">
                 <button class="btn btn-primary" id="prevPageSchools">Previous</button>
                 <button class="btn btn-primary" id="nextPageSchools">Next</button>
             </div>
         </div>
         <div class="tab-pane fade" id="volunteers" role="tabpanel" aria-labelledby="volunteers-tab">
             <!-- Volunteer Organizations Leaderboard -->
-            <h2 class="mt-5">Volunteer Organizations</h2>
             <div class="filter-container">
+                <label for="volunteersFilter" class="filter-label">Filter:</label>
                 <select id="volunteersFilter" class="form-control">
                     <option value="">Sort by</option>
                     <option value="asc">Ascending</option>
                     <option value="desc">Descending</option>
                 </select>
             </div>
-            <table class="table table-striped mt-4">
-                <thead>
-                    <tr>
-                        <th scope="col">Rank</th>
-                        <th scope="col">Volunteer Organization</th>
-                        <th scope="col">Trash Collected</th>
-                    </tr>
-                </thead>
-                <tbody id="volunteersBody">
-                    {% for volunteer in volunteers %}
-                    <tr>
-                        <th scope="row">{{ loop.index }}</th>
-                        <td>
-                            <div class="user-info">
-                                <img src="{{ url_for('organization_image', organization_id=volunteer.id) }}" alt="{{ volunteer.name }} Image" class="profile-image" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';">
-                                <span>{{ volunteer.name }}</span>
-                            </div>
-                        </td>
-                        <td>{{ volunteer.total_trash }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="pagination-controls">
+            <div class="table-responsive">
+                <table class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Volunteer Organization</th>
+                            <th scope="col">Trash Collected</th>
+                        </tr>
+                    </thead>
+                    <tbody id="volunteersBody">
+                        {% for volunteer in volunteers %}
+                        <tr>
+                            <th scope="row">{{ loop.index }}</th>
+                            <td>{{ volunteer.name }}</td>
+                            <td>{{ volunteer.total_trash }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-controls" data-tbody-id="volunteersBody">
                 <button class="btn btn-primary" id="prevPageVolunteers">Previous</button>
                 <button class="btn btn-primary" id="nextPageVolunteers">Next</button>
             </div>

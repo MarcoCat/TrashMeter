@@ -1,4 +1,22 @@
 document.addEventListener("DOMContentLoaded", function() {
+    function updateLeaderboardTitle(title) {
+        document.getElementById("leaderboardTitle").textContent = title;
+    }
+
+    // Update title on tab click
+    document.querySelectorAll('.nav-link').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            updateLeaderboardTitle(this.getAttribute('data-title'));
+        });
+    });
+
+    // Update title on dropdown item click
+    document.querySelectorAll('.dropdown-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+            updateLeaderboardTitle(this.getAttribute('data-title'));
+        });
+    });
+
     function sortTable(tbodyId, filterValue) {
         var tbody = document.getElementById(tbodyId);
         var rows = Array.from(tbody.getElementsByTagName("tr"));
@@ -52,6 +70,7 @@ document.addEventListener("DOMContentLoaded", function() {
             var targetTab = this.getAttribute('data-filter');
             var tabTrigger = new bootstrap.Tab(document.querySelector(targetTab + '-tab'));
             tabTrigger.show();
+            updatePagination(targetTab.slice(1) + 'Body');
         });
     });
 
@@ -76,8 +95,22 @@ document.addEventListener("DOMContentLoaded", function() {
             row.style.display = (index >= start && index < end) ? "" : "none";
         });
 
-        document.getElementById(`prevPage${tbodyId.charAt(0).toUpperCase() + tbodyId.slice(1)}`).disabled = currentPage[tbodyId] === 1;
-        document.getElementById(`nextPage${tbodyId.charAt(0).toUpperCase() + tbodyId.slice(1)}`).disabled = currentPage[tbodyId] === totalPages;
+        var paginationControls = document.querySelector(`.pagination-controls[data-tbody-id="${tbodyId}"]`);
+        if (paginationControls) {
+            if (totalRows <= rowsPerPage) {
+                paginationControls.style.display = "none";
+            } else {
+                paginationControls.style.display = "flex";
+            }
+
+            var prevButton = document.getElementById(`prevPage${tbodyId.charAt(0).toUpperCase() + tbodyId.slice(1)}`);
+            var nextButton = document.getElementById(`nextPage${tbodyId.charAt(0).toUpperCase() + tbodyId.slice(1)}`);
+
+            if (prevButton && nextButton) {
+                prevButton.disabled = currentPage[tbodyId] === 1;
+                nextButton.disabled = currentPage[tbodyId] === totalPages;
+            }
+        }
     }
 
     document.getElementById("prevPageAllUsers").addEventListener("click", function() {
@@ -132,9 +165,13 @@ document.addEventListener("DOMContentLoaded", function() {
         updatePagination("volunteersBody");
     });
 
-    // Initialize pagination
-    updatePagination("allUsersBody");
-    updatePagination("companiesBody");
-    updatePagination("schoolsBody");
-    updatePagination("volunteersBody");
+    // Initialize pagination on page load
+    function initializePagination() {
+        updatePagination("allUsersBody");
+        updatePagination("companiesBody");
+        updatePagination("schoolsBody");
+        updatePagination("volunteersBody");
+    }
+
+    initializePagination();
 });
