@@ -1,6 +1,176 @@
-/* leaderboard.css */
-#filterSelect {
-    width: 200px;
-    margin-left: auto;
-    margin-right: 0;
+body {
+    background-color: #E5F5F5;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    background-color: #FFFFFF;
+    padding: 40px;
+    margin: 20px auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 800px; /* Adjust max-width as needed */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    top: 20px; /* Add some space from the top */
+}
+
+h1, h2 {
+    color: #00AFAD;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: flex-end; /* Align to the right */
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.filter-container select {
+    width: auto; /* Auto width */
+    padding: 8px;
+    border: 1px solid #D0D0D0;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: #235A70;
+}
+
+.top-users-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.top-user {
+    text-align: center;
+    position: relative;
+}
+
+.top-user p {
+    margin: 0;
+}
+
+#top1 {
+    order: 2;
+    background-color: #00AFAD;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#top2 {
+    order: 1;
+    background-color: #6DCFF6;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#top3 {
+    order: 3;
+    background-color: #F6A01F;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.top-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #FFFFFF;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    table-layout: fixed; /* Fix the table layout */
+    word-wrap: break-word; /* Ensure words break to fit the fixed width */
+}
+
+th, td {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflowing text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+    color: #235A70;
+}
+
+td {
+    color: #235A70;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-info img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px; /* Space between image and username */
+}
+
+@media (max-width: 576px) {
+    .nav-tabs {
+        display: none; /* Hide tabs for mobile */
+    }
+
+    .filter-container {
+        display: flex;
+        justify-content: flex-start; /* Align filter bar to the left */
+    }
+
+    .btn-group .form-control {
+        margin-bottom: 10px;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+    }
+
+    .dropdown-item {
+        display: block;
+        width: 100%;
+    }
+
+    select {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    table {
+        font-size: 14px; /* Smaller font size for better readability */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: calc(100% - 40px); /* Adjust width to add margin on sides */
+        padding: 20px;
+        margin: 20px; /* Ensure centered alignment with some margin */
+    }
 }
