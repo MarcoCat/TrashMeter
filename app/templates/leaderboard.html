@@ -36,6 +36,26 @@
     <!-- Tabs Content -->
     <div class="tab-content" id="leaderboardTabsContent">
         <div class="tab-pane fade show active" id="all-users" role="tabpanel" aria-labelledby="all-users-tab">
+            <!-- Top 3 Users -->
+            <div class="top-users-container mt-5 text-center">
+                {% set top_users = users[:3] %}
+                <div class="top-user" id="top1">
+                    <img src="{{ url_for('profile_picture', user_id=top_users[0].id) }}" alt="Profile Image" class="profile-image top-image">
+                    <p>{{ top_users[0].username }}</p>
+                    <p>{{ top_users[0].trash_collected }}</p>
+                </div>
+                <div class="top-user" id="top2">
+                    <img src="{{ url_for('profile_picture', user_id=top_users[1].id) }}" alt="Profile Image" class="profile-image top-image">
+                    <p>{{ top_users[1].username }}</p>
+                    <p>{{ top_users[1].trash_collected }}</p>
+                </div>
+                <div class="top-user" id="top3">
+                    <img src="{{ url_for('profile_picture', user_id=top_users[2].id) }}" alt="Profile Image" class="profile-image top-image">
+                    <p>{{ top_users[2].username }}</p>
+                    <p>{{ top_users[2].trash_collected }}</p>
+                </div>
+            </div>
+
             <!-- All Users Leaderboard -->
             <h2 class="mt-5">All Users</h2>
             <div class="filter-container">

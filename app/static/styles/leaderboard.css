@@ -43,6 +43,59 @@ h1, h2 {
     color: #235A70;
 }
 
+.top-users-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 20px;
+}
+
+.top-user {
+    text-align: center;
+    position: relative;
+}
+
+.top-user p {
+    margin: 0;
+}
+
+#top1 {
+    order: 2;
+    background-color: #00AFAD;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+#top2 {
+    order: 1;
+    background-color: #6DCFF6;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+#top3 {
+    order: 3;
+    background-color: #F6A01F;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.profile-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.top-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 2px solid #FFFFFF;
+}
+
 table {
     width: 100%;
     margin-top: 20px;
