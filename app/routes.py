@@ -328,3 +328,16 @@ def search():
                 results.append(org)
 
     return render_template('search.html', results=results, query=query, org_type=org_type)
+
+@app.route('/organization_image/<int:organization_id>')
+def organization_image(organization_id):
+    organization = Organization.query.get_or_404(organization_id)
+    if organization.image:
+        return send_file(
+            io.BytesIO(organization.image),
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name=f'{organization.name}.jpg'
+        )
+    else:
+        return redirect(url_for('static', filename='images/user_icon.png'))
