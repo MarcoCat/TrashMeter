@@ -169,13 +169,10 @@ def change_password():
             flash('Incorrect old password.', 'danger')
     return render_template('change_password.html')
 
-
 @app.route('/profile')
 @login_required
 def profile():
-    if g.user is not None:
-        return render_template('profile.html', user=g.user)
-    return 'User not found', 404
+    return render_template('profile.html', user=g.user)
 
 @app.route('/update_profile', methods=['POST'])
 @login_required
@@ -185,7 +182,6 @@ def update_profile():
     user.first_name = request.form['first_name']
     user.last_name = request.form['last_name']
     user.email = request.form['email']
-    user.account_type = request.form['account_type']
 
     profile_picture = request.files.get('profile_image')
     if profile_picture:
@@ -225,26 +221,10 @@ def update_trash():
 
 @app.route('/leaderboard')
 def leaderboard():
-    # Leaderboard for all users
     users = User.query.order_by(User.trash_collected.desc()).all()
-
-    # Leaderboard for companies
-    companies = db.session.query(
-        Organization.name,
-        Organization.total_trash
-    ).filter(Organization.type == 'company').order_by(db.desc(Organization.total_trash)).all()
-
-    # Leaderboard for schools
-    schools = db.session.query(
-        Organization.name,
-        Organization.total_trash
-    ).filter(Organization.type == 'school').order_by(db.desc(Organization.total_trash)).all()
-
-    # Leaderboard for volunteer organizations
-    volunteers = db.session.query(
-        Organization.name,
-        Organization.total_trash
-    ).filter(Organization.type == 'volunteer').order_by(db.desc(Organization.total_trash)).all()
+    companies = Organization.query.filter_by(type='company').order_by(Organization.total_trash.desc()).all()
+    schools = Organization.query.filter_by(type='school').order_by(Organization.total_trash.desc()).all()
+    volunteers = Organization.query.filter_by(type='volunteer').order_by(Organization.total_trash.desc()).all()
 
     return render_template('leaderboard.html', users=users, companies=companies, schools=schools, volunteers=volunteers)
 
@@ -329,3 +309,15 @@ def search():
 
     return render_template('search.html', results=results, query=query, org_type=org_type)
 
+@app.route('/organization_image/<int:organization_id>')
+def organization_image(organization_id):
+    organization = Organization.query.get_or_404(organization_id)
+    if organization.image:
+        return send_file(
+            io.BytesIO(organization.image),
+            mimetype='image/jpeg',
+            as_attachment=False,
+            download_name=f'{organization.name}.jpg'
+        )
+    else:
+        return redirect(url_for('static', filename='images/user_icon.png'))
