@@ -21,19 +21,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateHallOfFame(title) {
         // Hide all Hall of Fame sections
-        document.getElementById("hallOfFameAllUsers").style.display = 'none';
-        document.getElementById("hallOfFameCompanies").style.display = 'none';
-        document.getElementById("hallOfFameSchools").style.display = 'none';
-        document.getElementById("hallOfFameVolunteers").style.display = 'none';
+        document.querySelectorAll('.hall-of-fame').forEach(function(hof) {
+            hof.style.display = 'none';
+        });
 
         // Show the appropriate Hall of Fame section
-        if (title.includes('All Users')) {
+        if (title.includes('All Users') && document.getElementById("hallOfFameAllUsers")) {
             document.getElementById("hallOfFameAllUsers").style.display = 'flex';
-        } else if (title.includes('Companies')) {
+        } else if (title.includes('Companies') && document.getElementById("hallOfFameCompanies")) {
             document.getElementById("hallOfFameCompanies").style.display = 'flex';
-        } else if (title.includes('Schools')) {
+        } else if (title.includes('Schools') && document.getElementById("hallOfFameSchools")) {
             document.getElementById("hallOfFameSchools").style.display = 'flex';
-        } else if (title.includes('Volunteer')) {
+        } else if (title.includes('Volunteer') && document.getElementById("hallOfFameVolunteers")) {
             document.getElementById("hallOfFameVolunteers").style.display = 'flex';
         }
     }
