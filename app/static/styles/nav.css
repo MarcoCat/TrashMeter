@@ -137,4 +137,8 @@
     .nav-list.show {
         display: flex; /* 햄버거 메뉴 클릭 시 표시 */
     }
+
+    body {
+        padding-top: 60px; /* 네비게이션 바 높이만큼 패딩 추가 */
+    }
 }
