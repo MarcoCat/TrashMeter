@@ -37,6 +37,26 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function truncateUsername(selector, maxLength) {
+        document.querySelectorAll(selector).forEach(function(element) {
+            const originalText = element.textContent;
+            if (originalText.length > maxLength) {
+                element.textContent = originalText.substring(0, maxLength) + "...";
+            }
+        });
+    }
+
+    // Apply truncation for web and mobile views
+    function applyTruncation() {
+        const isMobile = window.innerWidth <= 767.98;
+        truncateUsername(".hof-username", isMobile ? 10 : 20);
+    }
+
+    applyTruncation();
+
+    // Re-apply truncation on window resize for responsiveness
+    window.addEventListener("resize", applyTruncation);
+
     function sortTable(tbodyId, filterValue) {
         var tbody = document.getElementById(tbodyId);
         var rows = Array.from(tbody.getElementsByTagName("tr"));
