@@ -31,6 +31,7 @@
                             <a href="{{ url_for('signup', org_name=org.name, username=request.args.get('username', ''), email=request.args.get('email', ''), first_name=request.args.get('first_name', ''), last_name=request.args.get('last_name', ''), password=request.args.get('password', ''), account_type=request.args.get('account_type', 'individual')) }}">
                                 <strong>{{ org.name }}</strong>
                             </a><br>
+                            <img src="{{ url_for('organization_image', organization_id=org.id) }}" alt="{{ org.name }} Image" style="max-width: 100px; max-height: 100px;" onerror="this.onerror=null;this.src='{{ url_for('static', filename='images/user_icon.png') }}';"><br>
                             Type: {{ org.type }}<br>
                             Address: {{ org.address }}<br>
                             Total Trash: {{ org.total_trash }}
@@ -38,7 +39,7 @@
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>No information found? <a href="#" onclick="redirectToCreate()">Add it!</a></p>
+                <p>No information found? <a href="/createinformation" onclick="redirectToCreate()">Add it!</a></p>
             {% endif %}
         </div>
     </div>
