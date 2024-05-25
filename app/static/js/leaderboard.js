@@ -39,17 +39,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function truncateUsername(selector, maxLength) {
         document.querySelectorAll(selector).forEach(function(element) {
-            const originalText = element.textContent;
-            if (originalText.length > maxLength) {
-                element.textContent = originalText.substring(0, maxLength) + "...";
+            const originalText = element.getAttribute('data-original-text') || element.textContent;
+            element.setAttribute('data-original-text', originalText);
+
+            if (window.innerWidth <= 767.98) { // Mobile view
+                if (originalText.length > maxLength) {
+                    element.textContent = originalText.substring(0, maxLength) + "...";
+                } else {
+                    element.textContent = originalText;
+                }
+            } else { // Web view
+                element.textContent = originalText;
             }
         });
     }
 
     // Apply truncation for web and mobile views
     function applyTruncation() {
-        const isMobile = window.innerWidth <= 767.98;
-        truncateUsername(".hof-username", isMobile ? 10 : 20);
+        truncateUsername(".hof-username", 10);
     }
 
     applyTruncation();
