@@ -1,5 +1,3 @@
-/* Existing CSS */
-
 @import url('https://fonts.googleapis.com/css2?family=ABeeZee&family=Kaushan+Script&family=Karma:wght@400;700&family=Libre+Bodoni:wght@400;700&display=swap');
 
 body, html {
@@ -184,6 +182,26 @@ body {
     .challenge-step {
         width: 100%;
     }
+
+    .content h1 {
+        font-size: 2rem; /* Adjust font size for smaller screens */
+    }
+
+    .pickup3-heading, .hero-heading, .challenge-heading, .involved-section h2 {
+        font-size: 2rem; /* Adjust font size for headings on smaller screens */
+    }
+
+    .pickup3-section, .involved-section {
+        padding: 0 10px; /* Adjust padding for smaller screens */
+    }
+
+    .social-media-buttons {
+        flex-direction: column;
+    }
+
+    .social-icon {
+        margin-bottom: 10px;
+    }
 }
 
 /* Social Media Section */
@@ -216,21 +234,6 @@ body {
 
 .social-icon:hover {
     background-color: #008F8C;
-}
-
-/* Additional styles for responsive design */
-@media (max-width: 768px) {
-    .challenge-steps {
-        flex-direction: column;
-    }
-
-    .social-media-buttons {
-        flex-direction: column;
-    }
-
-    .social-icon {
-        margin-bottom: 10px;
-    }
 }
 
 /* Modal Styles */
@@ -333,4 +336,42 @@ body {
 
 .involved-button:hover {
     background-color: #059696;
+}
+
+@media (max-width: 375px) { /* Specific media query for iPhone SE screen size */
+    .content {
+        padding: 10px;
+    }
+
+    .join-button {
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
+    .hero-section {
+        height: 40vh; /* Adjust height for smaller screens */
+    }
+
+    .pickup3-heading, .hero-heading, .challenge-heading, .involved-section h2 {
+        font-size: 1.5rem; /* Further adjust font size for headings on very small screens */
+    }
+
+    .challenge-step h3 {
+        font-size: 2rem; /* Adjust font size for challenge step headings on smaller screens */
+    }
+
+    .challenge-step p, .learn-more {
+        font-size: 1rem; /* Adjust font size for challenge step text on smaller screens */
+    }
+
+    .challenge-steps, .social-media-buttons, .involved-options {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .challenge-step, .option {
+        width: 100%;
+        max-width: 100%;
+        margin: 10px 0;
+    }
 }
