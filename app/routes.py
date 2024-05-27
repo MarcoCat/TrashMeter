@@ -316,7 +316,10 @@ def create_information():
             'image': image_data
         })
         if created:
+            flash('Organization created successfully!', 'success')
             return redirect(url_for('search', type=org_type))
+        else:
+            flash('An organization with the given attributes already exists.', 'danger')
 
     org_type = request.args.get('type', 'organization')
     return render_template('create_information.html', account_type=org_type)
