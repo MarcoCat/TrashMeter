@@ -12,6 +12,8 @@ from rapidfuzz import fuzz
 from sqlalchemy.exc import IntegrityError
 import random
 import string
+from validate_email_address import validate_email
+
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -112,6 +114,10 @@ def signup():
         email = request.form['email']
         organization_name = request.form.get('organization_name')
 
+        if not validate_email(email):
+            flash('Invalid email address.', 'danger')
+            return render_template('signup.html', organizations=organizations)
+
         organization = Organization.query.filter_by(name=organization_name).first()
         organization_id = organization.id if organization else None
         organization_type = organization.type if organization else None
@@ -137,10 +143,14 @@ def signup():
                           sender=app.config['MAIL_DEFAULT_SENDER'], 
                           recipients=[email])
             msg.body = f'Your verification code is: {verification_code}'
-            mail.send(msg)
-            
-            flash('Signup successful! Please check your email for a verification code.', 'success')
-            return redirect(url_for('verify_email'))
+            try:
+                mail.send(msg)
+                flash('Signup successful! Please check your email for a verification code.', 'success')
+                return redirect(url_for('verify_email'))
+            except smtplib.SMTPRecipientsRefused:
+                db.session.delete(temp_user)
+                db.session.commit()
+                flash('Invalid email address. Please try again.', 'danger')
 
     return render_template('signup.html', organizations=organizations)
 
