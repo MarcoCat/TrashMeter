@@ -1,11 +1,23 @@
+/* signup.css */
 body {
     background-color: #E5F5F5;
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    min-height: 100vh; /* Ensure full viewport height */
+    box-sizing: border-box;
+}
+
+main {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 60px; /* 네비게이션 바 높이만큼 패딩 추가 */
 }
 
 form {
@@ -157,5 +169,9 @@ input[type="radio"] {
         width: calc(100% - 40px); /* Adjust width to add margin on sides */
         padding: 20px;
         margin: 20px; /* Ensure centered alignment with some margin */
+    }
+
+    body {
+        padding-top: 60px; /* 모바일에서도 네비게이션 바 높이만큼 패딩 추가 */
     }
 }
