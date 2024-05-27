@@ -57,6 +57,10 @@
     {% if request.endpoint == 'create_information' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/create_information.css') }}">
     {% endif %}
+    <!-- Include allocate_trash.css -->
+    {% if request.endpoint == 'allocate_trash' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/allocate_trash.css') }}">
+    {% endif %}
 
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
 </head>
