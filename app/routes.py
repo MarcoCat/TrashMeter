@@ -8,7 +8,7 @@ from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
 from sqlalchemy.exc import IntegrityError
 
 # Utility function to check if a user is logged in
