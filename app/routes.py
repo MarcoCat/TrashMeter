@@ -4,12 +4,16 @@ from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User, Organization
+from .models import User, Organization, TempUser
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
 from rapidfuzz import fuzz
 from sqlalchemy.exc import IntegrityError
+import random
+import string
+from validate_email_address import validate_email
+
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -59,6 +63,9 @@ def update_instance(instance, **kwargs):
         db.session.rollback()
         flash(f"An instance with the given attributes already exists.", "danger")
         return False
+    
+def generate_verification_code():
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 @app.route('/')
 def index():
@@ -107,6 +114,10 @@ def signup():
         email = request.form['email']
         organization_name = request.form.get('organization_name')
 
+        if not validate_email(email):
+            flash('Invalid email address.', 'danger')
+            return render_template('signup.html', organizations=organizations)
+
         organization = Organization.query.filter_by(name=organization_name).first()
         organization_id = organization.id if organization else None
         organization_type = organization.type if organization else None
@@ -116,21 +127,57 @@ def signup():
         elif account_type in ['school', 'company', 'volunteer'] and organization_type != account_type:
             flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
-            new_user, created = get_or_create(User, username=username, defaults={
+            verification_code = generate_verification_code()
+            temp_user, created = get_or_create(TempUser, username=username, defaults={
                 'password': password,
                 'first_name': first_name,
                 'last_name': last_name,
                 'account_type': account_type,
                 'email': email,
-                'organization_id': organization_id
+                'organization_id': organization_id,
+                'verification_code': verification_code
             })
-            if created:
-                flash('Signup successful! Please log in.', 'success')
-                return redirect(url_for('login'))
-            else:
-                flash('Username or email already exists.', 'danger')
+            if not created:
+                flash('A user with the given username or email already exists.', 'danger')
+                return render_template('signup.html', organizations=organizations)
+
+            msg = Message('Email Verification', 
+                          sender=app.config['MAIL_DEFAULT_SENDER'], 
+                          recipients=[email])
+            msg.body = f'Your verification code is: {verification_code}'
+            try:
+                mail.send(msg)
+                flash('Signup successful! Please check your email for a verification code.', 'success')
+                return redirect(url_for('verify_email'))
+            except smtplib.SMTPRecipientsRefused:
+                db.session.delete(temp_user)
+                db.session.commit()
+                flash('Invalid email address. Please try again.', 'danger')
 
     return render_template('signup.html', organizations=organizations)
+
+@app.route('/verify_email', methods=['GET', 'POST'])
+def verify_email():
+    if request.method == 'POST':
+        email = request.form['email']
+        verification_code = request.form['verification_code']
+        temp_user = TempUser.query.filter_by(email=email, verification_code=verification_code).first()
+        if temp_user:
+            new_user = User(username=temp_user.username,
+                            password=temp_user.password,
+                            first_name=temp_user.first_name,
+                            last_name=temp_user.last_name,
+                            account_type=temp_user.account_type,
+                            email=temp_user.email,
+                            organization_id=temp_user.organization_id)
+            db.session.add(new_user)
+            db.session.delete(temp_user)
+            db.session.commit()
+            flash('Email verified! You can now log in.', 'success')
+            return redirect(url_for('login'))
+        else:
+            flash('Invalid email or verification code.', 'danger')
+    return render_template('verify_email.html')
 
 @app.route('/logout')
 def logout():

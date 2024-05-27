@@ -2,8 +2,9 @@ import pytest
 import io
 from flask import url_for
 from app import create_app, db
-from app.models import User, Organization
+from app.models import User, Organization, TempUser
 from werkzeug.security import generate_password_hash
+from unittest.mock import patch
 
 @pytest.fixture(scope='module')
 def app():
@@ -79,27 +80,40 @@ def test_signup(client, init_database):
         db.session.commit()
         organization_id = organization.id
 
-    response = client.post('/signup', data={
-        'username': 'newuser',
-        'password': 'password123',
-        'first_name': 'New',
-        'last_name': 'User',
-        'account_type': 'school',
-        'email': 'newuser@example.com',
-        'organization_name': 'School1'
-    }, follow_redirects=True)
-    assert response.status_code == 200
+    with patch('flask_mail.Mail.send') as mock_mail_send:
+        response = client.post('/signup', data={
+            'username': 'newuser',
+            'password': 'password123',
+            'first_name': 'New',
+            'last_name': 'User',
+            'account_type': 'school',
+            'email': 'newuser@example.com',
+            'organization_name': 'School1'
+        }, follow_redirects=True)
+        assert response.status_code == 200
+        mock_mail_send.assert_called_once()
 
+        # Ensure TempUser is created
+        with client.application.app_context():
+            temp_user = TempUser.query.filter_by(username='newuser').first()
+            assert temp_user is not None
+            assert temp_user.email == 'newuser@example.com'
+            assert temp_user.organization_id == organization_id
+
+        # Simulate email verification
+        verification_code = temp_user.verification_code
+        response = client.post('/verify_email', data={
+            'email': 'newuser@example.com',
+            'verification_code': verification_code
+        }, follow_redirects=True)
+        assert response.status_code == 200
+
+    # Check if User is created after verification
     with client.application.app_context():
         user = User.query.filter_by(username='newuser').first()
         assert user is not None
         assert user.email == 'newuser@example.com'
         assert user.organization_id == organization_id
-
-    with client.application.app_context():
-        user = User.query.filter_by(username='newuser').first()
-        assert user is not None
-        assert user.email == 'newuser@example.com'
 
 def test_update_trash(client, init_database):
     login_test_user(client)
