@@ -3,19 +3,66 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("leaderboardTitle").textContent = title;
     }
 
-    // Update title on tab click
+    // Update title and Hall of Fame on tab click
     document.querySelectorAll('.nav-link').forEach(function(tab) {
         tab.addEventListener('click', function() {
             updateLeaderboardTitle(this.getAttribute('data-title'));
+            updateHallOfFame(this.getAttribute('data-title'));
         });
     });
 
-    // Update title on dropdown item click
+    // Update title and Hall of Fame on dropdown item click
     document.querySelectorAll('.dropdown-item').forEach(function(item) {
         item.addEventListener('click', function() {
             updateLeaderboardTitle(this.getAttribute('data-title'));
+            updateHallOfFame(this.getAttribute('data-title'));
         });
     });
+
+    function updateHallOfFame(title) {
+        // Hide all Hall of Fame sections
+        document.querySelectorAll('.hall-of-fame').forEach(function(hof) {
+            hof.style.display = 'none';
+        });
+
+        // Show the appropriate Hall of Fame section
+        if (title.includes('All Users') && document.getElementById("hallOfFameAllUsers")) {
+            document.getElementById("hallOfFameAllUsers").style.display = 'flex';
+        } else if (title.includes('Companies') && document.getElementById("hallOfFameCompanies")) {
+            document.getElementById("hallOfFameCompanies").style.display = 'flex';
+        } else if (title.includes('Schools') && document.getElementById("hallOfFameSchools")) {
+            document.getElementById("hallOfFameSchools").style.display = 'flex';
+        } else if (title.includes('Volunteer') && document.getElementById("hallOfFameVolunteers")) {
+            document.getElementById("hallOfFameVolunteers").style.display = 'flex';
+        }
+    }
+
+    function truncateUsername(selector, maxLength) {
+        document.querySelectorAll(selector).forEach(function(element) {
+            const originalText = element.getAttribute('data-original-text') || element.textContent;
+            element.setAttribute('data-original-text', originalText);
+
+            if (window.innerWidth <= 767.98) { // Mobile view
+                if (originalText.length > maxLength) {
+                    element.textContent = originalText.substring(0, maxLength) + "...";
+                } else {
+                    element.textContent = originalText;
+                }
+            } else { // Web view
+                element.textContent = originalText;
+            }
+        });
+    }
+
+    // Apply truncation for web and mobile views
+    function applyTruncation() {
+        truncateUsername(".hof-username", 10);
+    }
+
+    applyTruncation();
+
+    // Re-apply truncation on window resize for responsiveness
+    window.addEventListener("resize", applyTruncation);
 
     function sortTable(tbodyId, filterValue) {
         var tbody = document.getElementById(tbodyId);
@@ -174,4 +221,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     initializePagination();
+    // Initially display the All Users Hall of Fame
+    updateHallOfFame("All Users Leaderboard");
 });
