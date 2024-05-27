@@ -1,5 +1,6 @@
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g, send_file
+from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
@@ -7,7 +8,8 @@ from .models import User, Organization
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
-from fuzzywuzzy import fuzz
+from rapidfuzz import fuzz
+from sqlalchemy.exc import IntegrityError
 
 # Utility function to check if a user is logged in
 def login_required(f):
@@ -27,6 +29,36 @@ def load_logged_in_user():
         g.user = None
     else:
         g.user = db.session.get(User, user_id)
+
+# Utility function to get or create a model instance
+def get_or_create(model, defaults=None, **kwargs):
+    instance = model.query.filter_by(**kwargs).first()
+    if instance:
+        return instance, False
+    else:
+        params = kwargs.copy()
+        if defaults:
+            params.update(defaults)
+        instance = model(**params)
+        db.session.add(instance)
+        try:
+            db.session.commit()
+            return instance, True
+        except IntegrityError:
+            db.session.rollback()
+            return None, False
+
+# Utility function to update a model instance with unique constraint checks
+def update_instance(instance, **kwargs):
+    for key, value in kwargs.items():
+        setattr(instance, key, value)
+    try:
+        db.session.commit()
+        return True
+    except IntegrityError:
+        db.session.rollback()
+        flash(f"An instance with the given attributes already exists.", "danger")
+        return False
 
 @app.route('/')
 def index():
@@ -58,7 +90,6 @@ def login():
         flash('Invalid email or password.', 'danger')
     return render_template('login.html')
 
-
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if 'user_id' in session:
@@ -85,17 +116,19 @@ def signup():
         elif account_type in ['school', 'company', 'volunteer'] and organization_type != account_type:
             flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
-            new_user = User(username=username,
-                            password=password,
-                            first_name=first_name,
-                            last_name=last_name,
-                            account_type=account_type,
-                            email=email,
-                            organization_id=organization_id)
-            db.session.add(new_user)
-            db.session.commit()
-            flash('Signup successful! Please log in.', 'success')
-            return redirect(url_for('login'))
+            new_user, created = get_or_create(User, username=username, defaults={
+                'password': password,
+                'first_name': first_name,
+                'last_name': last_name,
+                'account_type': account_type,
+                'email': email,
+                'organization_id': organization_id
+            })
+            if created:
+                flash('Signup successful! Please log in.', 'success')
+                return redirect(url_for('login'))
+            else:
+                flash('Username or email already exists.', 'danger')
 
     return render_template('signup.html', organizations=organizations)
 
@@ -122,7 +155,6 @@ def forgot_password():
             mail.send(msg)
             return 'Please check your email for a password reset link.'
     return render_template('forgot_password.html')
-
 
 @app.route('/reset_password/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -178,10 +210,14 @@ def profile():
 @login_required
 def update_profile():
     user = db.session.get(User, g.user.id)
-    user.username = request.form['username']
-    user.first_name = request.form['first_name']
-    user.last_name = request.form['last_name']
-    user.email = request.form['email']
+    updated = update_instance(user, 
+                              username=request.form['username'],
+                              first_name=request.form['first_name'],
+                              last_name=request.form['last_name'],
+                              email=request.form['email'])
+
+    if not updated:
+        return redirect(url_for('profile'))
 
     profile_picture = request.files.get('profile_image')
     if profile_picture:
@@ -206,7 +242,6 @@ def profile_picture(user_id):
         default_image_path = os.path.join(app.root_path, 'static/images/user_icon.png')
         return send_file(default_image_path, mimetype='image/jpeg')
 
-
 @app.route('/update_trash', methods=['POST'])
 @login_required
 def update_trash():
@@ -227,7 +262,6 @@ def leaderboard():
     volunteers = Organization.query.filter_by(type='volunteer').order_by(Organization.total_trash.desc()).all()
 
     return render_template('leaderboard.html', users=users, companies=companies, schools=schools, volunteers=volunteers)
-
 
 @app.route('/allocate_trash', methods=['GET', 'POST'])
 @login_required
@@ -257,7 +291,6 @@ def allocate_trash():
     organizations = Organization.query.all()
     return render_template('allocate_trash.html', organizations=organizations)
 
-
 @app.route('/createinformation', methods=['GET', 'POST'])
 def create_information():
     
@@ -277,15 +310,16 @@ def create_information():
             flash("Invalid organization type.")
             return redirect(request.url)
 
-        new_org = Organization(
-            name=request.form['organization_name'],
-            type=org_type,
-            address=request.form['organization_address'],
-            image=image_data
-        )
-        db.session.add(new_org)
-        db.session.commit()
-        return redirect(url_for('search', type=org_type))
+        new_org, created = get_or_create(Organization, name=request.form['organization_name'], defaults={
+            'type': org_type,
+            'address': request.form['organization_address'],
+            'image': image_data
+        })
+        if created:
+            flash('Organization created successfully!', 'success')
+            return redirect(url_for('search', type=org_type))
+        else:
+            flash('An organization with the given attributes already exists.', 'danger')
 
     org_type = request.args.get('type', 'organization')
     return render_template('create_information.html', account_type=org_type)
