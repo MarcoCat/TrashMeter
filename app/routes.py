@@ -46,7 +46,6 @@ def get_or_create(model, defaults=None, **kwargs):
             return instance, True
         except IntegrityError:
             db.session.rollback()
-            flash(f"A {model.__name__} with the given attributes already exists.", "danger")
             return None, False
 
 # Utility function to update a model instance with unique constraint checks
@@ -128,6 +127,8 @@ def signup():
             if created:
                 flash('Signup successful! Please log in.', 'success')
                 return redirect(url_for('login'))
+            else:
+                flash('Username or email already exists.', 'danger')
 
     return render_template('signup.html', organizations=organizations)
 
