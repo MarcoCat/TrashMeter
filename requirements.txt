@@ -7,4 +7,3 @@ pytest==7.3.1
 python-dotenv==1.0.1
 SQLAlchemy==2.0.16
 Werkzeug==2.3.2
-python-Levenshtein==0.20.9
