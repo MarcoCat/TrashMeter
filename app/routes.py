@@ -128,17 +128,19 @@ def signup():
             flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
             verification_code = generate_verification_code()
-            temp_user = TempUser(username=username,
-                                 password=password,
-                                 first_name=first_name,
-                                 last_name=last_name,
-                                 account_type=account_type,
-                                 email=email,
-                                 organization_id=organization_id,
-                                 verification_code=verification_code)
-            db.session.add(temp_user)
-            db.session.commit()
-            
+            temp_user, created = get_or_create(TempUser, username=username, defaults={
+                'password': password,
+                'first_name': first_name,
+                'last_name': last_name,
+                'account_type': account_type,
+                'email': email,
+                'organization_id': organization_id,
+                'verification_code': verification_code
+            })
+            if not created:
+                flash('A user with the given username or email already exists.', 'danger')
+                return render_template('signup.html', organizations=organizations)
+
             msg = Message('Email Verification', 
                           sender=app.config['MAIL_DEFAULT_SENDER'], 
                           recipients=[email])
