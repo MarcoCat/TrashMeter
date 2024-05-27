@@ -3,7 +3,7 @@ body {
     background-color: #E5F5F5;
 }
 
-.container {
+.container, .hall-container {
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -97,7 +97,6 @@ h1#leaderboardTitle {
     }
 }
 
-
 /* Adjust font size and table cell styles for mobile view */
 @media (max-width: 767.98px) {
     .table thead th,
@@ -190,5 +189,176 @@ h1#leaderboardTitle {
 
     .nav-tabs .nav-link {
         margin-right: 5px;
+    }
+}
+
+/* Hall of Fame Styles */
+.hall-container {
+    background-color: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.hall-of-fame {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hof-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    margin: 0 20px;
+    border-radius: 10px;
+    position: relative;
+    width: 300px; /* Increase width for longer usernames */
+    height: 300px;
+    text-align: center;
+}
+
+.hof-1 {
+    background-color: #00B0AD;
+}
+
+.hof-2 {
+    background-color: #BBE3DE;
+}
+
+.hof-3 {
+    background-color: #BBE3DE;
+}
+
+.hof-profile {
+    position: relative;
+    margin-bottom: 20px;
+    transform: scale(1.3); /* Increase size by 0.3 times */
+    top: -5px; /* Move it slightly down */
+}
+
+.hof-profile .hof-profile-image {
+    width: 78px; /* Adjusted to 0.3 times larger */
+    height: 78px; /* Adjusted to 0.3 times larger */
+    border-radius: 50%;
+    border: 6.5px solid transparent;
+    position: relative;
+    top: -10px; /* Slightly overlap the top of the box */
+}
+
+.hof-profile .hof-rank {
+    position: absolute;
+    bottom: -10px; /* Move it 5px higher */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 3.5px 7px; /* Reduce padding size */
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.7rem; /* Reduce size by 0.3 times */
+}
+
+.hof-rank-1 {
+    background-color: #FFAA00;
+    color: #fff;
+}
+
+.hof-rank-2 {
+    background-color: #009BD6;
+    color: #fff;
+}
+
+.hof-rank-3 {
+    background-color: #00D95F;
+    color: #fff;
+}
+
+.hof-info {
+    margin-top: 30px;
+}
+
+.hof-username {
+    display: block;
+    font-weight: bold;
+    color: #235A70;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px; /* Ensure longer usernames fit */
+}
+
+.hof-trash {
+    display: block;
+    font-size: 1.5rem;
+}
+
+/* Ensure profile images have a circle with colored border behind them */
+.hof-1 .hof-profile-image {
+    border-color: #FFAA00;
+}
+
+.hof-2 .hof-profile-image {
+    border-color: #009BD6;
+}
+
+.hof-3 .hof-profile-image {
+    border-color: #00D95F;
+}
+
+/* Mobile View */
+@media (max-width: 767.98px) {
+    .hof-box {
+        width: 33%; /* Reduce width for mobile view to fit 3 boxes in one row */
+        height: auto; /* Adjust height to maintain aspect ratio */
+        margin: 0; /* Remove margins between boxes */
+        padding: 10px; /* Adjust padding for better fit */
+        box-sizing: border-box; /* Ensure padding and borders are included in the width and height */
+    }
+
+    .hof-profile {
+        transform: scale(1.3); /* Increase size to match desktop */
+        top: -5px; /* Align with desktop view */
+    }
+
+    .hof-profile .hof-profile-image {
+        width: 45px; /* Reduce size by 0.5 times */
+        height: 45px; /* Reduce size by 0.5 times */
+        border: 3.75px solid transparent; /* Ensure profile images have a circle with colored border behind them */
+    }
+
+    .hof-1 .hof-profile-image {
+        border-color: #FFAA00;
+    }
+
+    .hof-2 .hof-profile-image {
+        border-color: #009BD6;
+    }
+
+    .hof-3 .hof-profile-image {
+        border-color: #00D95F;
+    }
+
+    .hof-profile .hof-rank {
+        bottom: -15px; /* Move it 5px higher */
+        padding: 3.5px 7px; /* Reduce padding size */
+        font-size: 0.7rem; /* Adjust size */
+    }
+
+    .hof-username {
+        max-width: calc(100% - 4px); /* Ensure longer usernames fit in mobile view */
+        margin: 0 2px; /* Add margin for spacing */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* Prevent text wrapping */
+    }
+
+    .hof-trash {
+        font-size: 0.75rem; /* Reduce size by 0.5 times */
+        max-width: calc(100% - 4px); /* Ensure text fits within the box */
+        margin: 0 2px; /* Add margin for spacing */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap; /* Prevent text wrapping */
     }
 }

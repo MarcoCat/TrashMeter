@@ -34,6 +34,149 @@
 
 <h1 class="text-center" id="leaderboardTitle">All Users Leaderboard</h1>
 
+<!-- Hall of Fame Sections -->
+<div class="hall-container mt-4">
+    {% if users|length >= 3 %}
+    <div id="hallOfFameAllUsers" class="hall-of-fame">
+        <div class="hof-box hof-2">
+            <div class="hof-profile">
+                <img src="{{ url_for('profile_picture', user_id=users[1].id) }}" alt="Profile Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-2">2</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ users[1].username }}</span>
+                <span class="hof-trash" style="color: #009BD6;">{{ users[1].trash_collected }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-1">
+            <div class="hof-profile">
+                <img src="{{ url_for('profile_picture', user_id=users[0].id) }}" alt="Profile Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-1">1</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ users[0].username }}</span>
+                <span class="hof-trash" style="color: #FFAA00;">{{ users[0].trash_collected }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-3">
+            <div class="hof-profile">
+                <img src="{{ url_for('profile_picture', user_id=users[2].id) }}" alt="Profile Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-3">3</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ users[2].username }}</span>
+                <span class="hof-trash" style="color: #00D95F;">{{ users[2].trash_collected }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if companies|length >= 3 %}
+    <div id="hallOfFameCompanies" class="hall-of-fame" style="display: none;">
+        <div class="hof-box hof-2">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=companies[1].id) }}" alt="Company Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-2">2</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ companies[1].name }}</span>
+                <span class="hof-trash" style="color: #009BD6;">{{ companies[1].total_trash }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-1">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=companies[0].id) }}" alt="Company Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-1">1</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ companies[0].name }}</span>
+                <span class="hof-trash" style="color: #FFAA00;">{{ companies[0].total_trash }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-3">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=companies[2].id) }}" alt="Company Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-3">3</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ companies[2].name }}</span>
+                <span class="hof-trash" style="color: #00D95F;">{{ companies[2].total_trash }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if schools|length >= 3 %}
+    <div id="hallOfFameSchools" class="hall-of-fame" style="display: none;">
+        <div class="hof-box hof-2">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=schools[1].id) }}" alt="School Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-2">2</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ schools[1].name }}</span>
+                <span class="hof-trash" style="color: #009BD6;">{{ schools[1].total_trash }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-1">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=schools[0].id) }}" alt="School Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-1">1</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ schools[0].name }}</span>
+                <span class="hof-trash" style="color: #FFAA00;">{{ schools[0].total_trash }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-3">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=schools[2].id) }}" alt="School Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-3">3</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ schools[2].name }}</span>
+                <span class="hof-trash" style="color: #00D95F;">{{ schools[2].total_trash }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if volunteers|length >= 3 %}
+    <div id="hallOfFameVolunteers" class="hall-of-fame" style="display: none;">
+        <div class="hof-box hof-2">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=volunteers[1].id) }}" alt="Volunteer Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-2">2</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ volunteers[1].name }}</span>
+                <span class="hof-trash" style="color: #009BD6;">{{ volunteers[1].total_trash }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-1">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=volunteers[0].id) }}" alt="Volunteer Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-1">1</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ volunteers[0].name }}</span>
+                <span class="hof-trash" style="color: #FFAA00;">{{ volunteers[0].total_trash }}</span>
+            </div>
+        </div>
+        <div class="hof-box hof-3">
+            <div class="hof-profile">
+                <img src="{{ url_for('organization_image', organization_id=volunteers[2].id) }}" alt="Volunteer Image" class="hof-profile-image">
+                <div class="hof-rank hof-rank-3">3</div>
+            </div>
+            <div class="hof-info">
+                <span class="hof-username">{{ volunteers[2].name }}</span>
+                <span class="hof-trash" style="color: #00D95F;">{{ volunteers[2].total_trash }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
 <!-- White Box Content -->
 <div class="container mt-5">
     <!-- Tabs Content -->
