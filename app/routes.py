@@ -1,5 +1,6 @@
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g, send_file
+from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
