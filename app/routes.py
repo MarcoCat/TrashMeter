@@ -127,6 +127,16 @@ def signup():
         elif account_type in ['school', 'company', 'volunteer'] and organization_type != account_type:
             flash(f'The selected organization type does not match the account type: {account_type}.', 'danger')
         else:
+            existing_user = User.query.filter((User.username == username) | (User.email == email)).first()
+            if existing_user:
+                flash('A user with the given username or email already exists.', 'danger')
+                return render_template('signup.html', organizations=organizations)
+
+            existing_temp_user = TempUser.query.filter((TempUser.username == username) | (TempUser.email == email)).first()
+            if existing_temp_user:
+                flash('A signup request with the given username or email already exists. Please check your email for the verification code.', 'danger')
+                return render_template('signup.html', organizations=organizations)
+
             verification_code = generate_verification_code()
             temp_user, created = get_or_create(TempUser, username=username, defaults={
                 'password': password,
@@ -402,3 +412,7 @@ def organization_image(organization_id):
         )
     else:
         return redirect(url_for('static', filename='images/user_icon.png'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
