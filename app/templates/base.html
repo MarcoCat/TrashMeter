@@ -61,6 +61,9 @@
     {% if request.endpoint == 'allocate_trash' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/allocate_trash.css') }}">
     {% endif %}
+{% if request.endpoint == 'verify_email' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/verify_email.css') }}">
+    {% endif %}
 
     <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap" rel="stylesheet">
 </head>
