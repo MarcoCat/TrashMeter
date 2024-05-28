@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>School Search</title>
+    <style>
+        #notfound {
+          position: relative;
+          height: 100vh;
+        }
+
+        .notfound {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          max-width: 460px;
+          width: 100%;
+          text-align: center;
+          line-height: 1.2;
+          padding: 10px;
+          box-sizing: border-box;
+        }
+
+        .notfound-404 {
+          height: auto;
+          line-height: 1;
+        }
+
+        .notfound-404 h1 {
+          font-size: clamp(50px, 15vw, 120px);
+          font-weight: 900;
+          color: #d3d3d3;
+          margin: 0;
+        }
+
+        .notfound h2 {
+          font-size: clamp(20px, 6vw, 40px);
+          font-weight: 700;
+          margin: 10px 0;
+        }
+
+        .notfound p {
+          font-size: clamp(14px, 4vw, 24px);
+          color: #333;
+          margin: 10px 0;
+        }
+
+        .notfound a {
+          display: inline-block;
+          padding: clamp(10px, 2vw, 20px) clamp(25px, 5vw, 40px);
+          background-color: #007bff;
+          color: #fff;
+          border-radius: 5px;
+          text-decoration: none;
+          font-size: clamp(14px, 4vw, 24px);
+          margin: 20px 0;
+        }
+
+        .notfound a:hover {
+          background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div id="notfound">
+      <div class="notfound">
+        <div class="notfound-404">
+          <h1>404</h1>
+        </div>
+        <h2>Oops! This Page Could Not Be Found</h2>
+        <p>Sorry but the page you are looking for does not exist, have been removed, name changed or is temporarily unavailable.</p>
+        <a href="{{ url_for('index') }}" class="btn error-btn">Go to Homepage</a>
+      </div>
+    </div>
+</body>
+</html>

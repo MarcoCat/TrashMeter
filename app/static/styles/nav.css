@@ -33,7 +33,7 @@
     list-style-type: none;
     padding: 0;
     margin: 0;
-    display: flex; /* 웹에서는 가로로 나열 */
+    display: flex;
     align-items: center;
 }
 
@@ -67,7 +67,7 @@
     background-color: #444;
     box-shadow: 0 4px 6px rgba(0,0,0,0.5);
     display: none;
-    flex-direction: column; /* 세로 나열 */
+    flex-direction: column;
     width: 200px; /* Adjust as needed */
 }
 
@@ -100,7 +100,7 @@
     background-color: #444;
     box-shadow: 0 4px 6px rgba(0,0,0,0.5);
     display: none;
-    flex-direction: column; /* 세로 나열 */
+    flex-direction: column;
     width: auto; /* Adjust as needed */
 }
 
@@ -126,19 +126,19 @@
     .nav-list {
         position: absolute;
         top: 60px;
-        right: 0; /* 오른쪽 끝에서 시작 */
-        display: none; /* 모바일에서는 기본적으로 숨김 */
-        flex-direction: column; /* 세로 나열 */
+        right: 0;
+        display: none;
+        flex-direction: column;
         background-color: #444;
-        width: 100%; /* 너비를 100%로 설정 */
+        width: 100%;
         box-shadow: 0 4px 6px rgba(0,0,0,0.5);
     }
 
     .nav-list.show {
-        display: flex; /* 햄버거 메뉴 클릭 시 표시 */
+        display: flex;
     }
 
     body {
-        padding-top: 60px; /* 네비게이션 바 높이만큼 패딩 추가 */
+        padding-top: 60px;
     }
 }

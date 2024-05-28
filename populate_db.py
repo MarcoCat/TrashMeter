@@ -1,6 +1,5 @@
-from app import create_app
 from app import create_app, db
-from app.models import User, Organization, TrashCounter
+from app.models import User, Organization
 from werkzeug.security import generate_password_hash
 import os
 
@@ -16,7 +15,6 @@ def get_or_create(model, defaults=None, **kwargs):
         instance = model(**params)
         db.session.add(instance)
         db.session.commit()
-        print('b')
         return instance
 
 def read_image(file_path):
@@ -27,8 +25,6 @@ def read_image(file_path):
         return file.read()
 
 def create_test_data():
-    db.session.add(TrashCounter(total_trash_collected=60000))  # Initial value
-    db.session.commit()
     ubc_image = read_image(os.path.join('app', 'static', 'uploads', 'ubc.jpg'))
     bcit_image = read_image(os.path.join('app', 'static', 'uploads', 'bcit.jpg'))
     langara_image = read_image(os.path.join('app', 'static', 'uploads', 'langara.jpg'))
@@ -54,12 +50,12 @@ def create_test_data():
         {'username': 'john_doe', 'password': generate_password_hash('password123'), 'first_name': 'John', 'last_name': 'Doe', 'email': 'john.doe@example.com', 'account_type': 'individual', 'trash_collected': 10, 'unallocated_trash': 5},
         {'username': 'alice_jones', 'password': generate_password_hash('password123'), 'first_name': 'Alice', 'last_name': 'Jones', 'email': 'alice.jones@example.com', 'account_type': 'individual', 'trash_collected': 20, 'unallocated_trash': 10},
         {'username': 'bob_brown', 'password': generate_password_hash('password123'), 'first_name': 'Bob', 'last_name': 'Brown', 'email': 'bob.brown@example.com', 'account_type': 'individual', 'trash_collected': 15, 'unallocated_trash': 5},
-
+        
         # School users
         {'username': 'ubc_student', 'password': generate_password_hash('password123'), 'first_name': 'Emma', 'last_name': 'Smith', 'email': 'emma.smith@ubc.ca', 'account_type': 'school', 'organization_id': ubc.id, 'trash_collected': 30, 'unallocated_trash': 15},
         {'username': 'bcit_student', 'password': generate_password_hash('password123'), 'first_name': 'Liam', 'last_name': 'Johnson', 'email': 'liam.johnson@bcit.ca', 'account_type': 'school', 'organization_id': bcit.id, 'trash_collected': 25, 'unallocated_trash': 10},
         {'username': 'langara_teacher', 'password': generate_password_hash('password123'), 'first_name': 'Olivia', 'last_name': 'Williams', 'email': 'olivia.williams@langara.ca', 'account_type': 'school', 'organization_id': langara.id, 'trash_collected': 35, 'unallocated_trash': 20},
-
+        
         # Company users
         {'username': 'telus_employee', 'password': generate_password_hash('password123'), 'first_name': 'James', 'last_name': 'Brown', 'email': 'james.brown@telus.com', 'account_type': 'company', 'organization_id': telus.id, 'trash_collected': 40, 'unallocated_trash': 20},
         {'username': 'rbc_employee', 'password': generate_password_hash('password123'), 'first_name': 'Sophia', 'last_name': 'Martinez', 'email': 'sophia.martinez@rbc.com', 'account_type': 'company', 'organization_id': rbc.id, 'trash_collected': 50, 'unallocated_trash': 25},
@@ -79,4 +75,5 @@ def create_test_data():
 app = create_app()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    with app.app_context():
+        create_test_data()

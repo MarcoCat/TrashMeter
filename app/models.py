@@ -6,7 +6,7 @@ from datetime import datetime
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(1000), nullable=False)
     first_name = db.Column(db.String(100), nullable=False)
     last_name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
@@ -30,6 +30,17 @@ class Organization(db.Model):
     __table_args__ = (
         CheckConstraint(type.in_(['school', 'company', 'volunteer']), name='check_organization_type'),
     )
+
+class TempUser(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(1000), nullable=False)
+    first_name = db.Column(db.String(100), nullable=False)
+    last_name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    account_type = db.Column(db.String(100), nullable=False)
+    organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
+    verification_code = db.Column(db.String(6), nullable=False)
 
 class TrashCounter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
