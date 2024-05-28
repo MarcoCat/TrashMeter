@@ -1,11 +1,107 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>School Search</title>
+    <style>
+        .school-card {
+            border: 1px solid #ccc;
+            padding: 16px;
+            margin: 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .school-card img {
+            max-width: 100px;
+            margin-right: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Search for Schools in BC</h1>
+    <input type="text" id="searchInput" placeholder="Search for schools...">
+    <div id="results"></div>
 
-{% block content %}
-    <div class="container">
-        <img src="{{ url_for('static', filename='images/no-data.png') }}" alt="No Data" class="error-image">
-        <h1 class="oops">Oops!</h1>
-        <h2>404 - Page Not Found</h2>
-        <p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
-        <a href="{{ url_for('home') }}" class="btn">Go to Homepage</a>
-    </div>
-{% endblock %}
+    <script>
+        const schools = [
+            {
+                name: 'University of British Columbia',
+                type: 'University',
+                location: 'Vancouver, BC',
+                image: 'https://www.ubc.ca/_assets/img/main-images/ubc-main.jpg'
+            },
+            {
+                name: 'Simon Fraser University',
+                type: 'University',
+                location: 'Burnaby, BC',
+                image: 'https://www.sfu.ca/content/dam/sfu/sfu-main.jpg'
+            },
+            {
+                name: 'Vancouver Secondary School',
+                type: 'High School',
+                location: 'Vancouver, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'Burnaby North Secondary School',
+                type: 'High School',
+                location: 'Burnaby, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'Maple Grove Elementary School',
+                type: 'Elementary School',
+                location: 'Vancouver, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'Point Grey Secondary School',
+                type: 'High School',
+                location: 'Vancouver, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'Lord Byng Secondary School',
+                type: 'High School',
+                location: 'Vancouver, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'Eric Hamber Secondary School',
+                type: 'High School',
+                location: 'Vancouver, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'Brentwood College School',
+                type: 'Secondary School',
+                location: 'Mill Bay, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            },
+            {
+                name: 'St. Michaels University School',
+                type: 'University',
+                location: 'Victoria, BC',
+                image: 'https://upload.wikimedia.org/wikipedia/commons/1/16/VanTech.png' // Example placeholder
+            }
+        ];
+
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const results = schools.filter(school => school.name.toLowerCase().includes(query) || school.type.toLowerCase().includes(query) || school.location.toLowerCase().includes(query));
+
+            document.getElementById('results').innerHTML = results.map(school => `
+                <div class="school-card">
+                    <img src="${school.image}" alt="${school.name}">
+                    <div>
+                        <h2>${school.name}</h2>
+                        <p>Type: ${school.type}</p>
+                        <p>Location: ${school.location}</p>
+                    </div>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>
