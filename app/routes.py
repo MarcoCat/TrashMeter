@@ -5,7 +5,7 @@ from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User, Organization, TrashCounter
+from .models import User, Organization, TrashCounter, TrashHistory
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
@@ -21,12 +21,12 @@ from fuzzywuzzy import fuzz
 
 
 
-trash_counter = 60000
-personal_counter = 0
-this_beach = ""
-this_date = ""
-this_picked = 0
-trash_history = []
+# trash_counter = 60000
+# personal_counter = 0
+# this_beach = ""
+# this_date = ""
+# this_picked = 0
+# # trash_history = []
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -53,14 +53,18 @@ def index():
     # trash_data = TrashData.query.first()
     user = db.session.get(User, g.user.id)
     total_trash = TrashCounter.query.first()
-    return render_template('trash_meter.html', trash_counter=trash_counter, personal_counter=personal_counter,
-                           trash_history=trash_history, user=user, total_trash=total_trash.total_trash_collected)
+    history = user.trash_history
+    return render_template('trash_meter.html',
+                            user=user, total_trash=total_trash.total_trash_collected, history=history)
                            # , this_date=this_date, beach=this_beach, this_picked=this_picked)
 
 # @app.route('/')
 # def index():
 #     return render_template('home.html')
 
+@app.route('/landing')
+def landing():
+    return render_template('trash_meter_landing.html')
 
 @app.route('/about')
 def about():
@@ -257,20 +261,27 @@ def update_trash_counter():
     user = db.session.get(User, g.user.id)
     total_trash = TrashCounter.query.first()
     session['total_trash'] = total_trash.total_trash_collected
-    picked_up = int(request.form['picked_up'])
+    amount = int(request.form['picked_up'])
     beach = request.form['beach']
-    this_picked = picked_up
+    this_picked = amount
     this_beach = beach
 
-    trash_history.append({
-        'date': datetime.now().strftime('%Y-%m-%d'),
-        'picked_up': this_picked,
-        'beach': this_beach
-    })
+    # trash_history.append({
+    #     'date': datetime.now().strftime('%Y-%m-%d'),
+    #     'picked_up': this_picked,
+    #     'beach': this_beach
+    # })
 
-    user.trash_collected += picked_up
-    user.unallocated_trash += picked_up
-    total_trash.total_trash_collected += picked_up
+    trash_history = TrashHistory(
+        picked_up=amount,
+        beach=beach,
+        user_id=user.id
+    )
+    db.session.add(trash_history)
+
+    user.trash_collected += amount
+    user.unallocated_trash += amount
+    total_trash.total_trash_collected += amount
     user.beach = beach
     db.session.commit()
 

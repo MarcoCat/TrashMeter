@@ -16,7 +16,7 @@ class User(db.Model):
     profile_picture = db.Column(db.LargeBinary, nullable=True)
     organization_id = db.Column(db.Integer, db.ForeignKey('organization.id'))
     organization = db.relationship('Organization', backref=db.backref('users', lazy=True))
-    beach = db.Column(db.String(100), nullable=True)
+    trash_history = db.relationship('TrashHistory', backref='user', lazy=True)
 
 
 class Organization(db.Model):
@@ -34,3 +34,10 @@ class Organization(db.Model):
 class TrashCounter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     total_trash_collected = db.Column(db.Integer, default=60000)
+
+class TrashHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, default=datetime.utcnow)
+    picked_up = db.Column(db.Integer, nullable=False)
+    beach = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

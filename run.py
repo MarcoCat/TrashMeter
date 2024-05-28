@@ -26,6 +26,8 @@ def read_image(file_path):
         return file.read()
 
 def create_test_data():
+    db.session.add(TrashCounter(total_trash_collected=60000))  # Initial value
+    db.session.commit()
     ubc_image = read_image(os.path.join('app', 'static', 'uploads', 'ubc.jpg'))
     bcit_image = read_image(os.path.join('app', 'static', 'uploads', 'bcit.jpg'))
     langara_image = read_image(os.path.join('app', 'static', 'uploads', 'langara.jpg'))

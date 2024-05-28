@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Counter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='webpage.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Trash Counter</h1>
+        <div class="counter">
+             <div class="trash-can">
+            <div class="progress-bars">
+                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
+                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
+                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
+            </div>
+        </div>
+            <h2>Current trash count: {{ total_trash }}</h2>
+            <a href="{{ url_for('landing') }}">
+                <button type="button">Log in to contribute!</button>
+            </a>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/pickup3canada" class="fa fa-facebook"></a>
+            <a href="https://twitter.com/PickUP3Canada" class="fa fa-twitter"></a>
+            <a href="https://www.instagram.com/pickup3canada/" class="fa fa-instagram"></a>
+        </div>
+    </footer>
+</body>
+</html>
+
+{% endblock %}
