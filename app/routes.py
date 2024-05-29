@@ -1,10 +1,11 @@
+import smtplib
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g, send_file
 from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User, Organization, TempUser
+from .models import User, Organization, TempUser, TrashCounter, TrashHistory
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
@@ -63,13 +64,33 @@ def update_instance(instance, **kwargs):
         db.session.rollback()
         flash(f"An instance with the given attributes already exists.", "danger")
         return False
-    
+
 def generate_verification_code():
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
 
 @app.route('/')
 def index():
     return render_template('home.html')
+
+
+@app.route('/trash_meter')
+def trash_meter():
+    if 'user_id' not in session:
+        return redirect(url_for('landing'))
+    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    db.session.commit()
+    user = db.session.get(User, g.user.id)
+    total_trash = TrashCounter.query.first()
+    history = user.trash_history
+    return render_template('trash_meter.html',
+                            user=user, total_trash=total_trash.total_trash_collected, history=history)
+
+@app.route('/landing')
+def landing():
+    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    db.session.commit()
+    total_trash = TrashCounter.query.first()
+    return render_template('trash_meter_landing.html', total_trash=total_trash.total_trash_collected)
 
 @app.route('/about')
 def about():
@@ -151,8 +172,8 @@ def signup():
                 flash('A user with the given username or email already exists.', 'danger')
                 return render_template('signup.html', organizations=organizations)
 
-            msg = Message('Email Verification', 
-                          sender=app.config['MAIL_DEFAULT_SENDER'], 
+            msg = Message('Email Verification',
+                          sender=app.config['MAIL_DEFAULT_SENDER'],
                           recipients=[email])
             msg.body = f'Your verification code is: {verification_code}'
             try:
@@ -267,7 +288,7 @@ def profile():
 @login_required
 def update_profile():
     user = db.session.get(User, g.user.id)
-    updated = update_instance(user, 
+    updated = update_instance(user,
                               username=request.form['username'],
                               first_name=request.form['first_name'],
                               last_name=request.form['last_name'],
@@ -311,6 +332,30 @@ def update_trash():
         flash('Trash collection updated successfully!', 'success')
         return redirect(url_for('profile'))
 
+
+@app.route('/update', methods=['POST'])
+def update_trash_counter():
+    user = db.session.get(User, g.user.id)
+    total_trash = TrashCounter.query.first()
+    session['total_trash'] = total_trash.total_trash_collected
+    amount = int(request.form['picked_up'])
+    beach = request.form['beach']
+
+    trash_history = TrashHistory(
+        picked_up=amount,
+        beach=beach,
+        user_id=user.id
+    )
+    db.session.add(trash_history)
+
+    user.trash_collected += amount
+    user.unallocated_trash += amount
+    total_trash.total_trash_collected += amount
+    user.beach = beach
+    db.session.commit()
+
+    return redirect(url_for('trash_meter'))
+
 @app.route('/leaderboard')
 def leaderboard():
     users = User.query.order_by(User.trash_collected.desc()).all()
@@ -344,17 +389,17 @@ def allocate_trash():
             flash('Organization not found.', 'danger')
 
         return redirect(url_for('profile'))
-    
+
     organizations = Organization.query.all()
     return render_template('allocate_trash.html', organizations=organizations)
 
 @app.route('/createinformation', methods=['GET', 'POST'])
 def create_information():
-    
+
     def allowed_file(filename):
         ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
+
     if request.method == 'POST':
         # Handle image upload
         image_file = request.files.get('organization_image')

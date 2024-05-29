@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Counter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/webpage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Help us fill our Trash Can and reach our goal! </h1>
+    <h1 style="color: white; background: #3B5998;">#pickup3</h1>
+        <div class="counter">
+             <div class="trash-can">
+            <div class="progress-bars">
+                {% set height_percentage = (total_trash / 100) %}
+                {% if total_trash >= 6100 %}
+                    {% set height_percentage = 62 %}
+                {% endif %}
+                    <div class="progress" style="height: {{ height_percentage }}%;"></div>
+                    <div class="progress" style="height: {{ height_percentage }}%;"></div>
+                    <div class="progress" style="height: {{ height_percentage }}%;"></div>
+            </div>
+        </div>
+            <h2 style="color: white; background: #3B5998;">Current trash count: {{ total_trash }}</h2>
+            <a href="{{ url_for('login') }}">
+                <button type="button">Log in to contribute!</button>
+            </a>
+        </div>
+    </div>
+
+
+    <footer>
+        <div class="social-icons">
+            <a href="https://www.facebook.com/pickup3canada" class="fa fa-facebook"></a>
+            <a href="https://twitter.com/PickUP3Canada" class="fa fa-twitter"></a>
+            <a href="https://www.instagram.com/pickup3canada/" class="fa fa-instagram"></a>
+        </div>
+    </footer>
+</body>
+</html>
+
+{% endblock %}
