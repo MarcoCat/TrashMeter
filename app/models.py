@@ -44,7 +44,7 @@ class TempUser(db.Model):
 
 class TrashCounter(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    total_trash_collected = db.Column(db.Integer, default=60000)
+    total_trash_collected = db.Column(db.Integer, default=0)
 
 class TrashHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)

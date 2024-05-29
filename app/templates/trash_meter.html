@@ -7,23 +7,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trash Counter</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='webpage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/webpage.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Trash Counter</h1>
+        <h1 style="color: white; background: #3B5998;">Current trash count: {{ total_trash }}</h1>
         <div class="counter">
-{#            <h2>Total Trash Picked Up: {{ trash_counter }}</h2>#}
              <div class="trash-can">
             <div class="progress-bars">
-                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
-                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
-                <div class="progress" style="height: {{ user.trash_collected }}%;"></div>
+                {% set height_percentage = (total_trash / 100) %}
+                {% if total_trash >= 6100 %}
+                    {% set height_percentage = 62 %}
+                {% endif %}
+                    <div class="progress" style="height: {{ height_percentage }}%;"></div>
+                    <div class="progress" style="height: {{ height_percentage }}%;"></div>
+                    <div class="progress" style="height: {{ height_percentage }}%;"></div>
             </div>
         </div>
-            <h2>Current trash count: {{ total_trash }}</h2>
-            <h2>You have picked up in total: {{ user.trash_collected }}</h2>
-            <h2>You have {{ user.unallocated_trash }} unallocated and have donated {{ user.trash_collected - user.unallocated_trash }}! </h2>
+            <h2 style="color: white; background: #5b81f3;">You have picked up in total: {{ user.trash_collected }}</h2>
+            <h2 style="color: white; background: #759df6;">You have {{ user.unallocated_trash }} unallocated and have donated {{ user.trash_collected - user.unallocated_trash }}! </h2>
             <a href="{{ url_for('allocate_trash') }}">
                 <button type="button">Donate to an Organization!</button>
             </a>
@@ -34,16 +37,15 @@
         <form action="/update" method="post">
             <label for="beach">Select a beach:</label>
             <select id="beach" name="beach">
-                <option value="beach1">Beach 1</option>
-                <option value="beach2">Beach 2</option>
-                <option value="beach3">Beach 3</option>
-                <!-- Add more beach options as needed -->
-                <option value="other">Other (Enter beach name below)</option>
+                <option value="Ferry Causeway Beach, Tsawwassen">Ferry Causeway Beach, Tsawwassen</option>
+                <option value="Beach Grove">Beach Grove</option>
+                <option value="Jericho Beach">Jericho Beach</option>
+                <option value="Fred Gingell Park">Fred Gingell Park</option>
+                <option value="Horseshoe Bay Beach">Horseshoe Bay Beach</option>
+
             </select>
-            <label for="other_beach">Select a beach:</label>
-            <input type="text" id="other_beach" name="other_beach" placeholder="Enter beach name">
             <label for="picked_up">Enter amount of trash picked up:</label>
-            <input type="number" id="picked_up" name="picked_up" required>
+            <input type="number" id="picked_up" name="picked_up" min="0" max="500" required>
             <button type="submit">Update Counter</button>
         </form>
         <br>
@@ -69,8 +71,6 @@
             </tbody>
         </table>
     </div>
-
-
 
     <footer>
         <div class="social-icons">

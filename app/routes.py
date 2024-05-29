@@ -1,12 +1,11 @@
-from datetime import datetime
+import smtplib
 from flask import current_app as app
 from flask import render_template, request, redirect, url_for, session, flash, g, send_file
 from flask_mail import Message
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 from . import db, mail
-from .models import User, Organization, TrashCounter, TrashHistory
-from .models import User, Organization, TempUser
+from .models import User, Organization, TempUser, TrashCounter, TrashHistory
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 import io
 import os
@@ -71,24 +70,27 @@ def generate_verification_code():
 
 @app.route('/')
 def index():
+    return render_template('home.html')
+
+
+@app.route('/trash_meter')
+def trash_meter():
     if 'user_id' not in session:
-        flash('Please log in to view this page.', 'warning')
-        return redirect(url_for('login'))
-    # trash_data = TrashData.query.first()
+        return redirect(url_for('landing'))
+    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    db.session.commit()
     user = db.session.get(User, g.user.id)
     total_trash = TrashCounter.query.first()
     history = user.trash_history
     return render_template('trash_meter.html',
                             user=user, total_trash=total_trash.total_trash_collected, history=history)
-                           # , this_date=this_date, beach=this_beach, this_picked=this_picked)
-
-# @app.route('/')
-# def index():
-#     return render_template('home.html')
 
 @app.route('/landing')
 def landing():
-    return render_template('trash_meter_landing.html')
+    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    db.session.commit()
+    total_trash = TrashCounter.query.first()
+    return render_template('trash_meter_landing.html', total_trash=total_trash.total_trash_collected)
 
 @app.route('/about')
 def about():
@@ -333,20 +335,11 @@ def update_trash():
 
 @app.route('/update', methods=['POST'])
 def update_trash_counter():
-    global trash_counter, personal_counter, this_beach, this_date, this_picked
     user = db.session.get(User, g.user.id)
     total_trash = TrashCounter.query.first()
     session['total_trash'] = total_trash.total_trash_collected
     amount = int(request.form['picked_up'])
     beach = request.form['beach']
-    this_picked = amount
-    this_beach = beach
-
-    # trash_history.append({
-    #     'date': datetime.now().strftime('%Y-%m-%d'),
-    #     'picked_up': this_picked,
-    #     'beach': this_beach
-    # })
 
     trash_history = TrashHistory(
         picked_up=amount,
@@ -361,9 +354,7 @@ def update_trash_counter():
     user.beach = beach
     db.session.commit()
 
-    # personal_counter += picked_up
-    # Redirect back to the main page
-    return redirect(url_for('index'))
+    return redirect(url_for('trash_meter'))
 
 @app.route('/leaderboard')
 def leaderboard():
