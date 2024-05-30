@@ -92,7 +92,6 @@ def trash_meter():
 
 @app.route('/landing')
 def landing():
-    global total_count
     # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
     # db.session.commit()
     # total_trash = TrashCounter.query.first()
