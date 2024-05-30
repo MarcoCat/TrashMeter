@@ -70,6 +70,8 @@ def generate_verification_code():
 
 @app.route('/')
 def index():
+    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    db.session.commit()
     return render_template('home.html')
 
 
@@ -77,8 +79,8 @@ def index():
 def trash_meter():
     if 'user_id' not in session:
         return redirect(url_for('landing'))
-    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
-    db.session.commit()
+    # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    # db.session.commit()
     user = db.session.get(User, g.user.id)
     total_trash = TrashCounter.query.first()
     history = user.trash_history
@@ -87,8 +89,8 @@ def trash_meter():
 
 @app.route('/landing')
 def landing():
-    db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
-    db.session.commit()
+    # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
+    # db.session.commit()
     total_trash = TrashCounter.query.first()
     return render_template('trash_meter_landing.html', total_trash=total_trash.total_trash_collected)
 
