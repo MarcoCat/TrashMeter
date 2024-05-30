@@ -77,6 +77,7 @@ def index():
 
 @app.route('/trash_meter')
 def trash_meter():
+    global total_count
     if 'user_id' not in session:
         return redirect(url_for('landing'))
     # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
@@ -92,6 +93,7 @@ def trash_meter():
 
 @app.route('/landing')
 def landing():
+    global total_count
     # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
     # db.session.commit()
     # total_trash = TrashCounter.query.first()
@@ -346,7 +348,7 @@ def update_trash_counter():
     user = db.session.get(User, g.user.id)
     # total_trash = TrashCounter.query.first()
     # session['total_trash'] = total_trash.total_trash_collected
-    total_trash = total_count
+    # total_trash = total_count
     amount = int(request.form['picked_up'])
     beach = request.form['beach']
 
