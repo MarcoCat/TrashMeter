@@ -15,7 +15,7 @@ import random
 import string
 from validate_email_address import validate_email
 
-
+total_count = 2000
 # Utility function to check if a user is logged in
 def login_required(f):
     @wraps(f)
@@ -82,17 +82,23 @@ def trash_meter():
     # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
     # db.session.commit()
     user = db.session.get(User, g.user.id)
-    total_trash = TrashCounter.query.first()
+    # total_trash = TrashCounter.query.first()
+    total_trash = total_count
     history = user.trash_history
+    # return render_template('trash_meter.html',
+    #                         user=user, total_trash=total_trash.total_trash_collected, history=history)
     return render_template('trash_meter.html',
-                            user=user, total_trash=total_trash.total_trash_collected, history=history)
+                           user=user, total_trash=total_trash, history=history)
 
 @app.route('/landing')
 def landing():
+    global total_count
     # db.session.add(TrashCounter(total_trash_collected=0))  # Initial value
     # db.session.commit()
-    total_trash = TrashCounter.query.first()
-    return render_template('trash_meter_landing.html', total_trash=total_trash.total_trash_collected)
+    # total_trash = TrashCounter.query.first()
+    total_trash = total_count
+    # return render_template('trash_meter_landing.html', total_trash=total_trash.total_trash_collected)
+    return render_template('trash_meter_landing.html', total_trash=total_trash)
 
 @app.route('/about')
 def about():
@@ -337,9 +343,11 @@ def update_trash():
 
 @app.route('/update', methods=['POST'])
 def update_trash_counter():
+    global total_count
     user = db.session.get(User, g.user.id)
-    total_trash = TrashCounter.query.first()
-    session['total_trash'] = total_trash.total_trash_collected
+    # total_trash = TrashCounter.query.first()
+    # session['total_trash'] = total_trash.total_trash_collected
+    total_trash = total_count
     amount = int(request.form['picked_up'])
     beach = request.form['beach']
 
@@ -352,7 +360,9 @@ def update_trash_counter():
 
     user.trash_collected += amount
     user.unallocated_trash += amount
-    total_trash.total_trash_collected += amount
+    # total_trash.total_trash_collected += amount
+    # user.total_trash_count += amount
+    total_count += amount
     user.beach = beach
     db.session.commit()
 
